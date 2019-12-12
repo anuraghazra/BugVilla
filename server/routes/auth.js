@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const slugify = require('slugify');
 
+const verify = require('../middleware/verify')
 const { User, validateUser, validateUserLogin } = require('../models/user');
 
 
@@ -31,7 +32,6 @@ router.post('/signup', async (req, res) => {
     res.json({ msg: "User Registered", _id: savedUser._id });
   } catch (err) {
     res.status(400).json({ error: 'Something went wrong' })
-    throw new Error(err);
   }
 })
 
@@ -54,7 +54,8 @@ router.post("/login", async (req, res) => {
     // Create JWT Token
     const token = jwt.sign({
       _id: user._id,
-      name: user.name
+      name: user.name,
+      username: user.username
     }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 
     // set authorization token
@@ -66,9 +67,24 @@ router.post("/login", async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ error: 'Something went wrong' })
-    throw new Error(err);
   }
 });
 
+// get user by username
+router.get('/:username', verify, async (req, res) => {
+  try {
+    let user = await User.findOne({ username: req.params.username });
+    if (!user) res.status(404).json({ error: 'User Not found' })
+
+    res.json({
+      name : user.name,
+      username: user.username,
+      _id: user._id,
+      email: user.email
+    });
+  } catch (err) {
+    res.status(400).json({ message: 'Something went wrong', error: err })
+  }
+})
 
 module.exports = router;

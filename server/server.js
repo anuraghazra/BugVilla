@@ -14,9 +14,10 @@ const bugs = require('./routes/bugs');
 
 // connect to database
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to database."))
+  .then(() => {
+    console.log('Connected to database')
+  })
   .catch(() => console.log("Failed to connect to database."));
-
 
 // middlewares
 app.use(cors());
