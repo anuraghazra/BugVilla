@@ -19,7 +19,6 @@ const LabelSchema = new mongoose.Schema({
     trim: true,
     minLength: 2,
     maxLength: 50,
-    unique: true,
   },
   color: {
     type: String,
@@ -28,7 +27,7 @@ const LabelSchema = new mongoose.Schema({
     maxLength: 10,
     validate: [colorValidator, 'Invalid Color Hex']
   }
-}, { _id: false })
+})
 
 const BugSchema = new mongoose.Schema({
   title: {
@@ -47,8 +46,8 @@ const BugSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  isOpen: { type: mongoose.Schema.Types.Boolean, default: true },
-  labels: { type: [LabelSchema], default: [], unique: true },
+  isOpen: { type: Boolean, default: true },
+  labels: { type: [LabelSchema], default: [] },
   author: { type: UserInfoSchema, required: true },
   comments: { type: [CommentSchema], default: [] }
 })
@@ -67,20 +66,20 @@ BugSchema.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId' });
 const Bug = mongoose.model('Bug', BugSchema, 'bugs');
 
 
-const labelSchema = Joi.object({
+const JoiLabelSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
   color: Joi.string().regex(colorRegEx).required()
 })
 
 const validateLabel = (label) => {
-  return labelSchema.validate(label)
+  return JoiLabelSchema.validate(label)
 }
+
 const validateBug = (bug) => {
   // nested schemas
   const schema = Joi.object({
     title: Joi.string().min(6).max(100).required(),
     body: Joi.string().min(6).max(10000).required(),
-    labels: Joi.array().unique().items(labelSchema).default([]),
     date_opened: Joi.date().default(Date.now),
     author: Joi.object(),
     isOpen: Joi.bool().default(true),

@@ -69,7 +69,8 @@ exports.login = async (req, res) => {
     }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 
     // set authorization token
-    res.setHeader("authorization", token).json({
+    res.setHeader("authorization", token);
+    res.status(200).json({
       id: user.id,
       name: user.name,
       email: user.email,

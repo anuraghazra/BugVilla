@@ -14,7 +14,6 @@ const UserInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
     minlength: 6,
     maxlength: 100,
   },
