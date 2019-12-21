@@ -1,22 +1,29 @@
-const router = require("express").Router();
+/// <reference path="./mytypes.d.ts" />
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const slugify = require('slugify');
-
-const verify = require('../middleware/verify')
-const { User, validateUser, validateUserLogin } = require('../models/user');
+const { User, validateUser, validateUserLogin } = require('../models/userModel');
 
 
-// SignUp
-router.post('/signup', async (req, res) => {
-  // Validate request body
+
+/**
+ * @method signup
+ * @type RequestHandler
+ */
+exports.signup = async (req, res) => {
   const { error, value } = validateUser(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
-  const slugifiedUsername = slugify(value.name, { lower: true, })
 
+  // create username for the user with their name.
+  const slugifiedUsername = slugify(value.name, { lower: true, })
   try {
     // add bugs reference model
-    const emailExists = await User.findOne({ $or: [{ 'email': value.email }, { 'username': slugifiedUsername }] });
+    const emailExists = await User.findOne({
+      $or: [
+        { 'email': value.email },
+        { 'username': slugifiedUsername }
+      ]
+    });
     if (emailExists) return res.status(400).json({ error: "Username / Email Already Exsist" });
 
     const newUser = new User({
@@ -33,14 +40,17 @@ router.post('/signup', async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: 'Something went wrong' })
   }
-})
+}
 
-// Login
-router.post("/login", async (req, res) => {
+
+/**
+ * @method login
+ * @type RequestHandler
+ */
+exports.login = async (req, res) => {
   // Validate request body
   const { error, value } = validateUserLogin(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
-
 
   try {
     // check if user exist
@@ -53,14 +63,14 @@ router.post("/login", async (req, res) => {
 
     // Create JWT Token
     const token = jwt.sign({
-      _id: user._id,
+      id: user.id,
       name: user.name,
       username: user.username
-    }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+    }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 
     // set authorization token
-    res.header("x-auth-token", token).json({
-      _id: user._id,
+    res.setHeader("authorization", token).json({
+      id: user.id,
       name: user.name,
       email: user.email,
       token
@@ -68,23 +78,25 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: 'Something went wrong' })
   }
-});
+}
 
-// get user by username
-router.get('/:username', verify, async (req, res) => {
+
+/**
+ * @method getByUsername
+ * @type RequestHandler
+ */
+exports.getByUsername = async (req, res) => {
   try {
     let user = await User.findOne({ username: req.params.username });
     if (!user) res.status(404).json({ error: 'User Not found' })
 
     res.json({
-      name : user.name,
+      name: user.name,
       username: user.username,
-      _id: user._id,
-      email: user.email
+      email: user.email,
+      id: user.id,
     });
   } catch (err) {
     res.status(400).json({ message: 'Something went wrong', error: err })
   }
-})
-
-module.exports = router;
+}

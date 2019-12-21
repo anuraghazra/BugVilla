@@ -7,10 +7,10 @@ const cors = require('cors');
 
 const PORT = 5000;
 
-// route imports 
-const auth = require('./routes/auth');
-const bugs = require('./routes/bugs');
-
+// route imports
+const userRoute = require('./routes/userRoute');
+const bugsRoute = require('./routes/bugsRoute');
+const commentsRoute = require('./routes/commentsRoute');
 
 // connect to database
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -25,8 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // routes
-app.use('/api/user', auth);
-app.use('/api/bugs', bugs);
+app.use('/api/user', userRoute);
+app.use('/api/bugs', bugsRoute);
+app.use('/api/bugs', commentsRoute);
 
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`));

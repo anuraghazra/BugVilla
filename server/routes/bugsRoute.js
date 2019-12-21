@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const verify = require('../middleware/verify')
 
-const { Bug, validateBug, validateLabel } = require('../models/bug');
+const { sendErrorResponse } = require('../utils/responder');
+const { BAD_REQUEST, NOT_FOUND } = require('../constants.js');
+const { Bug, validateBug, validateLabel } = require('../models/bugModel');
 
 // get all bugs
 router.get('/', verify, async (req, res) => {
@@ -9,7 +11,7 @@ router.get('/', verify, async (req, res) => {
     let bugs = await Bug.find({});
     res.json(bugs);
   } catch {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    sendErrorResponse(res, BAD_REQUEST, err);
   }
 })
 
@@ -17,19 +19,19 @@ router.get('/', verify, async (req, res) => {
 router.get('/:id', verify, async (req, res) => {
   try {
     let bug = await Bug.findOne({ bugId: req.params.id });
-    if (!bug) res.status(404).json({ error: 'Not found' })
+    if (!bug) return res.status(NOT_FOUND).json({ error: 'Not found' })
 
     res.json(bug);
   } catch (err) {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    sendErrorResponse(res, BAD_REQUEST, err);
   }
 })
 
 
 // create bug
-router.post('/new', verify, async (req, res) => {
+router.post('/', verify, async (req, res) => {
   const { error, value } = validateBug(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
+  if (error) return res.status(BAD_REQUEST).json({ error: error.details[0].message });
 
   try {
     let authorDetails = {
@@ -41,7 +43,7 @@ router.post('/new', verify, async (req, res) => {
     const newBug = await bug.save();
     res.json(newBug);
   } catch (err) {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    res.status(BAD_REQUEST).json({ message: 'Something went wrong while adding new bug', error: err })
   }
 })
 
@@ -51,30 +53,32 @@ const toggleBugOpenClose = (state) => {
     try {
       // {new: true} tells mongo to return the updated document
       let bug = await Bug.findOneAndUpdate({ bugId: req.params.id }, { isOpen: state }, { new: true });
-      if (!bug) res.status(404).json({ error: 'Not found' })
+      if (!bug) return res.status(NOT_FOUND).json({ error: 'Not found' })
 
       res.json(bug);
     } catch (err) {
-      res.status(400).json({ message: 'Something went wrong', error: err })
+      sendErrorResponse(res, BAD_REQUEST, err);
     }
   }
 }
 router.patch('/:id/close', verify, toggleBugOpenClose(false))
 router.patch('/:id/open', verify, toggleBugOpenClose(true))
 
+
+
 // add label to the specified bug
 router.patch('/:id/labels', async (req, res) => {
   const { error, value } = validateLabel(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
+  if (error) return res.status(BAD_REQUEST).json({ error: error.details[0].message });
 
   try {
     // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
     let bug = await Bug.findOneAndUpdate({ bugId: req.params.id }, { $addToSet: { labels: value } }, { new: true });
-    if (!bug) res.status(404).json({ error: 'Not found' })
+    if (!bug) return res.status(NOT_FOUND).json({ error: 'Not found' })
 
     res.json(bug);
   } catch (err) {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    sendErrorResponse(res, BAD_REQUEST, err);
   }
 })
 
@@ -86,11 +90,11 @@ router.delete('/:id/labels/:name', async (req, res) => {
       { $pull: { "labels": { name: req.params.name } } },
       { new: true }
     );
-    if (!bug) res.status(404).json({ error: 'Not found' })
+    if (!bug) return res.status(NOT_FOUND).json({ error: 'Not found' })
 
     res.json(bug);
   } catch (err) {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    sendErrorResponse(res, BAD_REQUEST, err);
   }
 })
 

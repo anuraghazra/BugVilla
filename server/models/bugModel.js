@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const autoIncrement = require('mongoose-auto-increment');
-const User = require('./user');
+const { UserInfoSchema } = require('./userModel');
+const { CommentSchema } = require('./commentModel');
+
 
 // plugin initialize
 autoIncrement.initialize(mongoose.connection);
@@ -19,7 +21,6 @@ const LabelSchema = new mongoose.Schema({
     maxLength: 50,
     unique: true,
   },
-  // TODO: validate color properly
   color: {
     type: String,
     required: true,
@@ -29,7 +30,7 @@ const LabelSchema = new mongoose.Schema({
   }
 }, { _id: false })
 
-const BugScheme = new mongoose.Schema({
+const BugSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -42,20 +43,28 @@ const BugScheme = new mongoose.Schema({
     required: true,
     maxLength: 10000
   },
-  labels: { type: [LabelSchema], default: [], unique: true },
   date_opened: {
     type: Date,
     default: Date.now
   },
-  author: { type: User, required: true },
-  // author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  isOpen: { type: mongoose.Schema.Types.Boolean, default: true }
+  isOpen: { type: mongoose.Schema.Types.Boolean, default: true },
+  labels: { type: [LabelSchema], default: [], unique: true },
+  author: { type: UserInfoSchema, required: true },
+  comments: { type: [CommentSchema], default: [] }
 })
 
+BugSchema.set('toJSON', {
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
+
 // enable plugin
-BugScheme.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId' });
+BugSchema.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId' });
 // create the model
-const Bug = mongoose.model('Bug', BugScheme, 'bugs');
+const Bug = mongoose.model('Bug', BugSchema, 'bugs');
 
 
 const labelSchema = Joi.object({
@@ -71,7 +80,7 @@ const validateBug = (bug) => {
   const schema = Joi.object({
     title: Joi.string().min(6).max(100).required(),
     body: Joi.string().min(6).max(10000).required(),
-    labels: Joi.array().items(labelSchema).default([]),
+    labels: Joi.array().unique().items(labelSchema).default([]),
     date_opened: Joi.date().default(Date.now),
     author: Joi.object(),
     isOpen: Joi.bool().default(true),
