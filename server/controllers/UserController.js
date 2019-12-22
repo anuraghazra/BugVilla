@@ -2,8 +2,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const slugify = require('slugify');
-const { User, validateUser, validateUserLogin } = require('../models/userModel');
 
+const { User, validateUser, validateUserLogin } = require('../models/userModel');
 
 
 /**
@@ -12,19 +12,23 @@ const { User, validateUser, validateUserLogin } = require('../models/userModel')
  */
 exports.signup = async (req, res) => {
   const { error, value } = validateUser(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
 
   // create username for the user with their name.
   const slugifiedUsername = slugify(value.name, { lower: true, })
   try {
     // add bugs reference model
-    const emailExists = await User.findOne({
+    const foundUser = await User.findOne({
       $or: [
         { 'email': value.email },
         { 'username': slugifiedUsername }
       ]
     });
-    if (emailExists) return res.status(400).json({ error: "Username / Email Already Exsist" });
+    if (foundUser) {
+      return res.conflict({ error: "Username / Email Already Exsist" })
+    }
 
     const newUser = new User({
       name: value.name,
@@ -36,9 +40,13 @@ exports.signup = async (req, res) => {
 
     // save the user data into database
     const savedUser = await newUser.save();
-    res.json({ msg: "User Registered", _id: savedUser._id });
+
+    res.created({
+      msg: "User Registered",
+      id: savedUser.id
+    });
   } catch (err) {
-    res.status(400).json({ error: 'Something went wrong' })
+    res.internalError({ error: err });
   }
 }
 
@@ -48,18 +56,21 @@ exports.signup = async (req, res) => {
  * @type RequestHandler
  */
 exports.login = async (req, res) => {
-  // Validate request body
   const { error, value } = validateUserLogin(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
 
   try {
     // check if user exist
     const user = await User.findOne({ email: value.email });
-    if (!user) return res.status(400).json({ error: "Email does not exsist" });
+    if (!user) return res.notFound({ error: "Email does not exsist" });
 
     // Check/Compares password
     const validPassword = await bcrypt.compare(value.password, user.password);
-    if (!validPassword) return res.status(401).json({ error: "Password is incorrect" });
+    if (!validPassword) {
+      return res.forbidden({ error: "Password is incorrect" })
+    }
 
     // Create JWT Token
     const token = jwt.sign({
@@ -69,15 +80,16 @@ exports.login = async (req, res) => {
     }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 
     // set authorization token
-    res.setHeader("authorization", token);
-    res.status(200).json({
+    res.setHeader("Authorization", token);
+    
+    res.ok({
       id: user.id,
       name: user.name,
       email: user.email,
       token
     });
   } catch (err) {
-    res.status(400).json({ error: 'Something went wrong' })
+    res.internalError({ error: err });
   }
 }
 
@@ -89,15 +101,15 @@ exports.login = async (req, res) => {
 exports.getByUsername = async (req, res) => {
   try {
     let user = await User.findOne({ username: req.params.username });
-    if (!user) res.status(404).json({ error: 'User Not found' })
+    if (!user) return res.notFound({ error: "User Not Found" })
 
-    res.json({
+    res.ok({
       name: user.name,
       username: user.username,
       email: user.email,
       id: user.id,
     });
   } catch (err) {
-    res.status(400).json({ message: 'Something went wrong', error: err })
+    res.internalError({ error: err });
   }
 }

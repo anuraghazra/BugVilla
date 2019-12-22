@@ -15,13 +15,15 @@ router.get('/:bugId/comments', verify, async (req, res) => {
 })
 
 // add a comments to a specified bugId
-router.post('/:bugId/comments', verify, async (req, res) => {
+router.put('/:bugId/comments', verify, async (req, res) => {
   const { error, value } = validateComment(req.body);
 
   if (error) return res.status(400).json({ error: error.details[0].message });
 
   try {
     const bug = await Bug.findOne({ bugId: req.params.bugId })
+
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` })
     let authorDetails = {
       username: req.user.username,
       name: req.user.name,
