@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const httpResponder = require('./middleware/responder');
+const httpResponder = require('./middleware/httpResponder');
 
 const PORT = 5000;
 
