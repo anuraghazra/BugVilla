@@ -1,5 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
+const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel } = require('../models/bugModel');
+
 
 /**
  * @method getBugs
@@ -22,7 +24,7 @@ exports.getBugs = async (req, res) => {
  */
 exports.getBugByNumber = async (req, res) => {
   try {
-    let bug = await Bug.findOne({ bugId: req.params.id });
+    let bug = await Bug.findOne({ bugId: req.params.bugId });
     if (!bug) return notFound({ error: 'Not Found' });
 
     res.ok(bug);
@@ -56,6 +58,35 @@ exports.createBug = async (req, res) => {
   }
 }
 
+
+/**
+ * @method updateBug
+ * @type RequestHandler
+ */
+exports.updateBug = async (req, res) => {
+  try {
+    let schema = Joi.object({
+      title: Joi.string().min(6).max(100).required(),
+      body: Joi.string().min(6).max(10000).required(),
+    })
+    let { error, value } = schema.validate(req.body);
+    if (error) {
+      return res.unprocessable({ error: error.details[0].message })
+    }
+
+    let bug = await Bug.findOneAndUpdate(
+      { bugId: req.params.bugId },
+      value,
+      { new: true } // tells mongo to return the updated document
+    );
+    if (!bug) return res.notFound({ error: 'Not Found' });
+
+    res.ok(bug);
+  } catch (err) {
+    res.internalError({ error: err });
+  }
+}
+
 /**
  * @method toggleBugOpenClose
  * @type RequestHandler
@@ -65,7 +96,7 @@ exports.toggleBugOpenClose = ({ state }) => {
     try {
       // {new: true} tells mongo to return the updated document
       let bug = await Bug.findOneAndUpdate(
-        { bugId: req.params.id },
+        { bugId: req.params.bugId },
         { isOpen: state },
         { new: true }
       );
@@ -91,7 +122,7 @@ exports.addLabel = async (req, res) => {
   try {
     // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
     let bug = await Bug.findOneAndUpdate(
-      { bugId: req.params.id },
+      { bugId: req.params.bugId },
       { $addToSet: { labels: value } },
       { new: true }
     );
@@ -110,7 +141,7 @@ exports.addLabel = async (req, res) => {
 exports.deleteLabel = async (req, res) => {
   try {
     let bug = await Bug.findOneAndUpdate(
-      { bugId: req.params.id },
+      { bugId: req.params.bugId },
       { $pull: { "labels": { name: req.params.name } } },
       { new: true }
     );

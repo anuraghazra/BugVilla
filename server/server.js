@@ -20,6 +20,8 @@ mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopo
   })
   .catch(() => console.log("Failed to connect to database."));
 
+app.set("env", process.env.NODE_ENV);
+
 // middlewares
 app.use(httpResponder);
 app.use(cors());
@@ -31,5 +33,15 @@ app.use('/api/user', userRoute);
 app.use('/api/bugs', bugsRoute);
 app.use('/api/bugs', commentsRoute);
 
+// finally handle errors
+app.use("*", function (req, res) {
+  res.notFound({ error: 'Not Found' });
+});
+
+app.use(function (err, req, res, next) {
+  if (err instanceof SyntaxError) {
+    res.status(400).send({ error: "Something Unknown Happened" });
+  } else next();
+});
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`));
