@@ -46,7 +46,9 @@ exports.signup = async (req, res) => {
       id: savedUser.id
     });
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: 'Something went wrong'
+    });
   }
 }
 
@@ -81,7 +83,7 @@ exports.login = async (req, res) => {
 
     // set authorization token
     res.setHeader("Authorization", token);
-    
+
     res.ok({
       id: user.id,
       name: user.name,
@@ -89,7 +91,9 @@ exports.login = async (req, res) => {
       token
     });
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: 'Something went wrong'
+    });
   }
 }
 
@@ -110,6 +114,8 @@ exports.getByUsername = async (req, res) => {
       id: user.id,
     });
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: 'Something went wrong'
+    });
   }
 }

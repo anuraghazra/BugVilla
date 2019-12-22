@@ -13,8 +13,10 @@ exports.getBugs = async (req, res) => {
     if (!bugs) return res.notFound({ errror: 'Not Found' });
 
     res.ok(bugs);
-  } catch {
-    res.internalError({ error: err });
+  } catch (err) {
+    res.internalError({
+      error: `Something went wrong while getting bugs`,
+    })
   }
 }
 
@@ -25,11 +27,13 @@ exports.getBugs = async (req, res) => {
 exports.getBugByNumber = async (req, res) => {
   try {
     let bug = await Bug.findOne({ bugId: req.params.bugId });
-    if (!bug) return notFound({ error: 'Not Found' });
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok(bug);
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: `Something went wrong while getting bug#${req.params.bugId}`,
+    })
   }
 }
 
@@ -54,7 +58,9 @@ exports.createBug = async (req, res) => {
 
     res.created(newBug);
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: `Something went wrong while creating new bug`,
+    })
   }
 }
 
@@ -83,7 +89,9 @@ exports.updateBug = async (req, res) => {
 
     res.ok(bug);
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: `Something went wrong while updating bug`,
+    })
   }
 }
 
@@ -100,11 +108,13 @@ exports.toggleBugOpenClose = ({ state }) => {
         { isOpen: state },
         { new: true }
       );
-      if (!bug) return res.notFound({ error: 'Not Found' });
+      if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
       res.ok(bug);
     } catch (err) {
-      res.internalError({ error: err });
+      res.internalError({
+        error: `Something went wrong`,
+      })
     }
   }
 }
@@ -126,11 +136,13 @@ exports.addLabel = async (req, res) => {
       { $addToSet: { labels: value } },
       { new: true }
     );
-    if (!bug) return res.notFound({ error: 'Not Found' });
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok(bug);
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: `Something went wrong while adding new label`,
+    })
   }
 }
 
@@ -145,10 +157,12 @@ exports.deleteLabel = async (req, res) => {
       { $pull: { "labels": { name: req.params.name } } },
       { new: true }
     );
-    if (!bug) return res.notFound({ error: 'Not Found' });
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok(bug);
   } catch (err) {
-    res.internalError({ error: err });
+    res.internalError({
+      error: `Something went wrong while deleting label`,
+    })
   }
 }

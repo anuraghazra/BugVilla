@@ -16,8 +16,7 @@ exports.getComments = async (req, res) => {
     res.ok(comments);
   } catch (err) {
     res.internalError({
-      message: 'Something went wrong while getting comments',
-      error: err
+      error: 'Something went wrong while getting comments',
     })
   }
 }
@@ -41,7 +40,7 @@ exports.createComment = async (req, res) => {
       name: req.user.name,
       _id: req.user._id
     };
-    
+
     bug.comments.push({
       body: value.body,
       author: authorDetails
@@ -51,8 +50,7 @@ exports.createComment = async (req, res) => {
     res.ok(newBug);
   } catch (err) {
     res.internalError({
-      message: 'Something went wrong while adding new comment',
-      error: err
+      error: 'Something went wrong while adding new comment',
     })
   }
 }
@@ -74,8 +72,7 @@ exports.deleteComment = async (req, res) => {
     res.ok(comment);
   } catch (err) {
     res.internalError({
-      message: `Something went wrong while deleting comment#${req.params.comment_id}`,
-      error: err
+      error: `Something went wrong while deleting comment#${req.params.comment_id}`,
     })
   }
 }
