@@ -73,6 +73,7 @@ const validateUser = (user) => {
   const schema = Joi.object({
     name:
       Joi.string()
+        .pattern(/^[a-zA-Z0-9]+$/)
         .min(6)
         .max(100)
         .required(),

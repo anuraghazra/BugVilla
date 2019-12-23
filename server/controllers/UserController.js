@@ -42,8 +42,12 @@ exports.signup = async (req, res) => {
     const savedUser = await newUser.save();
 
     res.created({
-      msg: "User Registered",
-      id: savedUser.id
+      data: {
+        id: savedUser.id,
+        username: savedUser.username,
+        name: savedUser.name,
+        message: "User Registered",
+      }
     });
   } catch (err) {
     res.internalError({
@@ -85,10 +89,12 @@ exports.login = async (req, res) => {
     res.setHeader("Authorization", token);
 
     res.ok({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      token
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token
+      }
     });
   } catch (err) {
     res.internalError({
@@ -108,10 +114,12 @@ exports.getByUsername = async (req, res) => {
     if (!user) return res.notFound({ error: "User Not Found" })
 
     res.ok({
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      id: user.id,
+      data: {
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        id: user.id,
+      }
     });
   } catch (err) {
     res.internalError({

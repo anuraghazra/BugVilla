@@ -61,7 +61,7 @@ BugSchema.set('toJSON', {
 });
 
 // enable plugin
-BugSchema.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId' });
+BugSchema.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId', startAt: 1 });
 // create the model
 const Bug = mongoose.model('Bug', BugSchema, 'bugs');
 

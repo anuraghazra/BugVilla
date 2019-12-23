@@ -12,7 +12,7 @@ exports.getBugs = async (req, res) => {
     let bugs = await Bug.find({});
     if (!bugs) return res.notFound({ errror: 'Not Found' });
 
-    res.ok(bugs);
+    res.ok({ data: bugs });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while getting bugs`,
@@ -29,7 +29,7 @@ exports.getBugByNumber = async (req, res) => {
     let bug = await Bug.findOne({ bugId: req.params.bugId });
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok(bug);
+    res.ok({ data: bug });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while getting bug#${req.params.bugId}`,
@@ -48,7 +48,13 @@ exports.createBug = async (req, res) => {
   }
 
   try {
+    /*
+      explicitly setting `_id` otherwise mongo will set the `_id` to 
+      a random `_id` instead of the original `user._id`, which we need
+      because it has to be same so we can check for bug's author
+    */
     let authorDetails = {
+      _id: req.user.id,
       username: req.user.username,
       name: req.user.name,
     }
@@ -56,7 +62,7 @@ exports.createBug = async (req, res) => {
     let bug = new Bug({ ...value, author: authorDetails });
     const newBug = await bug.save();
 
-    res.created(newBug);
+    res.created({ data: newBug });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while creating new bug`,
@@ -72,8 +78,8 @@ exports.createBug = async (req, res) => {
 exports.updateBug = async (req, res) => {
   try {
     let schema = Joi.object({
-      title: Joi.string().min(6).max(100).required(),
-      body: Joi.string().min(6).max(10000).required(),
+      title: Joi.string().min(6).max(100),
+      body: Joi.string().min(6).max(10000),
     })
     let { error, value } = schema.validate(req.body);
     if (error) {
@@ -81,14 +87,19 @@ exports.updateBug = async (req, res) => {
     }
 
     let bug = await Bug.findOneAndUpdate(
-      { bugId: req.params.bugId },
+      {
+        bugId: req.params.bugId,
+        // also check if current user is the author of this bug
+        "author._id": { $eq: req.user.id }
+      },
       value,
       { new: true } // tells mongo to return the updated document
     );
-    if (!bug) return res.notFound({ error: 'Not Found' });
+    if (!bug) return res.notFound({ error: `Can not update Bug#${req.params.bugId}` });
 
-    res.ok(bug);
+    res.ok({ data: bug });
   } catch (err) {
+    console.error(err)
     res.internalError({
       error: `Something went wrong while updating bug`,
     })
@@ -110,7 +121,7 @@ exports.toggleBugOpenClose = ({ state }) => {
       );
       if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-      res.ok(bug);
+      res.ok({ data: bug });
     } catch (err) {
       res.internalError({
         error: `Something went wrong`,
@@ -138,7 +149,7 @@ exports.addLabel = async (req, res) => {
     );
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok(bug);
+    res.ok({ data: bug });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while adding new label`,
@@ -159,7 +170,7 @@ exports.deleteLabel = async (req, res) => {
     );
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok(bug);
+    res.ok({ data: bug });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while deleting label`,

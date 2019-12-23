@@ -13,7 +13,7 @@ exports.getComments = async (req, res) => {
     const { comments } = await Bug.findOne({ bugId: req.params.bugId })
     if (!comments) return res.notFound({ error: 'Not Found' })
 
-    res.ok(comments);
+    res.ok({ data: comments });
   } catch (err) {
     res.internalError({
       error: 'Something went wrong while getting comments',
@@ -47,7 +47,7 @@ exports.createComment = async (req, res) => {
     });
 
     const newBug = await bug.save();
-    res.ok(newBug);
+    res.ok({ data: newBug });
   } catch (err) {
     res.internalError({
       error: 'Something went wrong while adding new comment',
@@ -69,7 +69,7 @@ exports.deleteComment = async (req, res) => {
     );
     if (!comment) res.notFound({ error: 'Not found' })
 
-    res.ok(comment);
+    res.ok({ data: comment });
   } catch (err) {
     res.internalError({
       error: `Something went wrong while deleting comment#${req.params.comment_id}`,
