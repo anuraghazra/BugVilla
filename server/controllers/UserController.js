@@ -127,3 +127,27 @@ exports.getByUsername = async (req, res) => {
     });
   }
 }
+
+/**
+ * @method getCurrent
+ * @type RequestHandler
+ */
+exports.getCurrent = async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.user.id });
+    if (!user) return res.notFound({ error: "User Not Found!" })
+
+    res.ok({
+      data: {
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        id: user.id,
+      }
+    });
+  } catch (err) {
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}

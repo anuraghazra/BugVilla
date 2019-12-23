@@ -27,7 +27,7 @@ const LabelSchema = new mongoose.Schema({
     maxLength: 10,
     validate: [colorValidator, 'Invalid Color Hex']
   }
-})
+}, { _id: false })
 
 const BugSchema = new mongoose.Schema({
   title: {
@@ -47,9 +47,9 @@ const BugSchema = new mongoose.Schema({
     default: Date.now
   },
   isOpen: { type: Boolean, default: true },
-  labels: { type: [LabelSchema], default: [] },
   author: { type: UserInfoSchema, required: true },
-  comments: { type: [CommentSchema], default: [] }
+  labels: [{ type: LabelSchema }],
+  comments: [{ type: CommentSchema }]
 })
 
 BugSchema.set('toJSON', {

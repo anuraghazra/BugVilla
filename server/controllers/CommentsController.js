@@ -38,7 +38,7 @@ exports.createComment = async (req, res) => {
     let authorDetails = {
       username: req.user.username,
       name: req.user.name,
-      _id: req.user._id
+      _id: req.user.id
     };
 
     bug.comments.push({
