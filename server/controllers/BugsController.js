@@ -4,7 +4,8 @@ const { Bug, validateBug, validateLabel } = require('../models/bugModel');
 
 
 /**
- * @method getBugs
+ * @route GET /api/bugs/
+ * @description Get all bugs
  * @type RequestHandler
  */
 exports.getBugs = async (req, res) => {
@@ -21,7 +22,8 @@ exports.getBugs = async (req, res) => {
 }
 
 /**
- * @method getBugsByNumber
+ * @route GET /api/bugs/:bugId
+ * @description Get bug by bugId
  * @type RequestHandler
  */
 exports.getBugByNumber = async (req, res) => {
@@ -38,7 +40,8 @@ exports.getBugByNumber = async (req, res) => {
 }
 
 /**
- * @method createBug
+ * @route POST /api/bugs/
+ * @description Create new bug
  * @type RequestHandler
  */
 exports.createBug = async (req, res) => {
@@ -72,7 +75,8 @@ exports.createBug = async (req, res) => {
 
 
 /**
- * @method updateBug
+ * @route PATCH /api/bugs/:bugId
+ * @description Update a bug with specified bugId
  * @type RequestHandler
  */
 exports.updateBug = async (req, res) => {
@@ -107,7 +111,8 @@ exports.updateBug = async (req, res) => {
 }
 
 /**
- * @method toggleBugOpenClose
+ * @route PATCH /api/bugs/:bugId/[close|open]
+ * @description Helper function to close/open bug
  * @type RequestHandler
  */
 exports.toggleBugOpenClose = ({ state }) => {
@@ -131,7 +136,8 @@ exports.toggleBugOpenClose = ({ state }) => {
 }
 
 /**
- * @method addLabel
+ * @route PATCH /api/bugs/:bugId/labels
+ * @description Add a label to specified bugId
  * @type RequestHandler
  */
 exports.addLabel = async (req, res) => {
@@ -158,7 +164,8 @@ exports.addLabel = async (req, res) => {
 }
 
 /**
- * @method deleteLabel
+ * @route DELETE /api/bugs/:bugId/labels/:name
+ * @description Delete a label from specified bugId & label name
  * @type RequestHandler
  */
 exports.deleteLabel = async (req, res) => {

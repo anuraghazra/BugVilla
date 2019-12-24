@@ -7,7 +7,7 @@ const { User, validateUser, validateUserLogin } = require('../models/userModel')
 
 
 /**
- * @method signup
+ * @route POST /user/signup
  * @type RequestHandler
  */
 exports.signup = async (req, res) => {
@@ -58,7 +58,7 @@ exports.signup = async (req, res) => {
 
 
 /**
- * @method login
+ * @route POST /user/login
  * @type RequestHandler
  */
 exports.login = async (req, res) => {
@@ -105,7 +105,7 @@ exports.login = async (req, res) => {
 
 
 /**
- * @method getByUsername
+ * @route GET /user/:username
  * @type RequestHandler
  */
 exports.getByUsername = async (req, res) => {
@@ -129,7 +129,7 @@ exports.getByUsername = async (req, res) => {
 }
 
 /**
- * @method getCurrent
+ * @route GET /user/me
  * @type RequestHandler
  */
 exports.getCurrent = async (req, res) => {

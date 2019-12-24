@@ -4,7 +4,7 @@ const { validateComment } = require('../models/commentModel');
 
 
 /**
- * @method signup
+ * @route GET /api/bugs/:bugId/comments
  * @description GET all comments with a specified bugId
  * @type RequestHandler
  */
@@ -22,7 +22,7 @@ exports.getComments = async (req, res) => {
 }
 
 /**
- * @method signup
+ * @route PATCH /api/bugs/:bugId/comments
  * @description add a comments to a specified bugId
  * @type RequestHandler
  */
@@ -56,7 +56,7 @@ exports.createComment = async (req, res) => {
 }
 
 /**
- * @method signup
+ * @route DELETE /api/bugs/:bugId/comments/:comment_id
  * @description remove a comments from specified bugId
  * @type RequestHandler
  */
