@@ -111,7 +111,7 @@ exports.login = async (req, res) => {
 exports.getByUsername = async (req, res) => {
   try {
     let user = await User.findOne({ username: req.params.username });
-    if (!user) return res.notFound({ error: "User Not Found" })
+    if (!user) return res.notFound({ error: `User not found with the username ${req.params.username}` })
 
     res.ok({
       data: {
@@ -122,6 +122,7 @@ exports.getByUsername = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err)
     res.internalError({
       error: 'Something went wrong'
     });
@@ -143,6 +144,7 @@ exports.getCurrent = async (req, res) => {
         username: user.username,
         email: user.email,
         id: user.id,
+        avatar: user.avatar
       }
     });
   } catch (err) {

@@ -5,6 +5,8 @@ module.exports = {
   FORBIDDEN: 403,
   CONFLICT: 409,
   UNPROCESSABLE: 422,
+  UNSUPPORTED_MEDIA: 415,
+  PAYLOAD_TOO_LARGE: 413,
 
   BAD_GATEWAY: 502,
   NOT_IMPLEMENTED: 501,
@@ -14,4 +16,6 @@ module.exports = {
   DELETED: 204,
   NO_CONTENT: 204,
   OK: 200,
+
+  PORT: 5000
 }

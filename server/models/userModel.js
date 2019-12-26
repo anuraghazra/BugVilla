@@ -37,6 +37,7 @@ const UserSchema = new mongoose.Schema({
   },
   username: {
     type: String,
+    lowercase: true,
     required: true,
     trim: true,
     unique: true,
@@ -54,6 +55,9 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minLength: 6,
     maxLength: 100,
+  },
+  avatar: {
+    type: mongoose.Schema.Types.ObjectId
   }
 })
 
@@ -91,7 +95,8 @@ const validateUser = (user) => {
     confirmPassword:
       Joi.any()
         .required()
-        .valid(Joi.ref('password'))
+        .valid(Joi.ref('password')),
+    avatar: Joi.string()
   })
   return schema.validate(user)
 }
