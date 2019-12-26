@@ -9,6 +9,7 @@ const {
   INTERNAL_ERROR,
   UNSUPPORTED_MEDIA,
   PAYLOAD_TOO_LARGE,
+  NOT_IMPLEMENTED
 } = require('../constants');
 
 const httpResponder = function (req, res, next) {
@@ -21,6 +22,7 @@ const httpResponder = function (req, res, next) {
   res.deleted = (data) => res.status(DELETED).json(data);
   res.created = (data) => res.status(CREATED).json(data);
   res.internalError = (data) => res.status(INTERNAL_ERROR).json(data);
+  res.notImplemented = (data) => res.status(NOT_IMPLEMENTED).json(data);
   res.unsupportedMedia = (data) => res.status(UNSUPPORTED_MEDIA).json(data);
   res.payloadTooLarge = (data) => res.status(PAYLOAD_TOO_LARGE).json(data);
 

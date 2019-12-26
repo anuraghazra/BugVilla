@@ -1,25 +1,23 @@
 /// <reference path="./mytypes.d.ts" />
 const mongoose = require('mongoose');
-const Grid = require("gridfs-stream");
 const { User } = require('../models/userModel');
 
-// init gfs
+
 let gfs;
 mongoose.connection.once("open", () => {
-  // gfs = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: "images" });
-  gfs = Grid(mongoose.connection.db, mongoose.mongo);
-  gfs.collection('images')
+  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: "images" });
+  // gfs = Grid(mongoose.connection.db, mongoose.mongo);
+  // gfs.collection('images')
 });
 
 const removeFile = (id) => {
-  gfs.remove({ _id: id, root: 'images' }, (err) => {
-    if (err) return res.notFound({ err: err.message });
-    console.log('Removed', id)
+  gfs.delete(id, () => {
+    console.log('Removed Old User Image:', id)
   })
 }
 
 /**
- * @route PATCH /api/user/:username/upload
+ * @route PATCH /api/user/me/avatar/upload
  * @description upload profile picture of user
  * @type RequestHandler
  */
@@ -28,7 +26,9 @@ exports.uploadProfileImage = async (req, res) => {
     let user = await User.findOne({ _id: req.user.id });
     if (!user) return res.notFound({ error: 'User not found' });
 
-    // authorization 
+    // @TODO: Validate Image Dimensions
+    
+    // authorization
     // at this point its not necessary to check this
     if (user.id !== req.user.id) {
       removeFile(req.file.id);
@@ -43,7 +43,6 @@ exports.uploadProfileImage = async (req, res) => {
 
     user.avatar = req.file.id;
     await user.save();
-
     res.ok({
       avatar: user.avatar,
       message: 'uploaded'
@@ -61,18 +60,15 @@ exports.uploadProfileImage = async (req, res) => {
  * @description upload profile picture of user
  * @type RequestHandler
  */
-exports.getAvatarImage = async (req, res) => {
+exports.getAvatarImageByUsername = async (req, res) => {
   try {
-    let user = await User.findOne({ username: req.params.username });
-    if (!user) return res.notFound({ error: 'User not found' });
-
-    let file = await gfs.files.findOne({ _id: user.avatar })
-    if (!file || file.length === 0) {
-      return res.status(404).json({
-        err: "no file exist"
-      });
-    }
-    res.ok({ data: file })
+    let avatars = await gfs.find({ _id: req.foundUser.avatar })
+    avatars.toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.notFound({ error: "Image not found" });
+      }
+      res.ok({ data: files[0] })
+    })
   } catch (err) {
     console.log(err);
     res.internalError({
@@ -86,27 +82,24 @@ exports.getAvatarImage = async (req, res) => {
  * @description upload profile picture of user
  * @type RequestHandler
  */
-exports.getRawAvatarImage = async (req, res) => {
+exports.getRawAvatarImageByUsername = async (req, res) => {
   try {
-    let user = await User.findOne({ username: req.params.username });
-    if (!user) return res.notFound({ error: 'User not found' });
+    let avatars = await gfs.find({ _id: req.foundUser.avatar })
+    avatars.toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.notFound({ error: "Image not found" });
+      }
 
-    let file = await gfs.files.findOne({ _id: user.avatar })
-    if (!file || file.length === 0) {
-      return res.status(404).json({
-        err: "no file exist"
-      });
-    }
+      let file = files[0];
+      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+        res.header('Content-Type', file.contentType);
+        res.header('Content-Length', file.length);
 
-    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-      res.header('Content-Type', file.contentType);
-      res.header('Content-Length', file.length);
-
-      const readStream = gfs.createReadStream(file.filename);
-      readStream.pipe(res);
-    } else {
-      return res.unsupportedMedia({ error: 'media type not supported' })
-    }
+        gfs.openDownloadStreamByName(file.filename).pipe(res);
+      } else {
+        return res.unsupportedMedia({ error: 'media type not supported' })
+      }
+    })
   } catch (err) {
     console.log(err);
     res.internalError({ error: 'opps' })
@@ -116,21 +109,21 @@ exports.getRawAvatarImage = async (req, res) => {
 
 /**
  * @route GET /api/user/me/avatar
- * @description 
+ * @description
  * @type RequestHandler
  */
 exports.getCurrentUserAvatar = async (req, res) => {
   try {
     let user = await User.findOne({ username: req.user.username });
-    if (!user) return res.notFound({ error: 'User not found!!' });
+    if (!user) return res.notFound({ error: 'User not found!' });
 
-    let file = await gfs.files.findOne({ _id: user.avatar })
-    if (!file || file.length === 0) {
-      return res.status(404).json({
-        err: "no file exist"
-      });
-    }
-    res.ok({ data: file })
+    let avatars = await gfs.find({ _id: user.avatar })
+    avatars.toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.notFound({ error: "Image not found" });
+      }
+      res.ok({ data: files[0] })
+    })
   } catch (err) {
     console.log(err);
     res.internalError({

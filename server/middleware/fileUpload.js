@@ -29,17 +29,15 @@ const storage = new GridFsStorage({
 
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
+  const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
     // if validation failed then generate error
     cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE", file), false);
   }
 };
+
 const upload = multer({
   storage,
   fileFilter,

@@ -56,7 +56,7 @@ app.use('/api/bugs', require('./routes/commentsRoute'));
 // finally handle errors
 app.use(errorHandler);
 app.use("*", function (req, res) {
-  res.notFound({ error: 'Something Unknown Happened' });
+  res.notImplemented({ error: 'Not Implemented.' });
 });
 
 
