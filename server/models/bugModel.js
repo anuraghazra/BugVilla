@@ -8,8 +8,8 @@ const { CommentSchema } = require('./commentModel');
 // plugin initialize
 autoIncrement.initialize(mongoose.connection);
 
-
-const colorRegEx = (/^#([0-9a-f]{3}){1,2}$/i);
+// eslint-disable-next-line security/detect-unsafe-regex
+const colorRegEx = (/^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$/i);
 const colorValidator = (v) => colorRegEx.test(v)
 
 const LabelSchema = new mongoose.Schema({
