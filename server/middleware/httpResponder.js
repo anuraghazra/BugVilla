@@ -9,7 +9,8 @@ const {
   INTERNAL_ERROR,
   UNSUPPORTED_MEDIA,
   PAYLOAD_TOO_LARGE,
-  NOT_IMPLEMENTED
+  NOT_IMPLEMENTED,
+  NOT_AUTHORIZED
 } = require('../constants');
 
 const httpResponder = function (req, res, next) {
@@ -18,6 +19,7 @@ const httpResponder = function (req, res, next) {
   res.ok = (data) => res.status(OK).json(data);
   res.unprocessable = (data) => res.status(UNPROCESSABLE).json(data);
   res.conflict = (data) => res.status(CONFLICT).json(data);
+  res.notAuthorized = (data) => res.status(NOT_AUTHORIZED).json(data);
 
   res.deleted = (data) => res.status(DELETED).json(data);
   res.created = (data) => res.status(CREATED).json(data);

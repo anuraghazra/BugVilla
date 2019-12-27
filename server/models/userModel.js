@@ -61,6 +61,14 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
+UserSchema.set('toJSON', {
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret.password;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
 
 UserSchema.methods.setHashedPassword = function (password) {
   // Hash Password

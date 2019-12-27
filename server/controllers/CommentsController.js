@@ -10,11 +10,12 @@ const { validateComment } = require('../models/commentModel');
  */
 exports.getComments = async (req, res) => {
   try {
-    const { comments } = await Bug.findOne({ bugId: req.params.bugId })
-    if (!comments) return res.notFound({ error: 'Not Found' })
+    const bug = await Bug.findOne({ bugId: req.params.bugId })
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` })
 
-    res.ok({ data: comments });
+    res.ok({ data: bug.comments });
   } catch (err) {
+    console.log(err)
     res.internalError({
       error: 'Something went wrong while getting comments',
     })
@@ -46,8 +47,8 @@ exports.createComment = async (req, res) => {
       author: authorDetails
     });
 
-    const newBug = await bug.save();
-    res.ok({ data: newBug });
+    let newBug = await bug.save();
+    res.ok({ data: newBug.comments });
   } catch (err) {
     res.internalError({
       error: 'Something went wrong while adding new comment',
@@ -62,15 +63,23 @@ exports.createComment = async (req, res) => {
  */
 exports.deleteComment = async (req, res) => {
   try {
-    let comment = await Bug.findOneAndUpdate(
+    const bug = await Bug.findOneAndUpdate(
       { bugId: req.params.bugId },
-      { $pull: { "comments": { _id: req.params.comment_id } } },
-      { new: true }
-    );
-    if (!comment) res.notFound({ error: 'Not found' })
+      {
+        $pull: {
+          "comments": {
+            _id: req.params.comment_id,
+            'author._id': req.user.id
+          }
+        }
+      },
+      { new: true, select: 'comments' }
+    )
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok({ data: comment });
+    res.ok({ data: bug.comments });
   } catch (err) {
+    console.log(err)
     res.internalError({
       error: `Something went wrong while deleting comment#${req.params.comment_id}`,
     })
