@@ -24,7 +24,7 @@ router.param('username', async (req, res, next) => {
 
 router.get("/me/avatar", verify, UserImageController.getCurrentUserAvatar);
 router.patch("/me/avatar/upload", verify, avatarUpload, UserImageController.uploadProfileImage);
-router.get('/:username/avatar', verify, UserImageController.getAvatarImageByUsername)
-router.get("/:username/avatar/raw", verify, UserImageController.getRawAvatarImageByUsername);
+router.get('/:username/avatar', UserImageController.getAvatarImageByUsername)
+router.get("/:username/avatar/raw", UserImageController.getRawAvatarImageByUsername);
 
 module.exports = router
