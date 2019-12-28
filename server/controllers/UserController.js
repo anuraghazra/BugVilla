@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const slugify = require('slugify');
 
 const { User, validateUser, validateUserLogin } = require('../models/userModel');
+const { Bug } = require('../models/bugModel');
+const { Comment } = require('../models/commentModel');
 
 
 /**
@@ -133,6 +135,59 @@ exports.getCurrent = async (req, res) => {
 
     res.ok({ data: user });
   } catch (err) {
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+
+/**
+ * @route GET /user/:username/comments
+ * @type RequestHandler
+ */
+exports.getCommentsByUser = async (req, res) => {
+  try {
+    // https://stackoverflow.com/questions/16845191/mongoose-finding-subdocuments-by-criteria
+    let bug = await Bug.aggregate([
+      { $match: { 'comments.author.username': req.params.username } },
+      { $unwind: '$comments' },
+      { $match: { 'comments.author.username': req.params.username } },
+      {
+        $project: {
+          body: '$comments.body',
+          date: '$comments.date',
+          author: {
+            id: '$comments.author._id',
+            username: '$comments.author.username',
+            name: '$comments.author.name'
+          },
+          'id': '$_id',
+          _id: 0,
+        },
+      },
+    ])
+
+    if (!bug) return res.notFound({ error: "Bug Not Found!" })
+    res.ok({ data: bug });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+/**
+ * @route GET /user/:username/bugs
+ * @type RequestHandler
+ */
+exports.getBugsByUser = async (req, res) => {
+  try {
+    let bug = await Bug.find({ 'author.username': req.params.username })
+    if (!bug) return res.notFound({ error: "Bug Not Found!" })
+
+    res.ok({ data: bug });
+  } catch (err) {
+    console.log(err)
     res.internalError({
       error: 'Something went wrong'
     });
