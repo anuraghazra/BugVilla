@@ -29,6 +29,15 @@ const LabelSchema = new mongoose.Schema({
   }
 }, { _id: false })
 
+const ActivitiesSchema = new mongoose.Schema({
+  action: { type: String, enum: ['closed', 'opened'], required: true },
+  author: { type: UserInfoSchema, required: true },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+}, { _id: false })
+
 const BugSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -47,6 +56,7 @@ const BugSchema = new mongoose.Schema({
     default: Date.now
   },
   isOpen: { type: Boolean, default: true },
+  activities: [{ type: ActivitiesSchema }],
   author: { type: UserInfoSchema, required: true },
   labels: [{ type: LabelSchema }],
   comments: [{ type: CommentSchema }]

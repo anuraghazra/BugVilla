@@ -5,7 +5,6 @@ const slugify = require('slugify');
 
 const { User, validateUser, validateUserLogin } = require('../models/userModel');
 const { Bug } = require('../models/bugModel');
-const { Comment } = require('../models/commentModel');
 
 
 /**
@@ -176,6 +175,7 @@ exports.getCommentsByUser = async (req, res) => {
     });
   }
 }
+
 /**
  * @route GET /user/:username/bugs
  * @type RequestHandler

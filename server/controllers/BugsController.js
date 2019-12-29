@@ -62,6 +62,7 @@ exports.createBug = async (req, res) => {
       name: req.user.name,
     }
 
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let bug = new Bug({ ...value, author: authorDetails });
     const newBug = await bug.save();
 
@@ -112,7 +113,7 @@ exports.updateBug = async (req, res) => {
 
 /**
  * @route PATCH /api/bugs/:bugId/[close|open]
- * @description Helper function to close/open bug
+ * @description Helper function to close/open bug and pushes to activities array
  * @type RequestHandler
  */
 exports.toggleBugOpenClose = ({ state }) => {
@@ -120,8 +121,16 @@ exports.toggleBugOpenClose = ({ state }) => {
     try {
       // {new: true} tells mongo to return the updated document
       let bug = await Bug.findOneAndUpdate(
-        { bugId: req.params.bugId },
-        { isOpen: state },
+        { bugId: req.params.bugId, isOpen: !state },
+        {
+          $push: {
+            activities: {
+              author: req.user,
+              action: state ? 'opened' : 'closed'
+            }
+          },
+          isOpen: state,
+        },
         { new: true }
       );
       if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
