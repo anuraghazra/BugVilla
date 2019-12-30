@@ -9,4 +9,5 @@ router.get('/:username', UserController.getByUsername);
 router.get('/:username/comments', UserController.getCommentsByUser);
 router.get('/:username/bugs', UserController.getBugsByUser);
 
+
 module.exports = router;
