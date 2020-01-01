@@ -5,6 +5,7 @@
   "main": "./server/server.js",
   "scripts": {
     "start": "node ./server/server.js",
+    "start:client": "cd client && npm start",
     "server:debug": "nodemon --inspect ./server/server.js",
     "server:watch": "nodemon ./server/server.js",
     "develop": "concurrently \"npm run server:watch\" \"cd client && npm start\"",

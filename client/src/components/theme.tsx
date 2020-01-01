@@ -95,7 +95,7 @@ const theme: DefaultTheme = {
     my: '20px',  
     mx: '20px', 
   },
-  border: `2px solid ${colors.brand.accent}`,
+  border: `2px solid ${colors.common.offwhite}`,
   media: {
     mobileS: `(max-width: ${size.mobileS})`,
     mobile: `(max-width: ${size.mobile})`,

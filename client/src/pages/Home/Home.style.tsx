@@ -5,7 +5,10 @@ const HomeWrapper = styled.section`
 
   .home__left {
     width: 500px;
-    height: 100vh;
+    min-height: 100vh;
+    position: relative;
+    top: 0;
+    bottom: 0;
 
     text-align: left;
     display: flex;
@@ -29,6 +32,7 @@ const HomeWrapper = styled.section`
     top: 0;
     left: 0;
     width: 200px;
+    z-index: 1;
   }
 `
 

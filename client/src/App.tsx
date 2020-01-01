@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import theme from './theme';
+import theme from './components/theme';
 import GlobalStyles from './styles/globalStyles';
 
 import Home from 'pages/Home/Home';

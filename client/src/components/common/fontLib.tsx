@@ -5,7 +5,8 @@ import {
   faLink,
   faPlus,
   faEnvelope,
-  faLock
+  faLock,
+  faEdit
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -13,5 +14,6 @@ library.add(
   faLink,
   faPlus,
   faEnvelope,
-  faLock
+  faLock,
+  faEdit
 );

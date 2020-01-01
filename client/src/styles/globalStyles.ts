@@ -31,6 +31,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: inherit;
     font-weight: inherit;
     font-size: 14px;
+    color: ${p => p.theme.colors.text.black};
   }
 
   h1, h2, h3, h4, h5, h6 {

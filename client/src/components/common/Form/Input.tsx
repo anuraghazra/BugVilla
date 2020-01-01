@@ -1,18 +1,22 @@
 import React from 'react';
+import { ErrorMessage } from 'react-hook-form';
 
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const InputLabel = styled.label`
-  margin-bottom: ${p => p.theme.spacings.my};
+
+interface InputLabelProps {
+  indicateError?: boolean
+}
+const InputLabel = styled.label<InputLabelProps>`
   display: flex;
   /* row-reverse because of :focus + span */
   flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   background-color: ${p => p.theme.colors.common.offwhite};
+  border: 1px solid ${p => p.indicateError ? p.theme.colors.common.red : 'transparent'};
   border-radius: 50px;
-  width: 100%;
   padding: 5px;
   padding: 0 20px;
   height: 40px;
@@ -41,18 +45,54 @@ const StyledInput = styled.input`
   }
 `
 
+const InputWrapper = styled.div`
+  margin-bottom: 10px;
+  width: 100%;
+  
+  .text--error {
+    font-size: 12px;
+    margin-left: 16px;
+    opacity: 0;
+    transition: 0.3s;
+    transform: translateY(-20px);
+    margin-top: 5px;
+
+    &:before {
+      content: '* ';
+    }
+  }
+  .show-error {
+    transform: translateY(0);
+    opacity: 1;
+    transition: 0.3s;
+  }
+`
+
 interface Props {
   icon: any;
-  [x:string]: any;
+  indicateError?: boolean;
+  errors?: any;
+  [x: string]: any;
 }
 
-const Input: React.FC<Props> = ({ icon, ...props }) => {
+const Input: React.FC<Props> = React.forwardRef(({
+  icon,
+  errors,
+  inputRef,
+  ...props
+}) => {
   return (
-    <InputLabel>
-      <StyledInput type="text" {...props} />
-      <span><FontAwesomeIcon icon={icon} /></span>
-    </InputLabel>
+    <InputWrapper>
+      <InputLabel indicateError={errors[props.name]}>
+        <StyledInput type="text" ref={inputRef} {...props} />
+        <span><FontAwesomeIcon icon={icon} /></span>
+      </InputLabel>
+
+      <div className={`text--error ${errors[props.name] && 'show-error'}`}>
+        <ErrorMessage errors={errors} name={props.name} />
+      </div>
+    </InputWrapper>
   )
-}
+})
 
 export default Input;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Login from 'components/Login/Login';
+import Signup from 'components/Signup/Signup';
 import Flex from 'components/common/Flex';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="home__right">
-          <Login />
+          <Signup />
         </div>
       </Flex>
     </HomeWrapper>
