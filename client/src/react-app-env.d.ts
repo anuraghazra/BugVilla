@@ -1,3 +1,5 @@
 /// <reference types="react-scripts" />
-/// <reference types="react" />
-/// <reference types="react-dom" />
+declare module '*.ttf';
+declare module '*.woff';
+declare module '*.woff2';
+declare module '*.svg';
