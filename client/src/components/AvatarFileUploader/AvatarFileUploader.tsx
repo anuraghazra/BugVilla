@@ -41,6 +41,7 @@ interface Props {
   file: any,
   handleFile: (file: any) => void;
 }
+
 const AvatarFileUploader: React.FC<Props> = ({ name, inputRef, handleFile, file }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',

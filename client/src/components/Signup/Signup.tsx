@@ -14,6 +14,8 @@ import Button from 'components/common/Button';
 
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader'
 
+import { useSelector, useDispatch } from 'react-redux';
+import { signUserUp } from 'store/ducks/signup';
 
 const SignupSchema = yup.object().shape({
   name: yup.string().min(6).max(100).trim().required(),
@@ -28,6 +30,7 @@ const SignupSchema = yup.object().shape({
 })
 
 const Signup: React.FC = () => {
+  const dispatch = useDispatch()
   const [name, setName] = useState('Enter Your Name');
   const [file, setFile] = useState<any>();
 
@@ -42,7 +45,9 @@ const Signup: React.FC = () => {
     for (let name in data) {
       formData.append(name, data[name]);
     }
+
     // submit form
+    dispatch(signUserUp(formData))
   }
 
   const handleNameChange = (e: any) => {
