@@ -35,7 +35,8 @@ exports.signup = async (req, res) => {
       name: value.name,
       username: slugifiedUsername,
       email: value.email,
-      password: value.password
+      password: value.password,
+      avatar: req.file.id
     });
     newUser.setHashedPassword(value.password);
 
