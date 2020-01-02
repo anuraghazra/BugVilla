@@ -10,6 +10,9 @@ export default css`
   .text--medium {
     font-family: ${p => p.theme.font.primaryMedium}
   }
+  .color--error {
+    color: ${p => p.theme.colors.common.red} !important;
+  }
   .text--error {
     font-size: 14px;
     color: ${p => p.theme.colors.common.red};

@@ -5,8 +5,8 @@ import dummyImage from 'assets/images/avatar_dummy.png';
 
 const AvatarContainer = styled.section`
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   border: ${p => p.theme.border};
   border-radius: 100%;
   overflow: hidden;

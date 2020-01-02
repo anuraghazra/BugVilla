@@ -1,13 +1,14 @@
 import axios from 'axios';
+import auth from './utils/authHelper';
 
 const instance = axios.create({
   baseURL: 'http://localhost:5000/',
 });
 
 const requestHandler = (request: any) => {
-  console.log(request)
   // Modify request here
-  // request.headers['X-CodePen'] = 'https://codepen.io/teroauralinna/full/vPvKWe'
+  request.headers['Authorization'] = `Bearer ${auth.getToken()}`
+  console.log(request)
   return request
 }
 

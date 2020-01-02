@@ -8,8 +8,8 @@ interface Props {
 }
 
 const AuthRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
-  // const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
-  const isAuthenticated = true;
+  const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
+  
   return (
     <Route
       {...rest}

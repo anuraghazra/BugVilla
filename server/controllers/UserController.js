@@ -18,7 +18,7 @@ exports.signup = async (req, res) => {
   }
 
   // create username for the user with their name.
-  const slugifiedUsername = slugify(value.name, { lower: true, })
+  const slugifiedUsername = slugify(value.username, { lower: true, })
   try {
     // add bugs reference model
     const foundUser = await User.findOne({
@@ -29,6 +29,9 @@ exports.signup = async (req, res) => {
     });
     if (foundUser) {
       return res.conflict({ error: "Username / Email Already Exsist" })
+    }
+    if (!req.file) {
+      return res.unprocessable({ error: "Please Select An Image" })
     }
 
     const newUser = new User({
@@ -52,6 +55,7 @@ exports.signup = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err)
     res.internalError({
       error: 'Something went wrong'
     });

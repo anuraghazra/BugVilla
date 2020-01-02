@@ -83,6 +83,12 @@ const User = mongoose.model('User', UserSchema);
 // validate the inputs
 const validateUser = (user) => {
   const schema = Joi.object({
+    username:
+      Joi.string()
+        .pattern(/[^\s-]/)
+        .min(6)
+        .max(100)
+        .required(),
     name:
       Joi.string()
         .pattern(/^[a-zA-Z0-9\s]+$/)

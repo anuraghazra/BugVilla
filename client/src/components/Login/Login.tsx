@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -9,9 +9,10 @@ import Logo from 'assets/svg/BugVilla.svg'
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
+import Toast from 'components/common/Toast';
 
-import { loginUser } from 'store/ducks/auth';
-import { useDispatch } from 'react-redux';
+import { loginUser, clearError } from 'store/ducks/auth';
+import { useSelector, useDispatch } from 'react-redux';
 
 const LoginSchema = yup.object().shape({
   email: yup.string().min(5).max(100).email().required(),
@@ -20,17 +21,17 @@ const LoginSchema = yup.object().shape({
 
 
 const Login: React.FC = () => {
+  const isLoading = useSelector((state: any) => state.auth.isLoading);
+  const loginError = useSelector((state: any) => state.auth.error);
   const history = useHistory();
   const dispatch = useDispatch();
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: LoginSchema
   });
 
-
   const onSubmit = async (data: { name: string, email: string }) => {
-    console.log(data)
-    // submit form
-
+    // clearing errors because Toast Component is not rerendring
+    dispatch(clearError())
     dispatch(loginUser(data, history))
   }
 
@@ -59,7 +60,16 @@ const Login: React.FC = () => {
             inputRef={register({ required: 'Password is Required' })}
           />
 
-          <Button type="submit" width="50%" icon="arrow-right">SignUp</Button>
+          <Button
+            isLoading={isLoading}
+            disabled={isLoading}
+            type="submit"
+            width="50%"
+            icon="arrow-right"
+          >
+            Login
+          </Button>
+          <Toast isVisible={loginError}>{loginError}</Toast>
         </form>
 
         <IconLink className="color--gray" to="/">

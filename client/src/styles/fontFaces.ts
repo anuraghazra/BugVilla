@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 
 import productSansRegular from 'assets/fonts/product-sans/ProductSans-Regular.woff';
-import productSansBold from 'assets/fonts/product-sans/ProductSans-Regular.woff';
+import productSansBold from 'assets/fonts/product-sans/ProductSans-Bold.woff';
 import productSansLight from 'assets/fonts/product-sans/ProductSans-Light.woff';
 
 export const fontFaces = css`

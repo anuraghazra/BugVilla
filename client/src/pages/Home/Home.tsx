@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Signup from 'components/Signup/Signup';
 import Flex from 'components/common/Flex';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 

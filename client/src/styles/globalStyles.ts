@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import fontFaces from './fontFaces';
+// import fontFaces from './fontFaces';
 import utils from './utils.style';
 
+/* ${fontFaces} */
 const GlobalStyles = createGlobalStyle`
-  ${fontFaces}
   ${utils}
 
   * {

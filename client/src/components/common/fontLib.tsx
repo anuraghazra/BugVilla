@@ -6,7 +6,11 @@ import {
   faPlus,
   faEnvelope,
   faLock,
-  faEdit
+  faEdit,
+  faUser,
+  faSpinner,
+  faTimes,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -15,5 +19,9 @@ library.add(
   faPlus,
   faEnvelope,
   faLock,
-  faEdit
+  faEdit,
+  faUser,
+  faSpinner,
+  faTimes,
+  faExclamationTriangle
 );

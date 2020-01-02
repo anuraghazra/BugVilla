@@ -1,40 +1,29 @@
 import React, { useState } from 'react';
-import * as yup from 'yup'
-import slugify from 'slugify';
+
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import SignupWrapper from './Signup.style';
-import Flex from 'components/common/Flex';
 import Logo from 'assets/svg/BugVilla.svg'
+
+import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
+import Toast from 'components/common/Toast';
 
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader'
+import SignupWrapper, { StyledH3Input } from './Signup.style';
+import SignupSchema from './SignupSchema';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { signUserUp } from 'store/ducks/signup';
-
-const SignupSchema = yup.object().shape({
-  name: yup.string().min(6).max(100).trim().required(),
-  email: yup.string().min(5).max(100).email().required(),
-  password: yup.string().min(6).max(100).required(),
-  confirmPassword:
-    yup
-      .string()
-      .min(6).max(100)
-      .oneOf([yup.ref('password'), null], "Confirm Password does not match")
-      .required(),
-  avatar: yup.string()
-})
+import { signUserUp, clearError } from 'store/ducks/auth';
 
 
 const Signup: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [name, setName] = useState('Enter Your Name');
+  const isLoading = useSelector((state: any) => state.auth.isLoading);
+  const loginError = useSelector((state: any) => state.auth.error);
   const [file, setFile] = useState<any>();
 
   const { register, handleSubmit, errors, watch }: any = useForm({
@@ -50,18 +39,14 @@ const Signup: React.FC = () => {
     }
 
     // submit form
+    dispatch(clearError())
     dispatch(signUserUp(formData, history))
-  }
-
-  const handleNameChange = (e: any) => {
-    setName(e.target.value);
   }
 
   return (
     <SignupWrapper>
       <Flex align="center" justify="center" direction="column">
         <img className="logo" src={Logo} alt="BugVilla Logo" />
-        <h2 className="text--bold">Join The Team</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <AvatarFileUploader
@@ -71,20 +56,26 @@ const Signup: React.FC = () => {
             handleFile={(file) => setFile(file)}
           />
 
-          <h3 className="signup__username">
-            <input
+          <StyledH3Input>
+            <Input
               autoComplete="off"
               name="name"
-              maxLength={20}
-              placeholder="Enter your name"
-              onChange={handleNameChange}
               type="text"
-              value={name}
-              ref={register({ required: 'Name is required' })}
+              icon="edit"
+              placeholder="Enter Your Name"
+              errors={errors}
+              inputRef={register({ required: 'Name is required' })}
             />
-            <FontAwesomeIcon icon="edit" />
-          </h3>
-          <p className="signup__username--text">{slugify(name, { lower: true }) || 'Name is required'}</p>
+          </StyledH3Input>
+
+          <Input
+            name="username"
+            type="text"
+            icon="user"
+            placeholder="user-name"
+            errors={errors}
+            inputRef={register({ required: 'Username is required' })}
+          />
 
           <Input
             name="email"
@@ -103,6 +94,7 @@ const Signup: React.FC = () => {
             errors={errors}
             inputRef={register({ required: 'Password is Required' })}
           />
+
           <Input
             type="password"
             name="confirmPassword"
@@ -117,10 +109,19 @@ const Signup: React.FC = () => {
             })}
           />
 
-          <Button type="submit" width="50%" icon="arrow-right">SignUp</Button>
+          <Button
+            isLoading={isLoading}
+            type="submit"
+            width="50%"
+            icon="arrow-right"
+          >
+            SignUp
+          </Button>
+
+          <Toast isVisible={loginError}>{loginError}</Toast>
         </form>
 
-        <IconLink className="color--gray" to="/signup">
+        <IconLink className="color--gray" to="/login">
           Already have an account?
         </IconLink>
       </Flex>

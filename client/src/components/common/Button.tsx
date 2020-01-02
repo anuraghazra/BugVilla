@@ -21,18 +21,23 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
     transform: scale(1.05);
     transition: 0.2s;
   }
+
+  &:disabled {
+    opacity: 0.8;
+  }
 `
 
 interface Props {
   width: string,
   icon: any;
   children: React.ReactNode;
-  [x:string]: any
+  isLoading?: boolean;
+  [x: string]: any
 }
 
-const Button: React.FC<Props> = ({ icon, children, width, ...props }) => (
+const Button: React.FC<Props> = ({ icon, children, width, isLoading, ...props }) => (
   <StyledButton {...props} width={width}>
-    <FontAwesomeIcon icon={icon} />
+    <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
     {children}
   </StyledButton>
 )

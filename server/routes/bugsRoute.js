@@ -3,7 +3,7 @@ const verify = require('../middleware/verify')
 
 const BugsController = require('../controllers/BugsController')
 
-router.get('/', BugsController.getBugs)
+router.get('/', verify, BugsController.getBugs)
 router.get('/:bugId', BugsController.getBugByNumber)
 router.post('/', verify, BugsController.createBug)
 

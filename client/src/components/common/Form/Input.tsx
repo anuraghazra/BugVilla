@@ -51,11 +51,11 @@ const InputWrapper = styled.div`
   
   .text--error {
     font-size: 12px;
-    margin-left: 16px;
     opacity: 0;
     transition: 0.3s;
     transform: translateY(-20px);
     margin-top: 5px;
+    margin-left: 16px;
 
     &:before {
       content: '* ';
