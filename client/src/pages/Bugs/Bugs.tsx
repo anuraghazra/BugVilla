@@ -14,7 +14,9 @@ const Bugs: React.FC = () => {
     }
 
     getBugs();
-  }, [])
+  }, []);
+
+
   return (
     <div>
       <h2>Bugs Page</h2>

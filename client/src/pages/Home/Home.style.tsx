@@ -20,6 +20,15 @@ const HomeWrapper = styled.section`
     
     .home__text {
       margin-left: -50px;
+      z-index: 1;
+    }
+
+    
+    @media screen and (${p => p.theme.media.mobile}) {
+      min-height: 50vh;
+      .home__text {
+        margin-left: 0px;
+      }
     }
   }
 
@@ -34,6 +43,7 @@ const HomeWrapper = styled.section`
     width: 200px;
     z-index: 1;
   }
+
 `
 
 export default HomeWrapper;

@@ -20,6 +20,10 @@ const LoginWrapper = styled.div`
     justify-content: center;
     align-items: center;
   }
+
+  @media screen and (${p => p.theme.media.mobile}) {
+    margin-top: ${p => p.theme.spacings.top}px;
+  }
 `
 
 

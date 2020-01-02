@@ -25,7 +25,7 @@ const App: React.FC = () => {
             <Route path="/login" component={() => {
               return <Home right={Login}></Home>
             }} />
-            <AuthRoute path="/bugs" component={Bugs} />
+            <Route path="/bugs" component={Bugs} />
           </Switch>
         </div>
       </Router>

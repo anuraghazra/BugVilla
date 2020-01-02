@@ -88,8 +88,8 @@ const theme: DefaultTheme = {
   },
   colors,
   spacings: {
-    top: 60,
-    bottom: 60,
+    top: 40,
+    bottom: 40,
     left: 25,
     right: 25,
     my: '20px',  
@@ -97,11 +97,11 @@ const theme: DefaultTheme = {
   },
   border: `2px solid ${colors.common.offwhite}`,
   media: {
-    mobileS: `(max-width: ${size.mobileS})`,
-    mobile: `(max-width: ${size.mobile})`,
-    tablet: `(max-width: ${size.tablet})`,
-    desktop: `(max-width: ${size.desktop})`,
-    desktopL: `(max-width: ${size.desktopL})`,
+    mobileS: `max-width: ${size.mobileS}`,
+    mobile: `max-width: ${size.mobile}`,
+    tablet: `max-width: ${size.tablet}`,
+    desktop: `max-width: ${size.desktop}`,
+    desktopL: `max-width: ${size.desktopL}`,
   }
 }
 
