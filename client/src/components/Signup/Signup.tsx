@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import * as yup from 'yup'
 import slugify from 'slugify';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SignupWrapper from './Signup.style';
 import Flex from 'components/common/Flex';
-
 import Logo from 'assets/svg/BugVilla.svg'
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
@@ -19,18 +19,21 @@ import { signUserUp } from 'store/ducks/signup';
 
 const SignupSchema = yup.object().shape({
   name: yup.string().min(6).max(100).trim().required(),
-  email: yup.string().min(5).max(100).required().email(),
+  email: yup.string().min(5).max(100).email().required(),
   password: yup.string().min(6).max(100).required(),
   confirmPassword:
-    yup.string()
+    yup
+      .string()
       .min(6).max(100)
       .oneOf([yup.ref('password'), null], "Confirm Password does not match")
       .required(),
   avatar: yup.string()
 })
 
+
 const Signup: React.FC = () => {
-  const dispatch = useDispatch()
+  const history = useHistory();
+  const dispatch = useDispatch();
   const [name, setName] = useState('Enter Your Name');
   const [file, setFile] = useState<any>();
 
@@ -47,7 +50,7 @@ const Signup: React.FC = () => {
     }
 
     // submit form
-    dispatch(signUserUp(formData))
+    dispatch(signUserUp(formData, history))
   }
 
   const handleNameChange = (e: any) => {
@@ -81,7 +84,7 @@ const Signup: React.FC = () => {
             />
             <FontAwesomeIcon icon="edit" />
           </h3>
-          <p className="signup__username--text">{slugify(name, { lower: true })}</p>
+          <p className="signup__username--text">{slugify(name, { lower: true }) || 'Name is required'}</p>
 
           <Input
             name="email"
@@ -116,6 +119,7 @@ const Signup: React.FC = () => {
 
           <Button type="submit" width="50%" icon="arrow-right">SignUp</Button>
         </form>
+
         <IconLink className="color--gray" to="/signup">
           Already have an account?
         </IconLink>

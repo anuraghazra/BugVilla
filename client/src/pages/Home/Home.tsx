@@ -7,7 +7,11 @@ import circleShapes from 'assets/svg/circle_shapes.svg';
 import HomeWrapper from './Home.style';
 import IconLink from 'components/common/IconLink';
 
-const Home: React.FC = () => {
+
+interface Props {
+  right: any
+}
+const Home: React.FC<Props> = ({ right: Right }) => {
   return (
     <HomeWrapper>
       <img className="home__shape" src={circleShapes} />
@@ -28,7 +32,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="home__right">
-          <Signup />
+          <Right />
         </div>
       </Flex>
     </HomeWrapper>

@@ -14,7 +14,7 @@ const DEFAULT_STATE = {
 }
 
 // reducers
-export default function reducer(state = DEFAULT_STATE, action: any) {
+const reducer = (state = DEFAULT_STATE, action: { type: string, payload: any }) => {
   switch (action.type) {
     case SIGNUP_LOADING:
       return { ...state, isLoading: true }
@@ -27,13 +27,15 @@ export default function reducer(state = DEFAULT_STATE, action: any) {
   }
 }
 
+export default reducer;
+
 
 // actions creators
-export const userSignupAction = (data: any) => ({ type: SIGNUP_SUCCESS, payload: data })
-export const userSignupError = (data: any) => ({ type: SIGNUP_ERROR, payload: data })
+export const userSignupAction = (data: object) => ({ type: SIGNUP_SUCCESS, payload: data })
+export const userSignupError = (data: object) => ({ type: SIGNUP_ERROR, payload: data })
 
 // side effects
-export const signUserUp = (formData: FormData) => {
+export const signUserUp = (formData: FormData, history: any) => {
   return async (dispatch: Dispatch) => {
     try {
       const res = await http({
@@ -42,6 +44,7 @@ export const signUserUp = (formData: FormData) => {
         data: formData,
       });
       dispatch(userSignupAction(res.data));
+      history.push('/login')
     }
     catch (err) {
       dispatch(userSignupError(err.response.data))

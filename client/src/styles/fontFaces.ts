@@ -1,7 +1,6 @@
 import { css } from 'styled-components';
 
 import productSansRegular from 'assets/fonts/product-sans/ProductSans-Regular.woff';
-// import pSans from 'assets/fonts/psans.woff2';
 import productSansBold from 'assets/fonts/product-sans/ProductSans-Regular.woff';
 import productSansLight from 'assets/fonts/product-sans/ProductSans-Light.woff';
 
@@ -13,6 +12,20 @@ export const fontFaces = css`
     font-style: normal;
     font-weight: normal;
     src: local("Product Sans Regular"), url(${productSansRegular}) format("woff");
+  }
+  
+  @font-face {
+    font-family: "Product Sans Light Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Product Sans Light Regular"), url(${productSansLight}) format("woff");
+  }
+
+  @font-face {
+    font-family: "Product Sans Bold";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Product Sans Bold"), url(${productSansBold}) format("woff");
   }
 
   @font-face {
@@ -29,12 +42,6 @@ export const fontFaces = css`
     src: local("Product Sans Thin Regular"), url("assets/fonts/product-sans/ProductSans-Thin.woff") format("woff");
   }
 
-  @font-face {
-    font-family: "Product Sans Light Regular";
-    font-style: normal;
-    font-weight: normal;
-    src: local("Product Sans Light Regular"), url(${productSansLight}) format("woff");
-  }
 
   @font-face {
     font-family: "Product Sans Medium Regular";
@@ -69,13 +76,6 @@ export const fontFaces = css`
     font-style: normal;
     font-weight: normal;
     src: local("Product Sans Medium Italic"), url("assets/fonts/product-sans/ProductSans-MediumItalic.woff") format("woff");
-  }
-
-  @font-face {
-    font-family: "Product Sans Bold";
-    font-style: normal;
-    font-weight: normal;
-    src: local("Product Sans Bold"), url(${productSansBold}) format("woff");
   }
 
   @font-face {

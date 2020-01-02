@@ -36,8 +36,8 @@ const GlobalStyles = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
-    line-height: 150%;
-    letter-spacing: 1px;
+    line-height: 1.5em;
+    letter-spacing: 0px;
     font-family: inherit;
     font-weight: inherit;
   }
@@ -47,7 +47,7 @@ const GlobalStyles = createGlobalStyle`
   }
   a {
     text-decoration: none;
-    line-height: 150%;
+    line-height: 1.5em;
     color: ${p => p.theme.colors.text.black}
   }
 
