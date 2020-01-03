@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
@@ -85,6 +86,17 @@ app.use('/api/bugs', require('./routes/commentsRoute'));
 
 // console.log(routes)
 
+
+// Server Side Routing
+// If no API routes are hit, send the React app
+app.use(express.static('client/build'));
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+});
 
 // finally handle errors
 app.use(errorHandler);
