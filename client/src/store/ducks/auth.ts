@@ -2,48 +2,64 @@ import http from 'httpInstance';
 import auth from 'utils/authHelper';
 
 // action
-export const CLEAR_ERROR = 'auth/CLEAR_ERROR';
-export const AUTH_SUCCESS = 'login/AUTH_SUCCESS';
-export const AUTH_ERROR = 'login/AUTH_ERROR';
-export const AUTH_LOADING = 'login/AUTH_LOADING';
-export const SIGNUP_SUCCESS = 'signup/SIGNUP_SUCCESS';
-export const SIGNUP_ERROR = 'signup/SIGNUP_ERROR';
+export const LOGIN_SUCCESS = 'login/SUCCESS';
+export const LOGIN_ERROR = 'login/ERROR';
+export const LOGIN_LOADING = 'login/LOADING';
+export const LOGIN_CLEAR_ERROR = 'login/CLEAR_ERROR';
+
+export const SIGNUP_SUCCESS = 'signup/SUCCESS';
+export const SIGNUP_ERROR = 'signup/ERROR';
+export const SIGNUP_LOADING = 'signup/LOADING';
+export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 
 
 const DEFAULT_STATE = {
   isAuthenticated: false,
-  isLoading: false,
-  error: null,
+  isLoginPending: false,
+  isSignupPending: false,
+  loginError: null,
+  signupError: null,
   user: null,
 }
 
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
-    case AUTH_LOADING:
-      return { ...state, isLoading: true }
-    case AUTH_ERROR:
+    case LOGIN_LOADING:
+      return { ...state, isLoginPending: true }
+    case LOGIN_ERROR:
       return {
         ...state,
-        error: action.payload,
-        isLoading: false
+        loginError: action.payload,
+        isLoginPending: false
       }
-    case AUTH_SUCCESS:
+    case LOGIN_SUCCESS:
       return {
         ...state,
-        isAuthenticated: true,
         user: action.payload,
-        error: null,
-        isLoading: false,
+        isAuthenticated: true,
+        loginError: null,
+        isLoginPending: false,
+      }
+
+    case SIGNUP_LOADING: return { ...state, isSignupPending: true }
+    case SIGNUP_ERROR:
+      return {
+        ...state,
+        signupError: action.payload,
+        isSignupPending: false
       }
     case SIGNUP_SUCCESS:
       return {
         ...state,
-        error: null,
-        isLoading: false,
+        signupError: null,
+        isSignupPending: false,
       }
-    case CLEAR_ERROR:
-      return { ...state, error: null }
+
+    case LOGIN_CLEAR_ERROR:
+      return { ...state, loginError: null }
+    case SIGNUP_CLEAR_ERROR:
+      return { ...state, signupError: null }
     default:
       return state;
   }
@@ -53,16 +69,21 @@ export default reducer;
 
 
 // actions creators
-export const userLoadingAction = () => ({ type: AUTH_LOADING })
-export const authErrorAction = (data: any) => ({ type: AUTH_ERROR, payload: data })
-export const userLoginSuccess = (data: any) => ({ type: AUTH_SUCCESS, payload: data })
-export const userSignupSuccess = (data: any) => ({ type: SIGNUP_SUCCESS, payload: data })
-export const clearError = () => ({ type: CLEAR_ERROR })
+export const loginLoading = () => ({ type: LOGIN_LOADING })
+export const loginSuccess = (data: any) => ({ type: LOGIN_SUCCESS, payload: data })
+export const loginError = (data: any) => ({ type: LOGIN_ERROR, payload: data })
+
+export const signupLoading = () => ({ type: SIGNUP_LOADING })
+export const signupSuccess = (data: any) => ({ type: SIGNUP_SUCCESS, payload: data })
+export const signupError = (data: any) => ({ type: SIGNUP_ERROR, payload: data })
+
+export const loginClearError = () => ({ type: LOGIN_CLEAR_ERROR })
+export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
 
 // side effects
 export const signUserUp = (formData: FormData, history: any) => {
   return async (dispatch: any) => {
-    dispatch(userLoadingAction());
+    dispatch(signupLoading());
 
     try {
       const res = await http({
@@ -71,11 +92,12 @@ export const signUserUp = (formData: FormData, history: any) => {
         data: formData,
       });
       let { data } = res.data;
-      dispatch(userSignupSuccess(data));
+      dispatch(signupSuccess(data));
+      dispatch(signupClearError());
       history.push('/login')
     }
     catch (err) {
-      dispatch(authErrorAction(err.response.data.error))
+      dispatch(signupError(err.response.data.error))
     }
   }
 }
@@ -83,7 +105,7 @@ export const signUserUp = (formData: FormData, history: any) => {
 // side effects
 export const loginUser = (formData: { name: string, email: string }, history: any) => {
   return async (dispatch: any) => {
-    dispatch(userLoadingAction());
+    dispatch(loginLoading());
 
     try {
       const res = await http({
@@ -92,12 +114,13 @@ export const loginUser = (formData: { name: string, email: string }, history: an
         data: formData,
       });
       const { data } = res.data;
-      dispatch(userLoginSuccess(data));
+      dispatch(loginSuccess(data));
+      dispatch(loginClearError());
       auth.setToken(data.token)
       history.push('/bugs')
     }
     catch (err) {
-      dispatch(authErrorAction(err.response.data.error))
+      dispatch(loginError(err.response.data.error))
     }
   }
 }

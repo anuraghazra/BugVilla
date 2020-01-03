@@ -2,7 +2,7 @@ import axios from 'axios';
 import auth from './utils/authHelper';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/',
+  baseURL: '/',
 });
 
 const requestHandler = (request: any) => {

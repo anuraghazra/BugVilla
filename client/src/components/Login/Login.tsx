@@ -11,7 +11,7 @@ import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
 
-import { loginUser, clearError } from 'store/ducks/auth';
+import { loginUser, loginClearError } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 
 const LoginSchema = yup.object().shape({
@@ -21,8 +21,8 @@ const LoginSchema = yup.object().shape({
 
 
 const Login: React.FC = () => {
-  const isLoading = useSelector((state: any) => state.auth.isLoading);
-  const loginError = useSelector((state: any) => state.auth.error);
+  const isLoading = useSelector((state: any) => state.auth.isLoginPending);
+  const loginError = useSelector((state: any) => state.auth.loginError);
   const history = useHistory();
   const dispatch = useDispatch();
   const { register, handleSubmit, errors }: any = useForm({
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: { name: string, email: string }) => {
     // clearing errors because Toast Component is not rerendring
-    dispatch(clearError())
+    dispatch(loginClearError())
     dispatch(loginUser(data, history))
   }
 
