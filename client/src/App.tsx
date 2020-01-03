@@ -10,6 +10,9 @@ import Home from 'pages/Home/Home';
 import Bugs from 'pages/Bugs/Bugs';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
+import Dashboard from 'pages/Dashboard/Dashboard';
+
+const NotFound = () => <p>404</p>;
 
 const App: React.FC = () => {
   return (
@@ -26,6 +29,8 @@ const App: React.FC = () => {
               return <Home right={Login}></Home>
             }} />
             <Route path="/bugs" component={Bugs} />
+            <AuthRoute path="/dashboard" component={Dashboard} />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </Router>

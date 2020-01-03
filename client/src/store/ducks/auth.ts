@@ -2,6 +2,7 @@ import http from 'httpInstance';
 import auth from 'utils/authHelper';
 
 // action
+export const AUTH_SET_USER = 'auth/SET_USER';
 export const LOGIN_SUCCESS = 'login/SUCCESS';
 export const LOGIN_ERROR = 'login/ERROR';
 export const LOGIN_LOADING = 'login/LOADING';
@@ -25,6 +26,8 @@ const DEFAULT_STATE = {
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
+    case AUTH_SET_USER:
+      return { ...state, user: action.payload, isAuthenticated: true }
     case LOGIN_LOADING:
       return { ...state, isLoginPending: true }
     case LOGIN_ERROR:
@@ -69,6 +72,7 @@ export default reducer;
 
 
 // actions creators
+export const setUser = (data: any) => ({ type: AUTH_SET_USER, payload: data })
 export const loginLoading = () => ({ type: LOGIN_LOADING })
 export const loginSuccess = (data: any) => ({ type: LOGIN_SUCCESS, payload: data })
 export const loginError = (data: any) => ({ type: LOGIN_ERROR, payload: data })
