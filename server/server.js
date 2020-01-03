@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 
 require('dotenv').config();
-const { PORT } = require('./constants');
+const PORT = process.env.PORT || 5000;
 
 const morgan = require('morgan');
 const rateLimit = require("express-rate-limit");
