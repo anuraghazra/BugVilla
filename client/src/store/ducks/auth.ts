@@ -1,4 +1,4 @@
-import http from 'httpInstance';
+import http from 'utils/httpInstance';
 import auth from 'utils/authHelper';
 
 // action

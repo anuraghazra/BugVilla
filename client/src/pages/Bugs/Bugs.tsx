@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
-import http from 'httpInstance';
+import http from 'utils/httpInstance';
 import auth from 'utils/authHelper';
 import BugCard from 'components/BugCard/BugCard';
 

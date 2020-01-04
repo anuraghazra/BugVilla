@@ -1,39 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import styled from 'styled-components/macro';
+
 import dummyImage from 'assets/images/avatar_dummy.png';
-
-const AvatarContainer = styled.section`
-  position: relative;
-  width: 130px;
-  height: 130px;
-  border: ${p => p.theme.border};
-  border-radius: 100%;
-  overflow: hidden;
-  margin: 0px;
-
-  .dropzone {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    line-height: 115px;
-    text-align: center;
-    background-color: rgba(88, 111, 253, 0.8);
-    opacity: 0;
-    cursor: pointer;
-    color: ${p => p.theme.colors.common.white};
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .img__preview {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
+import AvatarContainer from './AvatarFileUploader.style';
 
 interface Props {
   name?: string;
