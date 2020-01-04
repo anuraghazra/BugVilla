@@ -10,7 +10,7 @@ const Avatar = styled.img<AvatarProps>`
   height: ${p => p.height || '150px'};
   border: ${p => p.theme.border};
   border-radius: 100%;
-
+  object-fit: cover;
   margin: 0px;
 `
 

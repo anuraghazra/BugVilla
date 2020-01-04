@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import * as yup from 'yup'
+import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
 import LoginWrapper from '../Signup/Signup.style';
 import Flex from 'components/common/Flex';
-import Logo from 'assets/svg/BugVilla.svg'
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
+import BugVillaLogo from 'components/common/Logo';
 
 import { loginUser, loginClearError } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 
 const LoginSchema = yup.object().shape({
-  email: yup.string().min(5).max(100).email().required(),
-  password: yup.string().min(6).max(100).required(),
-})
-
+  email: yup
+    .string()
+    .min(5)
+    .max(100)
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(6)
+    .max(100)
+    .required()
+});
 
 const Login: React.FC = () => {
   const isLoading = useSelector((state: any) => state.auth.isLoginPending);
@@ -29,16 +37,16 @@ const Login: React.FC = () => {
     validationSchema: LoginSchema
   });
 
-  const onSubmit = async (data: { name: string, email: string }) => {
+  const onSubmit = async (data: { name: string; email: string }) => {
     // clearing errors because Toast Component is not rerendring
-    dispatch(loginClearError())
-    dispatch(loginUser(data, history))
-  }
+    dispatch(loginClearError());
+    dispatch(loginUser(data, history));
+  };
 
   return (
     <LoginWrapper>
       <Flex align="center" justify="center" direction="column">
-        <img className="logo" src={Logo} alt="BugVilla Logo" />
+        <BugVillaLogo />
         <h2 className="text--bold">Welcome back!</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -77,7 +85,7 @@ const Login: React.FC = () => {
         </IconLink>
       </Flex>
     </LoginWrapper>
-  )
-}
+  );
+};
 
 export default Login;

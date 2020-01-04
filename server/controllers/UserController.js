@@ -99,6 +99,7 @@ exports.login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        username: user.username,
         token
       }
     });
@@ -108,6 +109,29 @@ exports.login = async (req, res) => {
     });
   }
 }
+
+
+/**
+ * @route GET /user/verify
+ * @type RequestHandler
+ */
+exports.verifyUser = async (req, res) => {
+  try {
+    if (!req.user) return res.forbidden({ error: "Invalid User" })
+    res.ok({
+      data: {
+        id: req.user.id,
+        name: req.user.name,
+        username: req.user.username,
+      }
+    });
+  } catch (err) {
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+
 
 
 /**

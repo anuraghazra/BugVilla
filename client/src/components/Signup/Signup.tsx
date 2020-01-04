@@ -4,20 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
-import Logo from 'assets/svg/BugVilla.svg'
-
 import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
+import BugVillaLogo from 'components/common/Logo';
 
-import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader'
+import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
 import SignupWrapper, { StyledH3Input } from './Signup.style';
 import SignupSchema from './SignupSchema';
 
 import { signUserUp, signupClearError } from 'store/ducks/auth';
-
 
 const Signup: React.FC = () => {
   const history = useHistory();
@@ -30,7 +28,6 @@ const Signup: React.FC = () => {
     validationSchema: SignupSchema
   });
 
-
   const onSubmit = (data: any) => {
     const formData = new FormData();
     file && formData.append('image', file);
@@ -39,21 +36,20 @@ const Signup: React.FC = () => {
     }
 
     // submit form
-    dispatch(signupClearError())
-    dispatch(signUserUp(formData, history))
-  }
+    dispatch(signupClearError());
+    dispatch(signUserUp(formData, history));
+  };
 
   return (
     <SignupWrapper>
       <Flex align="center" justify="center" direction="column">
-        <img className="logo" src={Logo} alt="BugVilla Logo" />
-
+        <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>
           <AvatarFileUploader
             name="image"
             inputRef={register({ required: 'Image is required' })}
             file={file}
-            handleFile={(file) => setFile(file)}
+            handleFile={file => setFile(file)}
           />
 
           <StyledH3Input>
@@ -104,8 +100,11 @@ const Signup: React.FC = () => {
             inputRef={register({
               required: 'Confirm Password is Required',
               validate: (value: string) => {
-                return value === watch('password') || 'Confirm Password does not match';
-              },
+                return (
+                  value === watch('password') ||
+                  'Confirm Password does not match'
+                );
+              }
             })}
           />
 
@@ -126,7 +125,7 @@ const Signup: React.FC = () => {
         </IconLink>
       </Flex>
     </SignupWrapper>
-  )
-}
+  );
+};
 
 export default Signup;

@@ -10,6 +10,8 @@ import {
   faUser,
   faSpinner,
   faTimes,
+  faHome,
+  faTag,
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -23,5 +25,7 @@ library.add(
   faUser,
   faSpinner,
   faTimes,
+  faHome,
+  faTag,
   faExclamationTriangle
 );

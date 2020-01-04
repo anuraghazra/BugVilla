@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from 'components/Sidebar/Sidebar';
+import Bugs from 'pages/Bugs/Bugs';
 
 const DashboardWrapper = styled.section`
-  padding: 40px;
-
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 250px 1fr;
 `
 const DashboardBody = styled.section`
-  margin-left: 30px;
+  padding: 40px;
 `
 
 const Dashboard: React.FC = () => {
@@ -18,6 +17,8 @@ const Dashboard: React.FC = () => {
       <Sidebar />
       <DashboardBody>
         <h1>Track Bugs</h1>
+        <hr/>
+        <Bugs />
       </DashboardBody>
     </DashboardWrapper>
   )

@@ -14,7 +14,21 @@ export const SIGNUP_LOADING = 'signup/LOADING';
 export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 
 
-const DEFAULT_STATE = {
+interface UserProps {
+  username: string;
+  name: string;
+  id: number;
+}
+interface DefaultStateProps {
+  isAuthenticated: boolean,
+  isLoginPending: boolean,
+  isSignupPending: boolean,
+  loginError: null | object,
+  signupError: null | object,
+  user: null | UserProps;
+}
+
+const DEFAULT_STATE: DefaultStateProps = {
   isAuthenticated: false,
   isLoginPending: false,
   isSignupPending: false,
@@ -72,9 +86,9 @@ export default reducer;
 
 
 // actions creators
-export const setUser = (data: any) => ({ type: AUTH_SET_USER, payload: data })
+export const setUser = (data: UserProps | null) => ({ type: AUTH_SET_USER, payload: data })
 export const loginLoading = () => ({ type: LOGIN_LOADING })
-export const loginSuccess = (data: any) => ({ type: LOGIN_SUCCESS, payload: data })
+export const loginSuccess = (data: UserProps) => ({ type: LOGIN_SUCCESS, payload: data })
 export const loginError = (data: any) => ({ type: LOGIN_ERROR, payload: data })
 
 export const signupLoading = () => ({ type: SIGNUP_LOADING })
@@ -83,6 +97,8 @@ export const signupError = (data: any) => ({ type: SIGNUP_ERROR, payload: data }
 
 export const loginClearError = () => ({ type: LOGIN_CLEAR_ERROR })
 export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
+
+
 
 // side effects
 export const signUserUp = (formData: FormData, history: any) => {
@@ -99,14 +115,13 @@ export const signUserUp = (formData: FormData, history: any) => {
       dispatch(signupSuccess(data));
       dispatch(signupClearError());
       history.push('/login')
-    }
-    catch (err) {
+    } catch (err) {
       dispatch(signupError(err.response.data.error))
     }
   }
 }
 
-// side effects
+
 export const loginUser = (formData: { name: string, email: string }, history: any) => {
   return async (dispatch: any) => {
     dispatch(loginLoading());
@@ -118,12 +133,37 @@ export const loginUser = (formData: { name: string, email: string }, history: an
         data: formData,
       });
       const { data } = res.data;
-      dispatch(loginSuccess(data));
+      dispatch(loginSuccess({
+        username: data.username,
+        name: data.name,
+        id: data.id
+      }));
       dispatch(loginClearError());
       auth.setToken(data.token)
-      history.push('/bugs')
+      history.push('/dashboard')
+    } catch (err) {
+      auth.logout();
+      dispatch(loginError(err.response.data.error))
     }
-    catch (err) {
+  }
+}
+
+
+export const verifyLogin = () => {
+  return async (dispatch: any) => {
+    dispatch(loginLoading());
+
+    try {
+      const res = await http({
+        method: 'GET',
+        url: '/api/user/verify',
+      });
+
+      const { data } = res.data;
+      console.log(data);
+      dispatch(loginSuccess(data));
+      dispatch(loginClearError());
+    } catch (err) {
       dispatch(loginError(err.response.data.error))
     }
   }

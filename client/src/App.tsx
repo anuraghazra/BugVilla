@@ -28,7 +28,7 @@ const App: React.FC = () => {
             <Route path="/login" component={() => {
               return <Home right={Login}></Home>
             }} />
-            <Route path="/bugs" component={Bugs} />
+            <AuthRoute path="/bugs" component={Bugs} />
             <AuthRoute path="/dashboard" component={Dashboard} />
             <Route component={NotFound} />
           </Switch>

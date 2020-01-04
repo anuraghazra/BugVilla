@@ -9,11 +9,12 @@ import * as serviceWorker from "./serviceWorker";
 
 import store from "./store";
 import { Provider } from "react-redux";
-import { setUser } from "store/ducks/auth";
+import { verifyLogin, setUser } from "store/ducks/auth";
 import auth from "utils/authHelper";
 
-let user = auth.getUser();
-store.dispatch(setUser(user));
+if (auth.loggedIn()) {
+  store.dispatch(setUser(auth.getUser()))
+}
 
 ReactDOM.render(
   <Provider store={store}>
