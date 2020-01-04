@@ -17,6 +17,7 @@ declare module 'styled-components' {
         green: string;
         redlight: string;
         greenlight: string;
+        cardBg: string;
       },
       text: {
         black: string;
@@ -63,6 +64,7 @@ const colors = {
     green: '#25B93E',
     redlight: '#FFDADA',
     greenlight: '#CEFDD7',
+    cardBg: '#F7F8FF',
   },
   text: {
     black: '#3D3C47',

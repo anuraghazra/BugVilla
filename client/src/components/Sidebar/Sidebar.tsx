@@ -8,9 +8,9 @@ import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
 
 const SidebarWrapper = styled.aside`
-  padding: 40px;
-  display: flex;
-  flex-wrap: wrap;
+  padding: 60px 40px;
+  /* display: flex;
+  flex-wrap: wrap; */
 
   p {
     margin: 0;
@@ -35,17 +35,19 @@ const Sidebar: React.FC = () => {
 
   return (
     <SidebarWrapper>
-      <BugVillaLogo width="120px" />
-      <div>
+      <BugVillaLogo width="100px" />
+      <Flex align="center" justify="center">
         <Avatar
           className="dashboard__avatar"
           width="130px"
           height="130px"
-          src={`/api/user/${user.username}/avatar/raw`}
+          src={`/api/usedr/${user.username}/avatar/raw`}
         />
-        <h2 className="text--bold">{user && user.name}</h2>
-        <p className="color--gray">{user && user.username}</p>
-      </div>
+        <div>
+          <h2 className="text--bold">{user && user.name}</h2>
+          <p className="color--gray">{user && user.username}</p>
+        </div>
+      </Flex>
 
       <SidebarLinks>
         <Flex direction="column">
