@@ -1,10 +1,10 @@
-import React from 'react';
 import styled from 'styled-components/macro';
 
 interface AvatarProps {
   width: string;
   height: string;
 }
+
 const Avatar = styled.img<AvatarProps>`
   width: ${p => p.width || '150px'};
   height: ${p => p.height || '150px'};
@@ -12,6 +12,6 @@ const Avatar = styled.img<AvatarProps>`
   border-radius: 100%;
   object-fit: cover;
   margin: 0px;
-`
+`;
 
 export default Avatar;

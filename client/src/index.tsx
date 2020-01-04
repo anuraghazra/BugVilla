@@ -1,26 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./styles/index.css";
-import "./styles/fontStyles.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.css';
+import './styles/fontStyles.css';
 
-import "components/common/fontLib";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import './fontLib';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
-import store from "./store";
-import { Provider } from "react-redux";
-import { verifyLogin, setUser } from "store/ducks/auth";
-import auth from "utils/authHelper";
+import store from './store';
+import { Provider } from 'react-redux';
+import { setUser } from 'store/ducks/auth';
+import auth from 'utils/authHelper';
 
 if (auth.loggedIn()) {
-  store.dispatch(setUser(auth.getUser()))
+  store.dispatch(setUser(auth.getUser()));
 }
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

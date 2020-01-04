@@ -20,8 +20,8 @@ const StyledToast = styled.span<StyledProps>`
   background-color: ${p => p.theme.colors.common.redlight};
   padding: 15px;
 
-  opacity: ${p => p.isVisible ? 1 : 0};
-  pointer-events: ${p => p.isVisible ? 'all' : 'none'};
+  opacity: ${p => (p.isVisible ? 1 : 0)};
+  pointer-events: ${p => (p.isVisible ? 'all' : 'none')};
   transition: 0.3s;
 
   .close-icon {
@@ -38,37 +38,39 @@ const StyledToast = styled.span<StyledProps>`
   .message {
     margin-left: 10px;
   }
-`
+`;
 
 interface Props {
-  children: React.ReactNode;
   isVisible?: boolean;
+  children: React.ReactNode;
 }
 
-const Toast: React.FC<Props> = ({ children, isVisible }) => {
+const Toast: React.FC<Props> = ({ isVisible, children }) => {
   const [isToastVisible, setToastVisibility] = useState<any>(null);
 
   useEffect(() => {
-    setToastVisibility(isVisible)
+    setToastVisibility(isVisible);
     let timer = window.setTimeout(() => {
       setToastVisibility(false);
-    }, 2000)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [isVisible])
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [isVisible]);
 
   const closeToast = () => {
     setToastVisibility(false);
-  }
+  };
 
   return (
     <StyledToast isVisible={isToastVisible}>
       <FontAwesomeIcon icon="exclamation-triangle" />
       <span className="message">{children}</span>
-      <FontAwesomeIcon onClick={closeToast} className="close-icon" icon="times" />
+      <FontAwesomeIcon
+        onClick={closeToast}
+        className="close-icon"
+        icon="times"
+      />
     </StyledToast>
-  )
-}
+  );
+};
 
 export default Toast;

@@ -14,16 +14,15 @@ const HomeWrapper = styled.section`
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     background-color: ${p => p.theme.colors.brand.primary};
     color: ${p => p.theme.colors.common.white};
-    
+
     .home__text {
       margin-left: -50px;
       z-index: 1;
     }
 
-    
     @media screen and (${p => p.theme.media.mobile}) {
       min-height: 50vh;
       .home__text {
@@ -43,7 +42,6 @@ const HomeWrapper = styled.section`
     width: 200px;
     z-index: 1;
   }
-
-`
+`;
 
 export default HomeWrapper;

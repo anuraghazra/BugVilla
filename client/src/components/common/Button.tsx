@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ButtonProps {
   width?: string;
 }
+
+// prettier-ignore
 const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivElement>>`
   background-color: ${p => p.theme.colors.brand.primary};
   color: ${p => p.theme.colors.common.white};
@@ -25,21 +27,27 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
   &:disabled {
     opacity: 0.8;
   }
-`
+`;
 
 interface Props {
-  width: string,
+  width: string;
   icon: any;
   children: React.ReactNode;
   isLoading?: boolean;
-  [x: string]: any
+  [x: string]: any;
 }
 
-const Button: React.FC<Props> = ({ icon, children, width, isLoading, ...props }) => (
+const Button: React.FC<Props> = ({
+  width,
+  icon,
+  children,
+  isLoading,
+  ...props
+}) => (
   <StyledButton {...props} width={width}>
     <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
     {children}
   </StyledButton>
-)
+);
 
 export default Button;

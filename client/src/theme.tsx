@@ -9,7 +9,7 @@ declare module 'styled-components' {
         secondary: string;
         light: string;
         accent: string;
-      },
+      };
       common: {
         white: string;
         offwhite: string;
@@ -18,11 +18,11 @@ declare module 'styled-components' {
         redlight: string;
         greenlight: string;
         cardBg: string;
-      },
+      };
       text: {
         black: string;
         gray: string;
-      }
+      };
     };
     font: {
       primary: string;
@@ -32,13 +32,13 @@ declare module 'styled-components' {
       primaryLight: string;
     };
     spacings: {
-      top: number
-      bottom: number
-      left: number
-      right: number
-      my: string
-      mx: string
-    }
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+      my: string;
+      mx: string;
+    };
     border: string;
     media: {
       mobileS: string;
@@ -46,7 +46,7 @@ declare module 'styled-components' {
       tablet: string;
       desktop: string;
       desktopL: string;
-    }
+    };
   }
 }
 
@@ -55,7 +55,7 @@ const colors = {
     primary: '#586FFA',
     secondary: '#8B9AF4',
     light: '#A5B1FC',
-    accent: '#E5E9FF',
+    accent: '#E5E9FF'
   },
   common: {
     white: '#FBFBFF',
@@ -64,7 +64,7 @@ const colors = {
     green: '#25B93E',
     redlight: '#FFDADA',
     greenlight: '#CEFDD7',
-    cardBg: '#F7F8FF',
+    cardBg: '#F7F8FF'
   },
   text: {
     black: '#3D3C47',
@@ -73,11 +73,11 @@ const colors = {
 };
 
 const size = {
-  mobileS: "320px",
-  mobile: "425px",
-  tablet: "768px",
-  desktop: "1024px",
-  desktopL: "1440px",
+  mobileS: '320px',
+  mobile: '425px',
+  tablet: '768px',
+  desktop: '1024px',
+  desktopL: '1440px'
 };
 
 const theme: DefaultTheme = {
@@ -86,7 +86,7 @@ const theme: DefaultTheme = {
     primaryBold: 'Product Sans Bold',
     primaryItalic: 'Product Sans Italic',
     primaryMedium: 'Product Sans Medium Regular',
-    primaryLight: 'Product Sans Light Regular',
+    primaryLight: 'Product Sans Light Regular'
   },
   colors,
   spacings: {
@@ -94,8 +94,8 @@ const theme: DefaultTheme = {
     bottom: 40,
     left: 25,
     right: 25,
-    my: '20px',  
-    mx: '20px', 
+    my: '20px',
+    mx: '20px'
   },
   border: `2px solid ${colors.common.offwhite}`,
   media: {
@@ -103,8 +103,8 @@ const theme: DefaultTheme = {
     mobile: `max-width: ${size.mobile}`,
     tablet: `max-width: ${size.tablet}`,
     desktop: `max-width: ${size.desktop}`,
-    desktopL: `max-width: ${size.desktopL}`,
+    desktopL: `max-width: ${size.desktopL}`
   }
-}
+};
 
 export default theme;

@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AuthRoute from 'components/AuthRoute';
 
-import theme from './components/theme';
+import theme from './theme';
 import GlobalStyles from './styles/globalStyles';
 
 import Home from 'pages/Home/Home';
@@ -22,12 +22,19 @@ const App: React.FC = () => {
 
         <div>
           <Switch>
-            <Route path="/" exact={true} component={() => {
-              return <Home right={Signup}></Home>
-            }} />
-            <Route path="/login" component={() => {
-              return <Home right={Login}></Home>
-            }} />
+            <Route
+              path="/"
+              exact={true}
+              component={() => {
+                return <Home right={Signup}></Home>;
+              }}
+            />
+            <Route
+              path="/login"
+              component={() => {
+                return <Home right={Login}></Home>;
+              }}
+            />
             <AuthRoute path="/bugs" component={Bugs} />
             <AuthRoute path="/dashboard" component={Dashboard} />
             <Route component={NotFound} />
@@ -36,6 +43,6 @@ const App: React.FC = () => {
       </Router>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

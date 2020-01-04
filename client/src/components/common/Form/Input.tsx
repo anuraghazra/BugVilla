@@ -1,12 +1,11 @@
 import React from 'react';
-import { ErrorMessage } from 'react-hook-form';
-
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ErrorMessage } from 'react-hook-form';
 
 
 interface InputLabelProps {
-  indicateError?: boolean
+  indicateError?: boolean;
 }
 const InputLabel = styled.label<InputLabelProps>`
   display: flex;
@@ -15,7 +14,8 @@ const InputLabel = styled.label<InputLabelProps>`
   align-items: center;
   justify-content: center;
   background-color: ${p => p.theme.colors.common.offwhite};
-  border: 1px solid ${p => p.indicateError ? p.theme.colors.common.red : 'transparent'};
+  border: 1px solid
+    ${p => (p.indicateError ? p.theme.colors.common.red : 'transparent')};
   border-radius: 50px;
   padding: 5px;
   padding: 0 20px;
@@ -27,7 +27,7 @@ const InputLabel = styled.label<InputLabelProps>`
     color: ${p => p.theme.colors.text.gray} !important;
     transition: 0.2s;
   }
-`
+`;
 
 const StyledInput = styled.input`
   width: 100%;
@@ -43,12 +43,12 @@ const StyledInput = styled.input`
   &::placeholder {
     color: ${p => p.theme.colors.text.gray};
   }
-`
+`;
 
 const InputWrapper = styled.div`
   margin-bottom: 10px;
   width: 100%;
-  
+
   .text--error {
     font-size: 12px;
     opacity: 0;
@@ -66,7 +66,7 @@ const InputWrapper = styled.div`
     opacity: 1;
     transition: 0.3s;
   }
-`
+`;
 
 interface Props {
   icon: any;
@@ -75,24 +75,23 @@ interface Props {
   [x: string]: any;
 }
 
-const Input: React.FC<Props> = React.forwardRef(({
-  icon,
-  errors,
-  inputRef,
-  ...props
-}) => {
-  return (
-    <InputWrapper>
-      <InputLabel indicateError={errors[props.name]}>
-        <StyledInput type="text" ref={inputRef} {...props} />
-        <span><FontAwesomeIcon icon={icon} /></span>
-      </InputLabel>
+const Input: React.FC<Props> = React.forwardRef(
+  ({ icon, errors, inputRef, ...props }) => {
+    return (
+      <InputWrapper>
+        <InputLabel indicateError={errors[props.name]}>
+          <StyledInput type="text" ref={inputRef} {...props} />
+          <span>
+            <FontAwesomeIcon icon={icon} />
+          </span>
+        </InputLabel>
 
-      <div className={`text--error ${errors[props.name] && 'show-error'}`}>
-        <ErrorMessage errors={errors} name={props.name} />
-      </div>
-    </InputWrapper>
-  )
-})
+        <div className={`text--error ${errors[props.name] && 'show-error'}`}>
+          <ErrorMessage errors={errors} name={props.name} />
+        </div>
+      </InputWrapper>
+    );
+  }
+);
 
 export default Input;

@@ -6,9 +6,8 @@ import circleShapes from 'assets/svg/circle_shapes.svg';
 import HomeWrapper from './Home.style';
 import IconLink from 'components/common/IconLink';
 
-
 interface Props {
-  right: any
+  right: any;
 }
 const Home: React.FC<Props> = ({ right: Right }) => {
   return (
@@ -21,11 +20,7 @@ const Home: React.FC<Props> = ({ right: Right }) => {
             <h1 className="text--light">Manage</h1>
             <h1 className="text--light">& Kill Bugs</h1>
             <h1 className="text--bold">Effectively</h1>
-            <IconLink
-              className="color--white"
-              icon="arrow-right"
-              to="/bugs"
-            >
+            <IconLink className="color--white" icon="arrow-right" to="/bugs">
               Wanna see the currenty active bugs?
             </IconLink>
           </div>
@@ -35,7 +30,7 @@ const Home: React.FC<Props> = ({ right: Right }) => {
         </div>
       </Flex>
     </HomeWrapper>
-  )
-}
+  );
+};
 
 export default Home;

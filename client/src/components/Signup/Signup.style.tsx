@@ -24,8 +24,7 @@ const LoginWrapper = styled.div`
   @media screen and (${p => p.theme.media.mobile}) {
     margin-top: ${p => p.theme.spacings.top}px;
   }
-`
-
+`;
 
 export const StyledH3Input = styled.div`
   width: 280px;
@@ -35,7 +34,7 @@ export const StyledH3Input = styled.div`
   align-items: center;
   justify-content: center;
   width: 280px;
-  
+
   label {
     flex-direction: row;
     background-color: initial;
@@ -48,14 +47,13 @@ export const StyledH3Input = styled.div`
     outline: none;
     border: none;
     font-size: 24px;
-    font-family: ${p => p.theme.font.primaryBold}
+    font-family: ${p => p.theme.font.primaryBold};
   }
 
   .text--error {
     text-align: left;
     margin-left: 30px !important;
   }
-`
-
+`;
 
 export default LoginWrapper;
