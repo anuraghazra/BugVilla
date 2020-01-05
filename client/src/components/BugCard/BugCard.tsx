@@ -24,27 +24,28 @@ const BugCard: React.FC<BugCardProps> = ({
   date,
   author
 }) => {
-  console.log(labels);
   return (
     <StyledBugCard>
       <BugCardIcon isOpen={isOpen}>
         <FontAwesomeIcon size="xs" icon={isOpen ? 'exclamation' : 'ban'} />
       </BugCardIcon>
 
-      <span className="bug__metainfo">
-        <span className="bug__number text--medium">#{number}</span> / on {date}{' '}
-        by <a href={`/users/${author.username}`}>{author.name}</a>
+      <span className="bug__metainfo text--light">
+        <span className="bug__number">#{number}</span> / on {date} by{' '}
+        <a href={`/users/${author.username}`}>{author.name}</a>
       </span>
 
-      <h2>{title}</h2>
+      <h3>{title}</h3>
 
-      <Flex className="bug__label-container">
-        {labels.map((label: any, index: number) => (
-          <Label key={index} type={label.name}>
-            {label.name}
-          </Label>
-        ))}
-      </Flex>
+      {labels.length ? (
+        <Flex className="bug__label-container">
+          {labels.map((label: any, index: number) => (
+            <Label key={index} type={label.name}>
+              {label.name}
+            </Label>
+          ))}
+        </Flex>
+      ) : null}
 
       <div className="bug__body--text">{body.slice(0, 150)}</div>
     </StyledBugCard>

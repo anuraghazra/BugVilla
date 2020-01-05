@@ -2,20 +2,24 @@ import styled from 'styled-components';
 
 export const StyledBugCard = styled.div`
   position: relative;
-
   width: auto;
-  height: auto;
+
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05), -1px 0px 1px rgba(0, 0, 0, 0.05),
+  1px 0px 1px rgba(0, 0, 0, 0.05), 0px -1px 1px rgba(0, 0, 0, 0.05); */
 
   background-color: ${p => p.theme.colors.common.cardBg};
-  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05), -1px 0px 1px rgba(0, 0, 0, 0.05),
-    1px 0px 1px rgba(0, 0, 0, 0.05), 0px -1px 1px rgba(0, 0, 0, 0.05); */
-
   border: 1px solid #e7ecfb;
+  border-radius: 10px;
   padding: 25px;
-  border-radius: 15px;
+
+  h3 {
+    font-family: ${p => p.theme.font.primaryMedium};
+    line-height: 1.3em;
+    margin-bottom: 10px;
+  }
 
   .bug__label-container {
-    margin: 10px 0;
+    margin: 15px 0;
   }
 
   .bug__metainfo {
@@ -25,9 +29,12 @@ export const StyledBugCard = styled.div`
     color: ${p => p.theme.colors.text.gray};
 
     a {
-      text-decoration: underline;
       font-size: 14px;
       color: ${p => p.theme.colors.text.gray};
+
+      &:hover {
+        color: ${p => p.theme.colors.text.black};
+      }
     }
 
     .bug__number {
@@ -36,7 +43,6 @@ export const StyledBugCard = styled.div`
   }
 
   .bug__body--text {
-    margin-top: 25px;
     font-size: 16px;
     color: ${p => p.theme.colors.text.gray};
   }
@@ -63,6 +69,7 @@ export const BugCardIcon = styled.div<{ isOpen?: boolean }>`
       ? p.theme.colors.common.greenlight
       : p.theme.colors.common.redlight};
 
+  /* status hover */
   &:before {
     width: 80px;
     text-align: center;
