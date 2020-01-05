@@ -1,7 +1,9 @@
 import http from 'utils/httpInstance';
 import auth from 'utils/authHelper';
+import history from 'utils/history';
 
 // action
+export const AUTH_LOGOUT = 'auth/LOGOUT';
 export const AUTH_SET_USER = 'auth/SET_USER';
 export const LOGIN_SUCCESS = 'login/SUCCESS';
 export const LOGIN_ERROR = 'login/ERROR';
@@ -42,6 +44,17 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case AUTH_SET_USER:
       return { ...state, user: action.payload, isAuthenticated: true }
+    case AUTH_LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoginPending: false,
+        isSignupPending: false,
+        loginError: null,
+        signupError: null,
+        user: null,
+      }
+
     case LOGIN_LOADING:
       return { ...state, isLoginPending: true }
     case LOGIN_ERROR:
@@ -86,6 +99,7 @@ export default reducer;
 
 
 // actions creators
+export const logUserOut = () => ({ type: AUTH_LOGOUT });
 export const setUser = (data: UserProps | null) => ({ type: AUTH_SET_USER, payload: data })
 export const loginLoading = () => ({ type: LOGIN_LOADING })
 export const loginSuccess = (data: UserProps) => ({ type: LOGIN_SUCCESS, payload: data })
@@ -101,7 +115,7 @@ export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
 
 
 // side effects
-export const signUserUp = (formData: FormData, history: any) => {
+export const signUserUp = (formData: FormData) => {
   return async (dispatch: any) => {
     dispatch(signupLoading());
 
@@ -122,7 +136,7 @@ export const signUserUp = (formData: FormData, history: any) => {
 }
 
 
-export const loginUser = (formData: { name: string, email: string }, history: any) => {
+export const loginUser = (formData: { name: string, email: string }) => {
   return async (dispatch: any) => {
     dispatch(loginLoading());
 
@@ -149,22 +163,22 @@ export const loginUser = (formData: { name: string, email: string }, history: an
 }
 
 
-export const verifyLogin = () => {
-  return async (dispatch: any) => {
-    dispatch(loginLoading());
+// export const verifyLogin = () => {
+//   return async (dispatch: any) => {
+//     dispatch(loginLoading());
 
-    try {
-      const res = await http({
-        method: 'GET',
-        url: '/api/user/verify',
-      });
+//     try {
+//       const res = await http({
+//         method: 'GET',
+//         url: '/api/user/verify',
+//       });
 
-      const { data } = res.data;
-      console.log(data);
-      dispatch(loginSuccess(data));
-      dispatch(loginClearError());
-    } catch (err) {
-      dispatch(loginError(err.response.data.error))
-    }
-  }
-}
+//       const { data } = res.data;
+//       console.log(data);
+//       dispatch(loginSuccess(data));
+//       dispatch(loginClearError());
+//     } catch (err) {
+//       dispatch(loginError(err.response.data.error))
+//     }
+//   }
+// }

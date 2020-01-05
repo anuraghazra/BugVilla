@@ -1,34 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import Avatar from 'components/Avatar/Avatar';
 import BugVillaLogo from 'components/common/Logo';
 import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
-
-const SidebarWrapper = styled.aside`
-  padding: 60px 40px;
-  /* display: flex;
-  flex-wrap: wrap; */
-
-  p {
-    margin: 0;
-  }
-
-  .dashboard__avatar {
-    margin-bottom: 5px;
-    margin-top: ${p => p.theme.spacings.top}px;
-  }
-`;
-
-const SidebarLinks = styled.div`
-  margin-top: ${p => p.theme.spacings.top}px;
-
-  a {
-    margin: 15px 0;
-  }
-`;
+import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
+import auth from 'utils/authHelper';
 
 const Sidebar: React.FC = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -36,7 +14,7 @@ const Sidebar: React.FC = () => {
   return (
     <SidebarWrapper>
       <BugVillaLogo width="100px" />
-      <Flex align="center" justify="center">
+      <Flex align="center" justify="flex-start">
         <Avatar
           className="dashboard__avatar"
           width="130px"
@@ -62,6 +40,14 @@ const Sidebar: React.FC = () => {
           </IconLink>
           <IconLink isNav icon="tag" to="/labels">
             Labels
+          </IconLink>
+          <IconLink
+            isNav
+            icon="door-open"
+            to="/login"
+            onClick={() => auth.logout()}
+          >
+            Logout
           </IconLink>
         </Flex>
       </SidebarLinks>

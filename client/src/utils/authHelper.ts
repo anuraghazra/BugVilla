@@ -19,7 +19,7 @@ class Auth {
 
   getUser(): { name: string; username: string; id: number; } | null {
     try {
-      let token = auth.getToken();
+      let token = this.getToken();
       const { name, username, id } = jwt(token);
       return { name, username, id };
     } catch (err) {

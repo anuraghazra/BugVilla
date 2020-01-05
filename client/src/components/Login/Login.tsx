@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 
 import LoginWrapper from '../Signup/Signup.style';
 import Flex from 'components/common/Flex';
@@ -29,10 +28,10 @@ const LoginSchema = yup.object().shape({
 });
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const isLoading = useSelector((state: any) => state.auth.isLoginPending);
   const loginError = useSelector((state: any) => state.auth.loginError);
-  const history = useHistory();
-  const dispatch = useDispatch();
+  
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: LoginSchema
   });
@@ -40,7 +39,7 @@ const Login: React.FC = () => {
   const onSubmit = async (data: { name: string; email: string }) => {
     // clearing errors because Toast Component is not rerendring
     dispatch(loginClearError());
-    dispatch(loginUser(data, history));
+    dispatch(loginUser(data));
   };
 
   return (

@@ -13,8 +13,9 @@ import {
   faHome,
   faTag,
   faBan,
+  faDoorOpen,
   faExclamation,
-  faExclamationTriangle
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -30,6 +31,7 @@ library.add(
   faHome,
   faTag,
   faBan,
+  faDoorOpen,
   faExclamation,
   faExclamationTriangle
 );

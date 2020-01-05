@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 
 import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
@@ -18,7 +17,6 @@ import SignupSchema from './SignupSchema';
 import { signUserUp, signupClearError } from 'store/ducks/auth';
 
 const Signup: React.FC = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const isLoading = useSelector((state: any) => state.auth.isSignupPending);
   const loginError = useSelector((state: any) => state.auth.signupError);
@@ -37,7 +35,7 @@ const Signup: React.FC = () => {
 
     // submit form
     dispatch(signupClearError());
-    dispatch(signUserUp(formData, history));
+    dispatch(signUserUp(formData));
   };
 
   return (

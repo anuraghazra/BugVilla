@@ -1,8 +1,9 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import AuthRoute from 'components/AuthRoute';
 
+import history from 'utils/history';
 import theme from './theme';
 import GlobalStyles from './styles/globalStyles';
 
@@ -18,7 +19,7 @@ const NotFound = () => <p>404</p>;
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router history={history}>
         <GlobalStyles />
 
         <div>
