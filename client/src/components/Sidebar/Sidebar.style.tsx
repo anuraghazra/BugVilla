@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
-const SidebarWrapper = styled.aside`
+const SidebarWrapper = styled.aside<{ isOpen?: boolean }>`
   padding: 60px 40px;
   background-color: ${p => p.theme.colors.common.white};
-
+  border-right: ${p => p.theme.border};
+  
   p {
     margin: 0;
   }
@@ -14,15 +15,19 @@ const SidebarWrapper = styled.aside`
   }
 
   @media all and (${p => p.theme.media.tablet}) {
-    width: 200px;
-
     position: fixed;
+    left: ${p => (p.isOpen ? '0px' : '-200px')};
     top: 0;
-    left: 0;
-    padding: 40px 25px;
+    padding: 80px 25px;
+    width: 200px;
     height: 100vh;
     z-index: 1;
-    background-color: ${p => p.theme.colors.common.redlight};
+    background-color: ${p => p.theme.colors.common.white};
+    transition: 0.3s;
+
+    a {
+      font-size: 14px;
+    }
 
     .dashboard__avatar {
       width: 100px;

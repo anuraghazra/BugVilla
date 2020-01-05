@@ -8,11 +8,14 @@ import IconLink from 'components/common/IconLink';
 import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
 import auth from 'utils/authHelper';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen?: any;
+}
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const user = useSelector((state: any) => state.auth.user);
 
   return (
-    <SidebarWrapper>
+    <SidebarWrapper isOpen={isOpen}>
       <BugVillaLogo width="100px" />
       <Flex align="center" justify="flex-start">
         <Avatar

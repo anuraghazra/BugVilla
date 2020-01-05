@@ -24,7 +24,7 @@ const HomeWrapper = styled.section`
     }
 
     @media screen and (${p => p.theme.media.mobile}) {
-      min-height: 50vh;
+      min-height: 45vh;
       .home__text {
         margin-left: 0px;
       }

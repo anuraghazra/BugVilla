@@ -1,21 +1,21 @@
 import styled from 'styled-components';
 
 export const StyledBugCard = styled.div`
-  position: relative;
   width: auto;
-
-  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05), -1px 0px 1px rgba(0, 0, 0, 0.05),
-  1px 0px 1px rgba(0, 0, 0, 0.05), 0px -1px 1px rgba(0, 0, 0, 0.05); */
-
+  position: relative;
   background-color: ${p => p.theme.colors.common.cardBg};
   border: 1px solid #e7ecfb;
   border-radius: 10px;
   padding: 25px;
 
-  h3 {
+  .bug__title {
     font-family: ${p => p.theme.font.primaryMedium};
     line-height: 1.3em;
     margin-bottom: 10px;
+
+    @media screen and (${p => p.theme.media.tablet}) {
+      font-size: 1.4em;
+    }
   }
 
   .bug__label-container {

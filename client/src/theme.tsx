@@ -44,6 +44,7 @@ declare module 'styled-components' {
       mobileS: string;
       mobile: string;
       tablet: string;
+      minTablet: string;
       desktop: string;
       desktopL: string;
     };
@@ -102,6 +103,7 @@ const theme: DefaultTheme = {
     mobileS: `max-width: ${size.mobileS}`,
     mobile: `max-width: ${size.mobile}`,
     tablet: `max-width: ${size.tablet}`,
+    minTablet: `min-width: ${size.tablet}`,
     desktop: `max-width: ${size.desktop}`,
     desktopL: `max-width: ${size.desktopL}`
   }

@@ -23,6 +23,7 @@ const LoginWrapper = styled.div`
 
   @media screen and (${p => p.theme.media.mobile}) {
     margin-top: ${p => p.theme.spacings.top}px;
+    margin-bottom: ${p => p.theme.spacings.bottom}px;
   }
 `;
 
