@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Masonry from 'react-masonry-css';
-import { useHistory } from 'react-router-dom';
 
-import http from 'utils/httpInstance';
-import auth from 'utils/authHelper';
 import { formatDate } from 'utils';
 
 import BugCard from 'components/BugCard/BugCard';
+import useFetch from 'hooks/useFetch';
+import Loading from 'components/common/Loading';
 
 const breakpointColumns = {
   default: 3,
@@ -21,35 +20,19 @@ const BugsWrapper = styled.section`
 `;
 
 const Bugs: React.FC = () => {
-  const history = useHistory<any>();
-  const [bugs, setBugs] = useState<any>([]);
-
-  useEffect(() => {
-    const getBugs = async () => {
-      try {
-        let res = await http({
-          method: 'GET',
-          url: '/api/bugs'
-        });
-        setBugs(res.data.data);
-      } catch (err) {
-        auth.logout();
-        history.push('/');
-      }
-    };
-
-    getBugs();
-  }, []);
+  const { data: bugs, isLoading, error } = useFetch('/api/bugs');
 
   return (
     <BugsWrapper>
+      {isLoading && <Loading />}
+      {error && <p>Something went wrong while fetching the data</p>}
       <Masonry
         breakpointCols={breakpointColumns}
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column"
       >
         {bugs &&
-          bugs.map((bug: any) => {
+          bugs.data.map((bug: any) => {
             return (
               <BugCard
                 key={bug.id}

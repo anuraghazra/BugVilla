@@ -31,6 +31,7 @@ mongoose.connect(
 app.set("env", process.env.NODE_ENV);
 
 // middlewares
+app.use(express.static('client/build'));
 app.use(helmet()) // security headers
 app.use(cors());
 app.use(httpResponder);
@@ -87,21 +88,22 @@ app.use('/api/bugs', require('./routes/commentsRoute'));
 // console.log(routes)
 
 
+
+// finally handle errors
+app.use(errorHandler);
+app.use("*", function (req, res) {
+  res.notImplemented({ error: 'Not Implemented.' });
+});
+
+
 // Server Side Routing
 // If no API routes are hit, send the React app
-app.use(express.static('client/build'));
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
     if (err) {
       res.status(500).send(err)
     }
   })
-});
-
-// finally handle errors
-app.use(errorHandler);
-app.use("*", function (req, res) {
-  res.notImplemented({ error: 'Not Implemented.' });
 });
 
 
