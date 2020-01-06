@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Flex from 'components/common/Flex';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 
 import HomeWrapper from './Home.style';
 import IconLink from 'components/common/IconLink';
+import history from 'utils/history';
+import auth from 'utils/authHelper';
 
 interface Props {
   right: any;
 }
 const Home: React.FC<Props> = ({ right: Right }) => {
+  useEffect(() => {
+    if (auth.loggedIn()) {
+      history.push('/dashboard/bugs');
+    }
+  }, []);
+
   return (
     <HomeWrapper>
       <img className="home__shape" src={circleShapes} />

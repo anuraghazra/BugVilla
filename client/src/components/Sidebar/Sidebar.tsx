@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           className="dashboard__avatar"
           width="130px"
           height="130px"
-          src={`/api/usedr/${user.username}/avatar/raw`}
+          src={`/api/user/${user.username}/avatar/raw`}
         />
         <div>
           <h2 className="text--bold">{user && user.name}</h2>
@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
       <SidebarLinks>
         <Flex direction="column">
-          <IconLink isNav icon="home" to="/dashboard">
+          <IconLink isNav icon="home" to="/dashboard/bugs">
             Dashboard
           </IconLink>
           <IconLink isNav icon="user" to="/profiles">

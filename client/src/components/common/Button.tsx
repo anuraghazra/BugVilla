@@ -12,12 +12,15 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
   color: ${p => p.theme.colors.common.white};
 
   width: ${p => p.width};
+  height: fit-content;
   border: none;
   border-radius: 50px;
   padding: 10px 15px;
-  margin: 10px auto;
+  margin: 10px 0;
   cursor: pointer;
   transition: 0.2s;
+  line-height: 1;
+  font-size: 14px;
 
   &:hover {
     transform: scale(1.05);
@@ -30,8 +33,8 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
 `;
 
 interface Props {
-  width: string;
-  icon: any;
+  width?: string;
+  icon?: any;
   children: React.ReactNode;
   isLoading?: boolean;
   [x: string]: any;
@@ -45,7 +48,9 @@ const Button: React.FC<Props> = ({
   ...props
 }) => (
   <StyledButton {...props} width={width}>
-    <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
+    {icon && (
+      <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
+    )}
     {children}
   </StyledButton>
 );

@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import Masonry from 'react-masonry-css';
+import { NavLink } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 
-import BugCard from 'components/BugCard/BugCard';
 import useFetch from 'hooks/useFetch';
+import Flex from 'components/common/Flex';
+import Button from 'components/common/Button';
 import Loading from 'components/common/Loading';
+import BugCard from 'components/BugCard/BugCard';
+import DashboardHeader from 'components/DashboardHeader';
 
 const breakpointColumns = {
   default: 3,
@@ -16,7 +20,7 @@ const breakpointColumns = {
 };
 
 const BugsWrapper = styled.section`
-  margin-top: ${p => p.theme.spacings.top}px;
+  margin-top: 0;
 `;
 
 const Bugs: React.FC = () => {
@@ -24,6 +28,20 @@ const Bugs: React.FC = () => {
 
   return (
     <BugsWrapper>
+      <DashboardHeader>
+        <Flex align="center">
+          <h1>Track Bugs</h1>
+          <Button
+            as={NavLink}
+            to="/dashboard/new-bug"
+            style={{ marginLeft: 20 }}
+            icon="plus"
+          >
+            Add
+          </Button>
+        </Flex>
+      </DashboardHeader>
+
       {isLoading && <Loading />}
       {error && <p>Something went wrong while fetching the data</p>}
       <Masonry
