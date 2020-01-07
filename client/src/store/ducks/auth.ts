@@ -154,7 +154,7 @@ export const loginUser = (formData: { name: string, email: string }) => {
       }));
       dispatch(loginClearError());
       auth.setToken(data.token)
-      history.push('/dashboard')
+      history.push('/dashboard/bugs')
     } catch (err) {
       auth.logout();
       dispatch(loginError(err.response.data.error))

@@ -4,7 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 const morgan = require('morgan');
 const rateLimit = require("express-rate-limit");
@@ -91,7 +91,7 @@ app.use('/api/bugs', require('./routes/commentsRoute'));
 
 // finally handle errors
 app.use(errorHandler);
-app.use("*", function (req, res) {
+app.use("/api/*", function (req, res) {
   res.notImplemented({ error: 'Not Implemented.' });
 });
 
