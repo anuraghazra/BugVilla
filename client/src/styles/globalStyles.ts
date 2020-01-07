@@ -48,7 +48,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     line-height: 1.5em;
-    color: ${p => p.theme.colors.text.black}
+    color: ${p => p.theme.colors.text.black};
   }
 
   .svg-inline--fa {

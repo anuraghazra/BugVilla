@@ -13,12 +13,12 @@ const LoginWrapper = styled.div`
   }
 
   form {
-    width: 300px;
-    margin-top: ${p => p.theme.spacings.my};
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 300px;
+    margin-top: ${p => p.theme.spacings.my};
   }
 
   @media screen and (${p => p.theme.media.mobile}) {
@@ -29,12 +29,11 @@ const LoginWrapper = styled.div`
 
 export const StyledH3Input = styled.div`
   width: 280px;
-  margin-top: 10px;
-  margin-bottom: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 280px;
+  margin-top: 10px;
+  margin-bottom: 0px;
 
   label {
     flex-direction: row;
@@ -43,17 +42,17 @@ export const StyledH3Input = styled.div`
   }
 
   input {
-    text-align: center;
     width: 100%;
+    font-family: ${p => p.theme.font.primaryBold};
+    font-size: 24px;
+    text-align: center;
     outline: none;
     border: none;
-    font-size: 24px;
-    font-family: ${p => p.theme.font.primaryBold};
   }
 
   .text--error {
+    margin-left: 30px;
     text-align: left;
-    margin-left: 30px !important;
   }
 `;
 
