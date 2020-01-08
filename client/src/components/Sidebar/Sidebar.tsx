@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           className="dashboard__avatar"
           width="130px"
           height="130px"
-          src={`/api/user/${user.username}/avatar/rawd`}
+          src={`/api/user/${user.username}/avatar/raw?size=130`}
         />
         <div>
           <h2 className="text--bold">{user && user.name}</h2>

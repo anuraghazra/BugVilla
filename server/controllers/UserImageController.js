@@ -1,7 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
 const mongoose = require('mongoose');
+const sharp = require('sharp');
 const { User } = require('../models/userModel');
-
 
 let gfs;
 mongoose.connection.once("open", () => {
@@ -27,7 +27,7 @@ exports.uploadProfileImage = async (req, res) => {
     if (!user) return res.notFound({ error: 'User not found' });
 
     // @TODO: Validate Image Dimensions
-    
+
     // authorization
     // at this point its not necessary to check this
     if (user.id !== req.user.id) {
@@ -94,8 +94,20 @@ exports.getRawAvatarImageByUsername = async (req, res) => {
       if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
         res.header('Content-Type', file.contentType);
         res.header('Content-Length', file.length);
+        // resize img
+        let size = +Math.abs(req.query.size) || 200;
+        if (size > 500) size = 500;
 
-        gfs.openDownloadStreamByName(file.filename).pipe(res);
+        let chunks = [];
+        const stream = gfs.openDownloadStreamByName(file.filename);
+        stream.on('data', chunk => chunks.push(chunk));
+        stream.on('end', () => {
+          const buffer = Buffer.concat(chunks);
+          sharp(buffer).resize(size, size).toBuffer((err, resizedBuffer) => {
+            if (err) res.send({ error: 'Cannot resize img' })
+            res.send(resizedBuffer);
+          });
+        })
       } else {
         return res.unsupportedMedia({ error: 'media type not supported' })
       }
