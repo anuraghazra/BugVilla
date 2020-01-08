@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { StyledH3Input } from 'components/Signup/Signup.style';
 import Input from 'components/common/Form/Input';
 import Button from 'components/common/Button';
+import Toast from 'components/common/Toast';
 import http from 'utils/httpInstance';
 
 import AddBugSchema from './AddBugSchema';
@@ -15,29 +16,32 @@ import AddBugWrapper from './AddBug.style';
 
 const AddBug: React.FC = () => {
   const history = useHistory();
-  const [isLoading, setIsloading] = useState();
+  const [isLoading, setIsloading] = useState(false);
+  const [error, setError] = useState<any>(null);
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: AddBugSchema
   });
 
   const onSubmit = async (data: { title: string; body: string }) => {
     setIsloading(true);
+    setError(null);
     try {
-      let res = await http({
+      await http({
         method: 'POST',
-        url: '/api/bugs',
+        url: '/api/bdugs',
         data
       });
-      console.log(res);
       setIsloading(false);
       history.push('/dashboard/bugs');
     } catch (err) {
+      setError(err.response.data.error);
       setIsloading(false);
     }
   };
 
   return (
     <AddBugWrapper>
+      <Toast isVisible={!!error} message={error} />
       <DashboardHeader>
         <h1>Submit new bug</h1>
       </DashboardHeader>

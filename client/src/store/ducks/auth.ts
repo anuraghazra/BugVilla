@@ -130,7 +130,7 @@ export const signUserUp = (formData: FormData) => {
       dispatch(signupClearError());
       history.push('/login')
     } catch (err) {
-      dispatch(signupError(err.response.data.error))
+      dispatch(signupError(err.response.data))
     }
   }
 }
@@ -157,7 +157,7 @@ export const loginUser = (formData: { name: string, email: string }) => {
       history.push('/dashboard/bugs')
     } catch (err) {
       auth.logout();
-      dispatch(loginError(err.response.data.error))
+      dispatch(loginError(err.response.data))
     }
   }
 }

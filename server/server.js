@@ -4,7 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 
 const morgan = require('morgan');
 const rateLimit = require("express-rate-limit");
@@ -98,13 +98,15 @@ app.use("/api/*", function (req, res) {
 
 // Server Side Routing
 // If no API routes are hit, send the React app
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  })
-});
+if (process.env.NODE_ENV === 'production') {
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  });
+}
 
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`));

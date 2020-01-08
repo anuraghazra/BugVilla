@@ -19,7 +19,7 @@ import { signUserUp, signupClearError } from 'store/ducks/auth';
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state: any) => state.auth.isSignupPending);
-  const loginError = useSelector((state: any) => state.auth.signupError);
+  const signupError = useSelector((state: any) => state.auth.signupError);
   const [file, setFile] = useState<any>();
 
   const { register, handleSubmit, errors, watch }: any = useForm({
@@ -32,14 +32,13 @@ const Signup: React.FC = () => {
     for (let name in data) {
       formData.append(name, data[name]);
     }
-
-    // submit form
-    dispatch(signupClearError());
     dispatch(signUserUp(formData));
   };
 
   return (
     <SignupWrapper>
+      <Toast isVisible={signupError} message={signupError?.error} />
+      
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,8 +113,6 @@ const Signup: React.FC = () => {
           >
             SignUp
           </Button>
-
-          <Toast isVisible={loginError}>{loginError}</Toast>
         </form>
 
         <IconLink className="color--gray" to="/login">

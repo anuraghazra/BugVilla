@@ -31,19 +31,18 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state: any) => state.auth.isLoginPending);
   const loginError = useSelector((state: any) => state.auth.loginError);
-  
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: LoginSchema
   });
 
   const onSubmit = async (data: { name: string; email: string }) => {
-    // clearing errors because Toast Component is not rerendring
-    dispatch(loginClearError());
     dispatch(loginUser(data));
   };
 
   return (
     <LoginWrapper>
+      <Toast isVisible={loginError} message={loginError?.error} />
+      
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <h2 className="text--bold">Welcome back!</h2>
@@ -76,7 +75,6 @@ const Login: React.FC = () => {
           >
             Login
           </Button>
-          <Toast isVisible={loginError}>{loginError}</Toast>
         </form>
 
         <IconLink className="color--gray" to="/">

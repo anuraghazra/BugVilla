@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,10 +42,10 @@ const StyledToast = styled.span<StyledProps>`
 
 interface Props {
   isVisible?: boolean;
-  children: React.ReactNode;
+  message: string;
 }
 
-const Toast: React.FC<Props> = ({ isVisible, children }) => {
+const Toast: React.FC<Props> = ({ isVisible, message }) => {
   const [isToastVisible, setToastVisibility] = useState<any>(null);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const Toast: React.FC<Props> = ({ isVisible, children }) => {
   return (
     <StyledToast isVisible={isToastVisible}>
       <FontAwesomeIcon icon="exclamation-triangle" />
-      <span className="message">{children}</span>
+      <span className="message">{message}</span>
       <FontAwesomeIcon
         onClick={closeToast}
         className="close-icon"
