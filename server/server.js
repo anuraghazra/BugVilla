@@ -42,7 +42,7 @@ app.use(xss()); // sanitize data
 // rateLimiter
 app.use('/api/', rateLimit({
   windowMs: 25 * 60 * 1000,
-  max: 200,
+  max: 500,
   message: { error: "Too many requests!, please try again after 25mins" }
 }));
 app.use(morgan('dev'));

@@ -50,32 +50,6 @@ const StyledEditor = styled.div`
     }
   }
 
-  .markdown-preview {
-    margin-bottom: 10px;
-    img {
-      width: 50%;
-    }
-
-    a {
-      position: relative;
-      color: ${p => p.theme.colors.brand.primary};
-
-      &:before {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0%;
-        height: 2px;
-        background-color: ${p => p.theme.colors.brand.primary};
-        transition: 0.2s;
-      }
-      &:hover:before {
-        width: 100%;
-        transition: 0.2s;
-      }
-    }
-  }
 `;
 
 export default StyledEditor;

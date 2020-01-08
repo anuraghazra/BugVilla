@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Flex from 'components/common/Flex';
 import Label from 'components/common/Label';
-import { StyledBugCard, BugCardIcon } from './BugCard.style';
+import { StyledBugCard, BugCardIcon, StyledMetaInfo } from './BugCard.style';
 
 interface Author {
   name: string;
@@ -27,11 +27,11 @@ interface BugCardProps {
   author: Author;
 }
 
-const BugMetaInfo: React.FC<BugMetaProps> = ({ number, date, author }) => (
-  <span className="bug__metainfo text--light">
+export const BugMetaInfo: React.FC<BugMetaProps> = ({ number, date, author }) => (
+  <StyledMetaInfo className="text--light">
     <span className="bug__number">#{number}</span> / on {date} by{' '}
     <a href={`/users/${author.username}`}>{author.name}</a>
-  </span>
+  </StyledMetaInfo>
 );
 
 const BugCard: React.FC<BugCardProps> = ({
@@ -50,7 +50,9 @@ const BugCard: React.FC<BugCardProps> = ({
       </BugCardIcon>
       <BugMetaInfo number={number} date={date} author={author} />
 
-      <h3 className="bug__title">{title}</h3>
+      <Link to={`/dashboard/bugs/${number}`}>
+        <h3 className="bug__title">{title}</h3>
+      </Link>
 
       {labels.length ? (
         <Flex className="bug__label-container">

@@ -22,31 +22,32 @@ export const StyledBugCard = styled.div`
     margin: 15px 0;
   }
 
-  .bug__metainfo {
-    display: block;
-    margin: 3px 0;
-    font-size: 14px;
-    color: ${p => p.theme.colors.text.gray};
-
-    a {
-      font-size: 14px;
-      color: ${p => p.theme.colors.text.gray};
-
-      &:hover {
-        color: ${p => p.theme.colors.text.black};
-      }
-    }
-
-    .bug__number {
-      font-size: 18px;
-    }
-  }
 
   .bug__body--text {
     font-size: 16px;
     color: ${p => p.theme.colors.text.gray};
   }
 `;
+
+export const StyledMetaInfo = styled.span`
+  display: block;
+  margin: 3px 0;
+  font-size: 14px;
+  color: ${p => p.theme.colors.text.gray};
+
+  a {
+    font-size: 14px;
+    color: ${p => p.theme.colors.text.gray};
+
+    &:hover {
+      color: ${p => p.theme.colors.text.black};
+    }
+  }
+
+  .bug__number {
+    font-size: 18px;
+  }
+`
 
 export const BugCardIcon = styled.div<{ isOpen?: boolean }>`
   position: absolute;

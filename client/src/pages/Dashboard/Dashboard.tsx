@@ -9,6 +9,7 @@ import AuthRoute from 'components/AuthRoute';
 import AddBug from 'components/AddBug/AddBug';
 import NotFound from 'components/NotFound';
 import { Route, Redirect } from 'react-router-dom';
+import SingleBug from 'components/SingleBug/SingleBug';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -24,6 +25,7 @@ const Dashboard: React.FC = () => {
       <DashboardBody>
         <AuthRoute exact path="/dashboard/bugs" component={Bugs} />
         <AuthRoute exact path="/dashboard/new-bug" component={AddBug} />
+        <AuthRoute exact path="/dashboard/bugs/:bugId" component={SingleBug} />
       </DashboardBody>
     </DashboardWrapper>
   );

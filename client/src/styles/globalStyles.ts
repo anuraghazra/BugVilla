@@ -45,16 +45,49 @@ const GlobalStyles = createGlobalStyle`
   p, a {
     font-size: 16px;
   }
+
   a {
     text-decoration: none;
     line-height: 1.5em;
     color: ${p => p.theme.colors.text.black};
   }
 
+  code, pre {
+    line-height: 150%;
+    white-space: pre-line;
+    font-size: 14px;
+  }
+
   .svg-inline--fa {
     margin: 0px 5px
   }
   
+  .markdown-preview {
+    margin-bottom: 10px;
+    img {
+      width: 50%;
+    }
+
+    a {
+      position: relative;
+      color: ${p => p.theme.colors.brand.primary};
+
+      &:before {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background-color: ${p => p.theme.colors.brand.primary};
+        transition: 0.2s;
+      }
+      &:hover:before {
+        width: 100%;
+        transition: 0.2s;
+      }
+    }
+  }
 `
 
 export default GlobalStyles
