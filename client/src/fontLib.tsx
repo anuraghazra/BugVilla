@@ -14,6 +14,7 @@ import {
   faTag,
   faBan,
   faBars,
+  faHistory,
   faDoorOpen,
   faExclamation,
   faExclamationTriangle,
@@ -33,6 +34,7 @@ library.add(
   faTag,
   faBan,
   faBars,
+  faHistory,
   faDoorOpen,
   faExclamation,
   faExclamationTriangle

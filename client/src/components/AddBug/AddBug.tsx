@@ -18,19 +18,16 @@ const AddBug: React.FC = () => {
   const history = useHistory();
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState<any>(null);
-  const { register, handleSubmit, errors }: any = useForm({
+  const { register, handleSubmit, errors, watch }: any = useForm({
     validationSchema: AddBugSchema
   });
+  const markdown = watch('body');
 
   const onSubmit = async (data: { title: string; body: string }) => {
     setIsloading(true);
     setError(null);
     try {
-      await http({
-        method: 'POST',
-        url: '/api/bdugs',
-        data
-      });
+      await http.post('/api/bugs', data);
       setIsloading(false);
       history.push('/dashboard/bugs');
     } catch (err) {
@@ -60,6 +57,7 @@ const AddBug: React.FC = () => {
             />
           </StyledH3Input>
           <Editor
+            markdown={markdown}
             errors={errors}
             inputRef={register({ required: 'Body is required' })}
           />

@@ -11,20 +11,16 @@ import CodeBlock from './CodeBlock';
 import { useSelector } from 'react-redux';
 
 interface EditorProps {
+  markdown: string;
   inputRef?: any;
   errors?: any;
 }
-const Editor: React.FC<EditorProps> = ({ inputRef, errors }) => {
+const Editor: React.FC<EditorProps> = ({ markdown, inputRef, errors }) => {
   const user = useSelector((state: any) => state.auth.user);
-  const [markdown, setMarkdown] = useState<string>('');
-
-  const handleMarkdown = (e: any) => {
-    setMarkdown(e.target.value);
-  };
 
   return (
     <>
-      <Tabs>
+      <Tabs forceRenderTabPanel={true}>
         <Flex className="editor__header" align="center">
           <Avatar
             width="45px"
@@ -41,7 +37,6 @@ const Editor: React.FC<EditorProps> = ({ inputRef, errors }) => {
             <textarea
               name="body"
               ref={inputRef}
-              onChange={handleMarkdown}
               value={markdown}
               placeholder="Write Markdown"
               className="editor__tabpanel-area"

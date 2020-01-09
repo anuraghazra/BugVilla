@@ -7,13 +7,14 @@ interface StyledProps {
   isVisible?: boolean;
 }
 const StyledToast = styled.span<StyledProps>`
-  position: absolute;
+  position: fixed;
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 
   border-radius: 50px;
   color: ${p => p.theme.colors.common.red};

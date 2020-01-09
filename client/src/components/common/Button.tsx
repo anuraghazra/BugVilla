@@ -1,15 +1,31 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ButtonProps {
   width?: string;
+  success?: boolean;
+  danger?: boolean;
 }
+
+export const ButtonGroup = styled.div`
+  > button {
+    margin-right: 10px;
+  }
+`;
 
 // prettier-ignore
 const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivElement>>`
   background-color: ${p => p.theme.colors.brand.primary};
   color: ${p => p.theme.colors.common.white};
+  ${p => p.success && css`
+    background-color: ${p => p.theme.colors.common.greenlight};
+    color: ${p => p.theme.colors.common.green};
+  `}
+  ${p => p.danger && css`
+    background-color: ${p => p.theme.colors.common.redlight};
+    color: ${p => p.theme.colors.common.red};
+  `}
 
   width: ${p => p.width};
   height: fit-content;

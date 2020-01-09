@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
-import { formatDate } from 'utils';
+import { getTimeDiff } from 'utils';
 import { AuthorProps } from './SingleBug';
 
 import Flex from 'components/common/Flex';
@@ -54,7 +54,7 @@ const Comment: React.FC<CommentProps> = ({ author, date, body }) => (
         <a className="text--medium" href={`/users/${author.username}`}>
           {author.name}
         </a>{' '}
-        commented on {formatDate(date)}
+        commented {getTimeDiff(date)}
       </span>
     </Flex>
     <ReactMarkdown
