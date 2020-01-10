@@ -30,6 +30,7 @@
     "helmet": "^3.21.2",
     "image-size": "^0.8.3",
     "jsonwebtoken": "^8.5.1",
+    "memory-cache": "^0.2.0",
     "mongoose": "^5.8.0",
     "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.9.1",

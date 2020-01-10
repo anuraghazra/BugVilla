@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const sharp = require('sharp');
 const { User } = require('../models/userModel');
+const { MemCache } = require('../middleware/cache');
 
 let gfs;
 mongoose.connection.once("open", () => {
@@ -43,6 +44,7 @@ exports.uploadProfileImage = async (req, res) => {
 
     user.avatar = req.file.id;
     await user.save();
+    MemCache.cache.clear();
     res.ok({
       avatar: user.avatar,
       message: 'uploaded'
@@ -84,34 +86,53 @@ exports.getAvatarImageByUsername = async (req, res) => {
  */
 exports.getRawAvatarImageByUsername = async (req, res) => {
   try {
-    let avatars = await gfs.find({ _id: req.foundUser.avatar })
-    avatars.toArray((err, files) => {
-      if (!files || files.length === 0) {
-        return res.notFound({ error: "Image not found" });
-      }
+    let cacheUrl = req.originalUrl || req.url;
+    console.log(MemCache.cache.keys())
+    MemCache.get(cacheUrl, async (cachedData) => {
+      if (cachedData === null) {
+        console.log('cache missed');
 
-      let file = files[0];
-      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-        res.header('Content-Type', file.contentType);
-        res.header('Content-Length', file.length);
-        // resize img
-        let size = +Math.abs(req.query.size) || 200;
-        if (size > 500) size = 500;
+        // get image if cache is missed
+        let avatars = await gfs.find({ _id: req.foundUser.avatar })
+        avatars.toArray((err, files) => {
+          if (!files || files.length === 0) {
+            return res.notFound({ error: "Image not found" });
+          }
 
-        let chunks = [];
-        const stream = gfs.openDownloadStreamByName(file.filename);
-        stream.on('data', chunk => chunks.push(chunk));
-        stream.on('end', () => {
-          const buffer = Buffer.concat(chunks);
-          sharp(buffer).resize(size, size).toBuffer((err, resizedBuffer) => {
-            if (err) res.send({ error: 'Cannot resize img' })
-            res.send(resizedBuffer);
-          });
+          const file = files[0];
+          const fileType = file.contentType;
+          if (fileType === 'image/jpeg' || fileType === 'image/png') {
+            res.header('Content-Type', fileType);
+            res.header('Content-Length', file.length);
+            // resize img
+            let size = +Math.abs(req.query.size) || 200;
+            if (size > 500) size = 500;
+
+            const chunks = [];
+            const stream = gfs.openDownloadStreamByName(file.filename);
+            stream.on('data', chunk => chunks.push(chunk));
+            stream.on('end', () => {
+              const buffer = Buffer.concat(chunks);
+              sharp(buffer)
+                .resize(size, size)
+                .jpeg({ quality: 100 })
+                .toBuffer((err, resizedBuffer) => {
+                  if (err) res.send({ error: 'Cannot resize img' })
+                  res.send(resizedBuffer);
+                  MemCache.set(cacheUrl, resizedBuffer);
+                });
+            })
+          } else {
+            return res.unsupportedMedia({ error: 'media type not supported' })
+          }
         })
       } else {
-        return res.unsupportedMedia({ error: 'media type not supported' })
+        // send cached data
+        res.header('Content-Type', 'image/jpeg');
+        res.send(cachedData);
       }
     })
+
   } catch (err) {
     console.log(err);
     res.internalError({ error: 'opps' })
