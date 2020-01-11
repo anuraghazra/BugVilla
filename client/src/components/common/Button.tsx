@@ -63,7 +63,7 @@ const Button: React.FC<Props> = ({
   isLoading,
   ...props
 }) => (
-  <StyledButton {...props} width={width}>
+  <StyledButton {...props} disabled={isLoading} width={width}>
     {icon && (
       <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
     )}

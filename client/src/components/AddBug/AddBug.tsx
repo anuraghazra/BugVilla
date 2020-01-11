@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
@@ -6,34 +6,35 @@ import { StyledH3Input } from 'components/Signup/Signup.style';
 import Input from 'components/common/Form/Input';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
-import http from 'utils/httpInstance';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';
 import DashboardHeader from 'components/DashboardHeader';
 import StyledEditor from 'components/Editor/Editor.style';
 import AddBugWrapper from './AddBug.style';
+import useAPI from 'hooks/useAPI';
 
 const AddBug: React.FC = () => {
   const history = useHistory();
-  const [isLoading, setIsloading] = useState(false);
-  const [error, setError] = useState<any>(null);
-  const { register, handleSubmit, errors, watch }: any = useForm({
+  const { loading: isLoading, error: error, callAPI } = useAPI();
+  const {
+    register,
+    handleSubmit,
+    errors,
+    watch,
+    reset,
+    setValue
+  }: any = useForm({
     validationSchema: AddBugSchema
   });
   const markdown = watch('body');
 
   const onSubmit = async (data: { title: string; body: string }) => {
-    setIsloading(true);
-    setError(null);
-    try {
-      await http.post('/api/bugs', data);
-      setIsloading(false);
+    callAPI({ method: 'POST', url: '/api/bugs', data }, () => {
+      reset();
+      setValue('body', '');
       history.push('/dashboard/bugs');
-    } catch (err) {
-      setError(err.response.data.error);
-      setIsloading(false);
-    }
+    })
   };
 
   return (

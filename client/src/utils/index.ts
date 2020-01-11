@@ -13,7 +13,8 @@ export const getTimeDiff = (dt1: any): string | number => {
   }
   const days = Math.floor(millsec / 1000 / 60 / (60 * 24));
   const hours = Math.floor(millsec / 1000 / 60 / 60);
-
+  const min = Math.floor(millsec / 1000 / 60);
   if (hours >= 24) return days + ' days ago';
+  if (hours < 1) return min + ' min ago';
   return hours + ' hours ago';
 }

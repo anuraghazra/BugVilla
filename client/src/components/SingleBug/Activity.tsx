@@ -13,15 +13,17 @@ interface ActivityProps {
   action: string;
 }
 
-const Activity: React.FC<ActivityProps> = ({ author, date, action }) => (
-  <StyledActivity>
-    <MetaInfo
-      author={author}
-      date={date}
-      showAvatar={true}
-      isOpen={action == 'opened'}
-    />
-  </StyledActivity>
+const Activity: React.FC<ActivityProps> = React.memo(
+  ({ author, date, action }) => (
+    <StyledActivity>
+      <MetaInfo
+        author={author}
+        date={date}
+        showAvatar={true}
+        isOpen={action == 'opened'}
+      />
+    </StyledActivity>
+  )
 );
 
 export default Activity;

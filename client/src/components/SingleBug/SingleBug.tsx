@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import * as yup from 'yup';
 
-import DashboardHeader from 'components/DashboardHeader';
-import styled from 'styled-components';
-
-import { useParams } from 'react-router-dom';
+import http from 'utils/httpInstance';
 import useFetch from 'hooks/useFetch';
 
+import Button, { ButtonGroup } from 'components/common/Button';
 import Loading from 'components/common/Loading';
-import MetaInfo from './MetaInfo';
-import Comment from './Comment';
-import Activity from './Activity';
+import Toast from 'components/common/Toast';
+
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
-import Button, { ButtonGroup } from 'components/common/Button';
-import http from 'utils/httpInstance';
-import { useForm } from 'react-hook-form';
-import Toast from 'components/common/Toast';
+import DashboardHeader from 'components/DashboardHeader';
+
+import Comment from './Comment';
+import Activity from './Activity';
+import MetaInfo from './MetaInfo';
+import CloseReopenButton from './CloseReopenButton';
+import useAPI from 'hooks/useAPI';
 
 const addCommentSchema = yup.object().shape({
   body: yup
@@ -25,26 +28,6 @@ const addCommentSchema = yup.object().shape({
     .max(1000)
     .required()
 });
-
-const CloseReopenButton = ({
-  handleRequst,
-  isOpen
-}: {
-  handleRequst: any;
-  isOpen: boolean;
-}) => (
-  <Button
-    danger={isOpen}
-    success={!isOpen}
-    icon={isOpen ? 'times' : 'history'}
-    onClick={(e: any) => {
-      e.preventDefault();
-      handleRequst(isOpen ? 'close' : 'open');
-    }}
-  >
-    {isOpen ? 'Close' : 'Reopen'}
-  </Button>
-);
 
 const SingleBugWrapper = styled.section`
   width: 100%;
@@ -65,61 +48,70 @@ export interface AuthorProps {
 
 const SingleBug: React.FC = () => {
   const { bugId } = useParams();
-  const { data, setData, isLoading, error } = useFetch(`/api/bugs/${bugId}`);
-  const [isCommentLoading, setIsCommentloading] = useState(false);
-  const [commentError, setCommentError] = useState<any>(null);
-
+  const { data: bugData, setData: setBug, isLoading, error } = useFetch(
+    `/api/bugs/${bugId}`
+  );
   const {
     register,
     handleSubmit,
     errors: formErrors,
     watch,
-    reset
-  }: any = useForm({
-    validationSchema: addCommentSchema
-  });
+    setValue
+  }: any = useForm({ validationSchema: addCommentSchema });
   // get the value of body to pass into <Editor />
   const markdown = watch('body');
 
-  const onSubmit = async (formData: { body: string }) => {
-    setIsCommentloading(true);
-    setCommentError(null);
-    try {
-      let res = await http.patch(`api/bugs/${bugId}/comments`, formData);
-      let stateData: any = { ...data };
-      stateData.data.comments = res.data.data;
-      setData(stateData);
-      reset();
-      setIsCommentloading(false);
-    } catch (err) {
-      setCommentError(err.response.data.error);
-      console.log(commentError);
-      setIsCommentloading(false);
-    }
+  // don't wanna put this state in redux
+  // for reasons unknown :D
+
+  // commenting
+  const {
+    loading: isCommentLoading,
+    error: commentError,
+    callAPI: callCommentAPI
+  } = useAPI();
+  // open/close
+  const {
+    loading: isToggleLoading,
+    error: toggleError,
+    callAPI: callToggleAPI
+  } = useAPI();
+
+  // add comment
+  const onSubmit = async (formData: any) => {
+    callCommentAPI(
+      {
+        method: 'PATCH',
+        url: `/api/bugs/${bugId}/comments`,
+        data: formData
+      },
+      (res: any) => {
+        let newData: any = { ...bugData };
+        newData.data.comments = res.data.data;
+        setBug(newData);
+        setValue('body', '');
+      }
+    );
   };
 
-  const sendCloseOpenRequest = async (state: string) => {
-    setIsCommentloading(true);
-    setCommentError(null);
-    try {
-      console.log(state);
-      let res = await http.patch(`api/bugs/${bugId}/${state}`);
-      let stateData: any = { ...data };
-      stateData.data.activities = res.data.data;
-      stateData.data.isOpen = state === 'open' ? true : false;
-      setData(stateData);
-      setIsCommentloading(false);
-    } catch (err) {
-      setCommentError(err.response.data.error);
-      console.log(commentError);
-      setIsCommentloading(false);
-    }
+  // send open/close request
+  const sendToggleRequest = async (state: string) => {
+    callToggleAPI(
+      { method: 'PATCH', url: `/api/bugs/${bugId}/${state}` },
+      (res: any) => {
+        let newData: any = { ...bugData };
+        newData.data.activities = res.data.data;
+        newData.data.isOpen = state === 'open' ? true : false;
+        setBug(newData);
+      }
+    );
   };
 
-  let bug = data && data.data;
+  let bug = bugData && bugData.data;
   return (
     <SingleBugWrapper>
       <Toast isVisible={!!commentError} message={commentError} />
+      <Toast isVisible={!!toggleError} message={toggleError} />
 
       {isLoading && <Loading />}
       {error && <p>Something went wrong while fetching the data</p>}
@@ -135,53 +127,47 @@ const SingleBug: React.FC = () => {
               author={bug.author}
               commentsCount={bug.comments.length}
             />
-            <Comment
-              body={bug.body}
-              author={bug.author}
-              date={bug.date_opened}
-            />
-
-            {bug.comments.length > 0 &&
-              bug.comments.map((comment: any) => (
-                <Comment
-                  key={comment.id}
-                  body={comment.body}
-                  author={comment.author}
-                  date={comment.date}
-                />
-              ))}
-            {bug.activities.length > 0 &&
-              bug.activities.map((activity: any) => (
-                <Activity
-                  key={activity.id}
-                  author={activity.author}
-                  action={activity.action}
-                  date={activity.date}
-                />
-              ))}
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <StyledEditor>
-                <Editor
-                  markdown={markdown}
-                  errors={formErrors}
-                  inputRef={register({ required: 'Body is required' })}
-                />
-                <ButtonGroup className="bug__button">
-                  <CloseReopenButton
-                    isOpen={bug.isOpen}
-                    handleRequst={sendCloseOpenRequest}
-                  />
-                  <Button
-                    isLoading={isCommentLoading}
-                    type="submit"
-                    icon="plus"
-                  >
-                    Comment
-                  </Button>
-                </ButtonGroup>
-              </StyledEditor>
-            </form>
           </DashboardHeader>
+
+          <Comment body={bug.body} author={bug.author} date={bug.date_opened} />
+
+          {bug.comments.length > 0 &&
+            bug.comments.map((comment: any) => (
+              <Comment
+                key={comment.id}
+                body={comment.body}
+                author={comment.author}
+                date={comment.date}
+              />
+            ))}
+          {bug.activities.length > 0 &&
+            bug.activities.map((activity: any, i: number) => (
+              <Activity
+                key={i}
+                author={activity.author}
+                action={activity.action}
+                date={activity.date}
+              />
+            ))}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <StyledEditor>
+              <Editor
+                markdown={markdown}
+                errors={formErrors}
+                inputRef={register({ required: 'Body is required' })}
+              />
+              <ButtonGroup className="bug__button">
+                <CloseReopenButton
+                  isOpen={bug.isOpen}
+                  isLoading={isToggleLoading}
+                  handleRequst={sendToggleRequest}
+                />
+                <Button isLoading={isCommentLoading} type="submit" icon="plus">
+                  Comment
+                </Button>
+              </ButtonGroup>
+            </StyledEditor>
+          </form>
         </>
       )}
     </SingleBugWrapper>

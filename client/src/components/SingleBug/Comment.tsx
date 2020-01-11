@@ -42,7 +42,7 @@ interface CommentProps {
   body: string;
 }
 
-const Comment: React.FC<CommentProps> = ({ author, date, body }) => (
+const Comment: React.FC<CommentProps> = React.memo(({ author, date, body }) => (
   <StyledComment>
     <Flex className="comment__header" align="center">
       <Avatar
@@ -63,6 +63,6 @@ const Comment: React.FC<CommentProps> = ({ author, date, body }) => (
       source={body}
     />
   </StyledComment>
-);
+));
 
 export default Comment;
