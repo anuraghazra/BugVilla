@@ -9,6 +9,7 @@ const StatusIconWrapper = styled.div<{ isOpen?: boolean }>`
 
   width: 30px;
   height: 30px;
+  min-width: 30px;
   border-radius: 50px;
 
   color: ${p =>

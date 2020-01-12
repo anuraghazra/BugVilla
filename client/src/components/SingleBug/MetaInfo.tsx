@@ -19,7 +19,7 @@ interface MetaProps {
 const MetaInfo: React.FC<MetaProps> = React.memo(
   ({ isOpen, date, author, commentsCount, showAvatar }) => (
     <StyledMetaInfo>
-      <Flex align="center">
+      <Flex align="center" nowrap>
         <StatusIcon isOpen={isOpen} />
         {showAvatar && (
           <Avatar
