@@ -146,6 +146,32 @@ exports.toggleBugOpenClose = ({ state }) => {
 
 /**
  * @route PATCH /api/bugs/:bugId/labels
+ * @description Updates thw whole label array
+ * @type RequestHandler
+ */
+exports.updateLabels = async (req, res) => {
+  const { error, value } = validateLabel(req.body.labels);
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  try {
+    let bug = await Bug.findOneAndUpdate(
+      { bugId: req.params.bugId },
+      { $set: { labels: value } },
+      { new: true, runValidators: true, }
+    );
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+    res.ok({ data: bug.labels });
+  } catch (err) {
+    res.internalError({
+      error: `Something went wrong while updating labels`,
+    })
+  }
+}
+/**
+ * @route PATCH /api/bugs/:bugId/labels
  * @description Add a label to specified bugId
  * @type RequestHandler
  */

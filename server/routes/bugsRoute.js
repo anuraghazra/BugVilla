@@ -17,7 +17,7 @@ router.patch('/:bugId', verify, BugsController.updateBug)
 router.patch('/:bugId/close', verify, bugOpenCloseLimiter, BugsController.toggleBugOpenClose({ state: false }))
 router.patch('/:bugId/open', verify, BugsController.toggleBugOpenClose({ state: true }))
 
-router.patch('/:bugId/labels', verify, BugsController.addLabel)
-router.delete('/:bugId/labels/:name', verify, BugsController.deleteLabel)
+router.patch('/:bugId/labels', verify, BugsController.updateLabels)
+// router.delete('/:bugId/labels/:name', verify, BugsController.deleteLabel)
 
 module.exports = router;

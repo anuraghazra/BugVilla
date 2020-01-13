@@ -8,27 +8,6 @@ const { CommentSchema } = require('./commentModel');
 // plugin initialize
 autoIncrement.initialize(mongoose.connection);
 
-// eslint-disable-next-line security/detect-unsafe-regex
-const colorRegEx = (/^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$/i);
-const colorValidator = (v) => colorRegEx.test(v)
-
-const LabelSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-    minLength: 2,
-    maxLength: 50,
-  },
-  color: {
-    type: String,
-    required: true,
-    minLength: 4,
-    maxLength: 10,
-    validate: [colorValidator, 'Invalid Color Hex']
-  }
-}, { _id: false })
-
 const ActivitiesSchema = new mongoose.Schema({
   action: { type: String, enum: ['closed', 'opened'], required: true },
   author: { type: UserInfoSchema, required: true },
@@ -38,6 +17,8 @@ const ActivitiesSchema = new mongoose.Schema({
   },
 }, { _id: false })
 
+
+const VALID_LABELS = ["bug", "feature", "help wanted", "enhancement"];
 const BugSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -58,9 +39,12 @@ const BugSchema = new mongoose.Schema({
   isOpen: { type: Boolean, default: true },
   activities: [{ type: ActivitiesSchema }],
   author: { type: UserInfoSchema, required: true },
-  labels: [{ type: LabelSchema }],
+  labels: {
+    type: [String],
+    enum: VALID_LABELS,
+  },
   comments: [{ type: CommentSchema }]
-})
+}, { strict: true })
 
 BugSchema.set('toJSON', {
   transform: function (doc, ret, options) {
@@ -76,10 +60,13 @@ BugSchema.plugin(autoIncrement.plugin, { model: 'Bug', field: 'bugId', startAt: 
 const Bug = mongoose.model('Bug', BugSchema, 'bugs');
 
 
-const JoiLabelSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required(),
-  color: Joi.string().regex(colorRegEx).required()
-})
+const JoiLabelSchema = Joi.array()
+  .items(Joi
+    .string()
+    .min(2)
+    .max(50)
+    .required()
+  )
 
 const validateLabel = (label) => {
   return JoiLabelSchema.validate(label)
