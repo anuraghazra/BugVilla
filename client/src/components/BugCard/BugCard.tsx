@@ -27,7 +27,11 @@ interface BugCardProps {
   author: Author;
 }
 
-export const BugMetaInfo: React.FC<BugMetaProps> = ({ number, date, author }) => (
+export const BugMetaInfo: React.FC<BugMetaProps> = ({
+  number,
+  date,
+  author
+}) => (
   <StyledMetaInfo className="text--light">
     <span className="bug__number">#{number}</span> / on {date} by{' '}
     <a href={`/users/${author.username}`}>{author.name}</a>
@@ -56,9 +60,9 @@ const BugCard: React.FC<BugCardProps> = ({
 
       {labels.length ? (
         <Flex className="bug__label-container">
-          {labels.map((label: any, index: number) => (
-            <Label key={index} type={label.name}>
-              {label.name}
+          {labels.map((label: string, index: number) => (
+            <Label style={{ marginBottom: 5 }} key={index} type={label}>
+              {label}
             </Label>
           ))}
         </Flex>

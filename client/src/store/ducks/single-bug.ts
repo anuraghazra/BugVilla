@@ -14,12 +14,22 @@ export const TOGGLE_BUG_REQUEST = 'singlebug/TOGGLE_BUG_REQUEST';
 export const TOGGLE_BUG_SUCCESS = 'singlebug/TOGGLE_BUG_SUCCESS';
 export const TOGGLE_BUG_FAILURE = 'singlebug/TOGGLE_BUG_FAILURE';
 
+export const EDIT_LABELS_REQUEST = 'singlebug/EDIT_LABELS_REQUEST';
+export const EDIT_LABELS_SUCCESS = 'singlebug/EDIT_LABELS_SUCCESS';
+export const EDIT_LABELS_FAILURE = 'singlebug/EDIT_LABELS_FAILURE';
+
+export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
+export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
+
+
 interface DefaultStateProps {
   bug: any,
+  labelsCheckbox: string[]
 }
 
 const DEFAULT_STATE: DefaultStateProps = {
   bug: null,
+  labelsCheckbox: []
 }
 
 // reducers
@@ -44,6 +54,24 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           isOpen: action.bug_state === 'open' ? true : false
         }
       }
+    case UPDATE_LABEL_CHECKBOX:
+      return {
+        ...state,
+        labelsCheckbox: [...action.payload]
+      }
+    case CLEAR_LABEL_CHECKBOX:
+      return {
+        ...state,
+        labelsCheckbox: []
+      }
+    case EDIT_LABELS_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          labels: action.payload
+        }
+      }
     case CLEAR_BUG_DATA:
       return { ...state, bug: null }
     default:
@@ -57,6 +85,10 @@ export default reducer;
 const errorAction = (action: string, payload: any) => ({
   type: action, payload: payload || 'Something went wrong'
 });
+
+export const updateLabelCheckbox = (data: string[]) => {
+  return { type: UPDATE_LABEL_CHECKBOX, payload: data }
+}
 
 // side effects
 export const fetchBugWithId = (bugId: number | string) => {
@@ -105,6 +137,28 @@ export const openOrCloseBug = (bugId: number | string, state: string) => {
       });
     } catch (err) {
       dispatch(errorAction(TOGGLE_BUG_FAILURE, err?.response?.data?.error))
+    }
+  }
+}
+
+export const editLabels = (bugId: number | string, labelData: string[]) => {
+  return async (dispatch: any) => {
+    dispatch({ type: EDIT_LABELS_REQUEST });
+    try {
+      const res = await http({
+        method: 'PATCH',
+        url: `/api/bugs/${bugId}/labels`,
+        data: { labels: labelData }
+      });
+      let { data } = res.data;
+      dispatch({
+        type: EDIT_LABELS_SUCCESS,
+        payload: data,
+      });
+      dispatch({ type: CLEAR_LABEL_CHECKBOX })
+    } catch (err) {
+      dispatch({ type: CLEAR_LABEL_CHECKBOX })
+      dispatch(errorAction(EDIT_LABELS_FAILURE, err?.response?.data?.error))
     }
   }
 }

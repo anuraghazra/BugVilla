@@ -2,12 +2,11 @@ import styled from 'styled-components';
 
 const SingleBugWrapper = styled.section`
   width: 100%;
-  overflow: hidden;
   margin-bottom: 40px;
   position: relative;
 
   display: grid;
-  grid-template-columns: 1fr .3fr;
+  grid-template-columns: 1fr 0.3fr;
   grid-gap: 20px;
 
   @media screen and (${p => p.theme.media.desktop}) {
@@ -23,6 +22,7 @@ const SingleBugWrapper = styled.section`
     h4 {
       margin: 20px 0;
       margin-bottom: 10px;
+      font-size: 17px;
     }
 
     .label__header {
@@ -30,8 +30,9 @@ const SingleBugWrapper = styled.section`
     }
     .label__dropdown {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 30px;
+      right: 10px;
+      text-align: center;
     }
   }
 `;

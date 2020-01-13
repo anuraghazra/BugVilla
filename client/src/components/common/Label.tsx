@@ -33,6 +33,28 @@ const Label = styled.div<{ type?: string }>`
     `}
 `;
 
+const labelColorSwitch = (p: any, property: string) => {
+  switch (p.type) {
+    case 'bug':
+      return css`
+        ${property}: ${p => p.theme.colors.common.red};
+      `
+    case 'feature':
+      return css`
+        ${property}: ${p => p.theme.colors.common.green};
+      `
+    case 'help wanted':
+      return css`
+        ${property}: ${p => p.theme.colors.brand.primary};
+      `
+    case 'enhancement':
+      return css`
+        ${property}: ${p => p.theme.colors.brand.primary};
+      `
+    default:
+      return css``;
+  }
+};
 
 export const StyledBulletLabel = styled.div<{ type?: string }>`
   font-size: 14px;
@@ -40,34 +62,14 @@ export const StyledBulletLabel = styled.div<{ type?: string }>`
   padding: 5px 10px;
   border-radius: 5px;
   .bullet {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
+    width: 10px;
+    height: 10px;
+    margin-top: 7px;
+    margin-right: 8px;
+    border-radius: 50px;
+    ${p => labelColorSwitch(p, 'background-color')}
   }
-
-  &:hover {
-    background-color: ${p => p.theme.colors.brand.accent};
-  }
-  ${p =>
-    p.type === 'bug' &&
-    css`
-      color: ${p => p.theme.colors.common.red};
-    `}
-  ${p =>
-    p.type === 'feature' &&
-    css`
-      color: ${p => p.theme.colors.common.green};
-    `}
-  ${p =>
-    p.type === 'enhancement' &&
-    css`
-      color: ${p => p.theme.colors.brand.primary};
-    `}
-  ${p =>
-    p.type === 'help wanted' &&
-    css`
-      color: ${p => p.theme.colors.brand.primary};
-    `}
+  ${p => labelColorSwitch(p, 'color')}
 `;
 
 interface BulletLabelProps {
@@ -77,7 +79,7 @@ interface BulletLabelProps {
 export const BulletLabel: React.FC<BulletLabelProps> = ({ type, children }) => {
   return (
     <StyledBulletLabel type={type}>
-      <div className="bullet">⚫</div>
+      <div className="bullet"></div>
       {children}
     </StyledBulletLabel>
   );

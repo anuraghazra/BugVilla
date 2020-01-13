@@ -35,7 +35,7 @@ const MetaInfo: React.FC<MetaProps> = React.memo(
             {author.name}
           </a>{' '}
           on {formatDate(date)}
-          {commentsCount && <span> / {commentsCount} comments</span>}
+          <span> / {commentsCount} comments</span>
         </span>
       </Flex>
     </StyledMetaInfo>

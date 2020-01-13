@@ -6,6 +6,7 @@ interface ButtonProps {
   width?: string;
   success?: boolean;
   danger?: boolean;
+  size?: string;
 }
 
 export const ButtonGroup = styled.div`
@@ -27,6 +28,7 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
     color: ${p => p.theme.colors.common.red};
   `}
 
+  
   width: ${p => p.width};
   height: fit-content;
   border: none;
@@ -38,6 +40,15 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
   line-height: 1;
   font-size: 14px;
 
+  ${p => p.size === 'sm' && css`
+    padding: 10px 15px;
+    font-size: 12px;
+  `}
+  ${p => p.size === 'md' && css`
+    padding: 10px 15px;
+    font-size: 12px;
+  `}
+
   &:hover {
     transform: scale(1.05);
     transition: 0.2s;
@@ -48,7 +59,12 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
   }
 `;
 
+enum Size {
+  sm = 'sm',
+  md = 'md'
+}
 interface Props {
+  size?: 'sm' | 'md';
   width?: string;
   icon?: any;
   children: React.ReactNode;
@@ -57,13 +73,14 @@ interface Props {
 }
 
 const Button: React.FC<Props> = ({
+  size,
   width,
   icon,
   children,
   isLoading,
   ...props
 }) => (
-  <StyledButton {...props} disabled={isLoading} width={width}>
+  <StyledButton {...props} size={size} disabled={isLoading} width={width}>
     {icon && (
       <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
     )}

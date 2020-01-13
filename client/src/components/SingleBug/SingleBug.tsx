@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import Dropdown from 'react-dropdown';
 
-import Flex from 'components/common/Flex';
 import Toast from 'components/common/Toast';
 import Loading from 'components/common/Loading';
-import Label, { BulletLabel } from 'components/common/Label';
 import Button, { ButtonGroup } from 'components/common/Button';
 
 import Editor from 'components/Editor/Editor';
@@ -20,7 +16,6 @@ import Comment from './Comment';
 import Activity from './Activity';
 import MetaInfo from './MetaInfo';
 import CloseReopenButton from './CloseReopenButton';
-import Avatar from 'components/Avatar/Avatar';
 import SingleBugWrapper from './SingleBug.style';
 
 import {
@@ -28,6 +23,7 @@ import {
   addComment,
   openOrCloseBug
 } from 'store/ducks/single-bug';
+import SingleBugAside from './SingleBugAside';
 
 const addCommentSchema = yup.object().shape({
   body: yup
@@ -36,19 +32,6 @@ const addCommentSchema = yup.object().shape({
     .max(1000)
     .required()
 });
-
-// get unique avatar images from all comments
-const getParticipants = (bug: any): string[] => {
-  if (bug && bug.comments) {
-    return bug.comments
-      .map((c: any) => `/api/user/${c.author.username}/avatar/raw?size=45`)
-      .filter(
-        (item: string, pos: number, array: string[]) =>
-          array.indexOf(item) === pos
-      );
-  }
-  return [];
-};
 
 export interface AuthorProps {
   name: string;
@@ -86,31 +69,34 @@ const SingleBug: React.FC = () => {
     };
   });
 
-  const onSubmit = async (formData: { body: string }) => {
-    dispatch(addComment(bugId, formData));
-    setValue('body', '');
-  };
-  const sendToggleRequest = (state: string) => {
-    dispatch(openOrCloseBug(bugId, state));
-  };
-
+  const onSubmit = useCallback(
+    async (formData: { body: string }) => {
+      dispatch(addComment(bugId, formData));
+      setValue('body', '');
+    },
+    [dispatch]
+  );
+  const sendToggleRequest = useCallback(
+    (state: string) => {
+      dispatch(openOrCloseBug(bugId, state));
+    },
+    [bugId]
+  );
   useEffect(() => {
     dispatch(fetchBugWithId(bugId));
   }, [bugId]);
-
-  let participants: string[] = getParticipants(bug);
 
   return (
     <SingleBugWrapper>
       <Toast isVisible={!!commentError} message={commentError} />
       <Toast isVisible={!!toggleError} message={toggleError} />
       <Toast isVisible={!!fetchError} message={fetchError} />
-      
+
       {isFetching && <Loading />}
       {fetchError && <p>Something went wrong while fetching the data</p>}
-      <section>
-        {bug && (
-          <>
+      {bug ? (
+        <>
+          <section>
             <DashboardHeader>
               <h1>
                 {bug.title} <span className="color--gray">#{bugId}</span>
@@ -169,47 +155,12 @@ const SingleBug: React.FC = () => {
                 </ButtonGroup>
               </StyledEditor>
             </form>
-          </>
-        )}
-      </section>
-      <section className="singlebug__aside">
-        <div>
-          {/* <h4 className="label__header color--gray">
-            Labels{' '}
-            <FontAwesomeIcon onClick={openDropdown} size="sm" icon="cog" />
-            {isDropdownOpen && (
-              <div className="label__dropdown">
-                <Dropdown
-                  options={selectLabels}
-                  renderItem={(value: any) => (
-                    <>
-                      <div></div>
-                      <BulletLabel type={value}>{value}</BulletLabel>
-                    </>
-                  )}
-                />
-              </div>
-            )}
-          </h4> */}
-          <Flex>
-            {bug &&
-              bug.labels.length > 0 &&
-              bug.labels.map((label: any, i: number) => (
-                <Label type={label.name} key={i}>
-                  {label.name}
-                </Label>
-              ))}
-          </Flex>
-        </div>
-        <div>
-          <h4 className="color--gray">{participants.length} participants</h4>
-          <Flex>
-            {participants.map((participant: any, i: number) => (
-              <Avatar key={i} width="40px" height="40px" src={participant} />
-            ))}
-          </Flex>
-        </div>
-      </section>
+          </section>
+          <section className="singlebug__aside">
+            <SingleBugAside bugId={bugId} bug={bug} />
+          </section>
+        </>
+      ) : null}
     </SingleBugWrapper>
   );
 };

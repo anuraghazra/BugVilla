@@ -16,6 +16,7 @@ const StyledComment = styled.div`
   margin-top: ${p => p.theme.spacings.top}px;
   margin-bottom: ${p => p.theme.spacings.bottom}px;
   position: relative;
+  word-break: break-word;
 
   &:after {
     content: '';
@@ -44,7 +45,7 @@ interface CommentProps {
 
 const Comment: React.FC<CommentProps> = React.memo(({ author, date, body }) => (
   <StyledComment>
-    <Flex className="comment__header" align="center">
+    <Flex className="comment__header" nowrap align="center">
       <Avatar
         width="45px"
         height="45px"
