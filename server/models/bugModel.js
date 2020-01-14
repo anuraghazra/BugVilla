@@ -30,7 +30,7 @@ const BugSchema = new mongoose.Schema({
   body: {
     type: String,
     required: true,
-    maxLength: 10000
+    maxLength: 1000
   },
   date_opened: {
     type: Date,
@@ -76,7 +76,7 @@ const validateBug = (bug) => {
   // nested schemas
   const schema = Joi.object({
     title: Joi.string().min(6).max(100).required(),
-    body: Joi.string().min(6).max(10000).required(),
+    body: Joi.string().min(6).max(1000).required(),
     date_opened: Joi.date().default(Date.now),
     author: Joi.object(),
     isOpen: Joi.bool().default(true),

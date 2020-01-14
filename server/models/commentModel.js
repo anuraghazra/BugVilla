@@ -7,8 +7,8 @@ const CommentSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    minLength: 2,
-    maxLength: 250,
+    minLength: 6,
+    maxLength: 1000,
   },
   date: {
     type: Date,
@@ -29,7 +29,7 @@ const Comment = mongoose.model('Comment', CommentSchema, 'bugs');
 
 const validateComment = (comment) => {
   const schema = Joi.object({
-    body: Joi.string().min(2).max(250).required(),
+    body: Joi.string().min(6).max(1000).required(),
     date: Joi.date().default(Date.now),
     author: Joi.object(),
     bugId: Joi.number()

@@ -79,9 +79,46 @@ exports.deleteComment = async (req, res) => {
 
     res.ok({ data: bug.comments });
   } catch (err) {
+    res.internalError({
+      error: `Something went wrong while deleting comment #${req.params.comment_id}`,
+    })
+  }
+}
+
+/**
+ * @route PATCH /api/bugs/:bugId/comments/:comment_id
+ * @description update a comments from specified bugId, comment_id
+ * @type RequestHandler
+ */
+exports.updateComment = async (req, res) => {
+  const { error, value } = validateComment(req.body);
+  if (error) return res.unprocessable({ error: error.details[0].message });
+
+  try {
+    const bug = await Bug.findOneAndUpdate(
+      {
+        bugId: req.params.bugId,
+        comments: {
+          $elemMatch: {
+            '_id': req.params.comment_id,
+            'author._id': req.user.id
+          }
+        }
+      },
+      {
+        $set: {
+          'comments.$.body': value.body
+        }
+      },
+      { new: true, runValidators: true, select: 'comments' }
+    )
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+    res.ok({ data: bug.comments });
+  } catch (err) {
     console.log(err)
     res.internalError({
-      error: `Something went wrong while deleting comment#${req.params.comment_id}`,
+      error: `Something went wrong while updating comment #${req.params.comment_id}`,
     })
   }
 }
