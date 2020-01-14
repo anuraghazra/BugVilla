@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import { useSelector } from 'react-redux';
 import { ErrorMessage } from 'react-hook-form';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import Avatar from 'components/Avatar/Avatar';
 import Flex from 'components/common/Flex';
+import Avatar from 'components/Avatar/Avatar';
 import { InputWrapper } from 'components/common/Form/Input';
 import CodeBlock from './CodeBlock';
-import { useSelector } from 'react-redux';
 
 interface EditorProps {
   markdown: string;
@@ -37,7 +37,7 @@ const Editor: React.FC<EditorProps> = ({ markdown, inputRef, errors }) => {
             <textarea
               name="body"
               ref={inputRef}
-              value={markdown}
+              defaultValue={markdown}
               placeholder="Write Markdown"
               className="editor__tabpanel-area"
             />

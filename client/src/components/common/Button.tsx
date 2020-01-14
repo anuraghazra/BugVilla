@@ -64,11 +64,13 @@ enum Size {
   md = 'md'
 }
 interface Props {
+  icon?: any;
   size?: 'sm' | 'md';
   width?: string;
-  icon?: any;
-  children: React.ReactNode;
+  success?: boolean;
+  danger?: boolean;
   isLoading?: boolean;
+  children: React.ReactNode;
   [x: string]: any;
 }
 

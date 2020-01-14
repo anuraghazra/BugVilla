@@ -27,7 +27,7 @@ interface SingleBugAsideProps {
   bug: any;
 }
 const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const [isDropdownOpen, setDropdownState] = useState(false);
 
   const selectedLabels = useSelector(
@@ -50,7 +50,9 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
 
   const handleSaveLabel = () => {
     if (selectedLabels.length > 0) {
-      dispatch(editLabels(bugId, selectedLabels));
+      dispatch(editLabels(bugId, selectedLabels)).then(() => {
+        setDropdownState(false);
+      });
     }
   };
 

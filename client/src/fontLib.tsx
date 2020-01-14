@@ -17,6 +17,7 @@ import {
   faBars,
   faHistory,
   faDoorOpen,
+  faEllipsisV,
   faExclamation,
   faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -38,6 +39,7 @@ library.add(
   faBars,
   faHistory,
   faDoorOpen,
+  faEllipsisV,
   faExclamation,
   faExclamationTriangle
 );

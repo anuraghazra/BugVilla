@@ -18,6 +18,14 @@ export const EDIT_LABELS_REQUEST = 'singlebug/EDIT_LABELS_REQUEST';
 export const EDIT_LABELS_SUCCESS = 'singlebug/EDIT_LABELS_SUCCESS';
 export const EDIT_LABELS_FAILURE = 'singlebug/EDIT_LABELS_FAILURE';
 
+export const EDIT_COMMENT_REQUEST = 'singlebug/EDIT_COMMENT_REQUEST';
+export const EDIT_COMMENT_SUCCESS = 'singlebug/EDIT_COMMENT_SUCCESS';
+export const EDIT_COMMENT_FAILURE = 'singlebug/EDIT_COMMENT_FAILURE';
+
+export const UPDATE_BUG_REQUEST = 'singlebug/UPDATE_BUG_REQUEST';
+export const UPDATE_BUG_SUCCESS = 'singlebug/UPDATE_BUG_SUCCESS';
+export const UPDATE_BUG_FAILURE = 'singlebug/UPDATE_BUG_FAILURE';
+
 export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
 export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
 
@@ -72,6 +80,22 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           labels: action.payload
         }
       }
+    case EDIT_COMMENT_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          comments: action.payload
+        }
+      }
+    case UPDATE_BUG_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          body: action.payload.body
+        }
+      }
     case CLEAR_BUG_DATA:
       return { ...state, bug: null }
     default:
@@ -120,6 +144,38 @@ export const addComment = (bugId: number | string, formData: { body: string }) =
       });
     } catch (err) {
       dispatch(errorAction(ADD_COMMENT_FAILURE, err?.response?.data?.error))
+    }
+  }
+}
+
+export const editComment = (bugId: number | string, commentId: string, formData: { body: string }) => {
+  return async (dispatch: any) => {
+    dispatch({ type: EDIT_COMMENT_REQUEST });
+    try {
+      const res = await http.patch(`/api/bugs/${bugId}/comments/${commentId}`, formData);
+      let { data } = res.data;
+      dispatch({
+        type: EDIT_COMMENT_SUCCESS,
+        payload: data
+      });
+    } catch (err) {
+      dispatch(errorAction(EDIT_COMMENT_FAILURE, err?.response?.data?.error))
+    }
+  }
+}
+
+export const updateBug = (bugId: number | string, formData: { body: string }) => {
+  return async (dispatch: any) => {
+    dispatch({ type: UPDATE_BUG_REQUEST });
+    try {
+      const res = await http.patch(`/api/bugs/${bugId}`, formData);
+      let { data } = res.data;
+      dispatch({
+        type: UPDATE_BUG_SUCCESS,
+        payload: data
+      });
+    } catch (err) {
+      dispatch(errorAction(UPDATE_BUG_FAILURE, err?.response?.data?.error))
     }
   }
 }

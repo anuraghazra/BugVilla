@@ -30,12 +30,12 @@ const MetaInfo: React.FC<MetaProps> = React.memo(
           />
         )}
         <span className="ml-15">
-          {isOpen ? 'Opened' : 'Closed'} by{' '}
+          {isOpen ? 'Opened' : 'Closed'} by
           <a className="text--medium" href={`/users/${author.username}`}>
-            {author.name}
-          </a>{' '}
+            &nbsp;{author.name}&nbsp;
+          </a>
           on {formatDate(date)}
-          <span> / {commentsCount} comments</span>
+          {commentsCount ? <span> / {commentsCount} comments</span> : null}
         </span>
       </Flex>
     </StyledMetaInfo>

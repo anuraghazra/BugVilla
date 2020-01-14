@@ -25,7 +25,7 @@ import {
 } from 'store/ducks/single-bug';
 import SingleBugAside from './SingleBugAside';
 
-const addCommentSchema = yup.object().shape({
+export const addCommentSchema = yup.object().shape({
   body: yup
     .string()
     .min(6)
@@ -36,10 +36,11 @@ const addCommentSchema = yup.object().shape({
 export interface AuthorProps {
   name: string;
   username: string;
+  id?: string;
 }
 
 const SingleBug: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const { bugId } = useParams<any>();
   const {
     watch,
@@ -110,6 +111,8 @@ const SingleBug: React.FC = () => {
             </DashboardHeader>
 
             <Comment
+              bugId={bugId}
+              commentId={''} // assumes it's not a comment
               body={bug.body}
               author={bug.author}
               date={bug.date_opened}
@@ -117,6 +120,8 @@ const SingleBug: React.FC = () => {
             {bug.comments.length > 0 &&
               bug.comments.map((comment: any) => (
                 <Comment
+                  bugId={bugId}
+                  commentId={comment.id}
                   key={comment.id}
                   body={comment.body}
                   author={comment.author}

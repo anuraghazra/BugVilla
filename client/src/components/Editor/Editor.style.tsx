@@ -12,7 +12,7 @@ const StyledEditor = styled.div`
   .editor__tabpanel-area {
     border-radius: 5px;
     width: 100%;
-    min-height: 300px;
+    min-height: 250px;
     padding: 20px;
     border: 1px solid ${p => p.theme.colors.common.offwhite};
     color: ${p => p.theme.colors.text.black};

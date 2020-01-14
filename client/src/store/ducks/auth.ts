@@ -17,9 +17,9 @@ export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 
 
 interface UserProps {
-  username: string;
-  name: string;
-  id: number;
+  username?: string;
+  name?: string;
+  id?: number;
 }
 interface DefaultStateProps {
   isAuthenticated: boolean,
@@ -27,7 +27,7 @@ interface DefaultStateProps {
   isSignupPending: boolean,
   loginError: null | object,
   signupError: null | object,
-  user: null | UserProps;
+  user: UserProps;
 }
 
 const DEFAULT_STATE: DefaultStateProps = {
@@ -36,7 +36,7 @@ const DEFAULT_STATE: DefaultStateProps = {
   isSignupPending: false,
   loginError: null,
   signupError: null,
-  user: null,
+  user: {},
 }
 
 // reducers
