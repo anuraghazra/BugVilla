@@ -1,85 +1,88 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
 
-const Label = styled.div<{ type?: string }>`
+const StyledLabel = styled.div`
   font-size: 14px;
   padding: 5px 10px;
   border-radius: 50px;
   margin-right: 10px;
 
-  ${p =>
-    p.type === 'bug' &&
-    css`
-      color: ${p => p.theme.colors.common.red};
+  &.bug {
+    color: ${p => p.theme.colors.common.red};
+    &--bg {
       background-color: ${p => p.theme.colors.common.redlight};
-    `}
-  ${p =>
-    p.type === 'feature' &&
-    css`
-      color: ${p => p.theme.colors.common.green};
+    }
+  }
+  &.feature {
+    color: ${p => p.theme.colors.common.green};
+    &--bg {
       background-color: ${p => p.theme.colors.common.greenlight};
-    `}
-  ${p =>
-    p.type === 'enhancement' &&
-    css`
-      color: ${p => p.theme.colors.brand.primary};
+    }
+  }
+  &.enhancement {
+    color: ${p => p.theme.colors.brand.primary};
+    &--bg {
       background-color: ${p => p.theme.colors.brand.accent};
-    `}
-  ${p =>
-    p.type === 'help wanted' &&
-    css`
-      color: ${p => p.theme.colors.brand.primary};
+    }
+  }
+  &.help-wanted {
+    color: ${p => p.theme.colors.brand.primary};
+    &--bg {
       background-color: ${p => p.theme.colors.brand.accent};
-    `}
+    }
+  }
 `;
 
-const labelColorSwitch = (p: any, property: string) => {
-  switch (p.type) {
-    case 'bug':
-      return css`
-        ${property}: ${p => p.theme.colors.common.red};
-      `
-    case 'feature':
-      return css`
-        ${property}: ${p => p.theme.colors.common.green};
-      `
-    case 'help wanted':
-      return css`
-        ${property}: ${p => p.theme.colors.brand.primary};
-      `
-    case 'enhancement':
-      return css`
-        ${property}: ${p => p.theme.colors.brand.primary};
-      `
-    default:
-      return css``;
-  }
-};
-
-export const StyledBulletLabel = styled.div<{ type?: string }>`
+export const StyledBulletLabel = styled(StyledLabel)`
   font-size: 14px;
   display: flex;
   padding: 5px 10px;
   border-radius: 5px;
+
   .bullet {
     width: 10px;
     height: 10px;
     margin-top: 7px;
     margin-right: 8px;
     border-radius: 50px;
-    ${p => labelColorSwitch(p, 'background-color')}
+    &.bug {
+      background-color: ${p => p.theme.colors.common.red};
+    }
+    &.feature {
+      background-color: ${p => p.theme.colors.common.green};
+    }
+    &.enhancement {
+      background-color: ${p => p.theme.colors.brand.primary};
+    }
+    &.help-wanted {
+      background-color: ${p => p.theme.colors.brand.primary};
+    }
   }
-  ${p => labelColorSwitch(p, 'color')}
+  & {
+    background-color: none !important;
+  }
 `;
 
-interface BulletLabelProps {
+interface LabelProps {
   type: string;
   children: React.ReactNode;
+  [x: string]: any;
 }
-export const BulletLabel: React.FC<BulletLabelProps> = ({ type, children }) => {
+const Label: React.FC<LabelProps> = ({ children, type }) => {
+  const labelType = type.replace(/\s/, '-');
   return (
-    <StyledBulletLabel type={type}>
-      <div className="bullet"></div>
+    <StyledLabel className={`${labelType} ${labelType}--bg`}>
+      {children}
+    </StyledLabel>
+  );
+};
+
+export const BulletLabel: React.FC<LabelProps> = ({ type, children }) => {
+  const labelType = type.replace(/\s/, '-');
+
+  return (
+    <StyledBulletLabel className={labelType}>
+      <div className={'bullet ' + labelType}></div>
       {children}
     </StyledBulletLabel>
   );
