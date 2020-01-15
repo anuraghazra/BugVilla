@@ -4,6 +4,7 @@ const UserController = require('../controllers/UserController');
 const upload = require('../middleware/fileUpload');
 let avatarUpload = upload.single('image');
 
+router.get('/', verify, UserController.getAllUsers);
 router.get('/me', verify, UserController.getCurrent);
 router.get('/verify', verify, UserController.verifyUser);
 router.post('/signup', avatarUpload, UserController.signup);

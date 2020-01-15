@@ -153,6 +153,24 @@ exports.getByUsername = async (req, res) => {
 }
 
 /**
+ * @route GET /user/
+ * @type RequestHandler
+ */
+exports.getAllUsers = async (req, res) => {
+  try {
+    let users = await User.find({}).select('-password -email');
+    if (!users) return res.notFound({ error: `No users found!` })
+
+    res.ok({ data: users });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong while getting users'
+    });
+  }
+}
+
+/**
  * @route GET /user/me
  * @type RequestHandler
  */
