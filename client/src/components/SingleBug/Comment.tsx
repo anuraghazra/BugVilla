@@ -17,6 +17,7 @@ import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
 import StyledComment from './Comment.style';
 import { editComment, updateBug } from 'store/ducks/single-bug';
+import MentionPlugin from 'components/Editor/MentionPlugin';
 
 interface CommentProps {
   author: AuthorProps;
@@ -37,10 +38,19 @@ const Comment: React.FC<CommentProps> = ({
   const userId = useSelector((state: any) => state.auth.user.id);
   const [isEditing, setIsEditing] = useState(false);
 
-  const { watch, register, handleSubmit, errors: formErrors }: any = useForm({
+  const {
+    watch,
+    register,
+    handleSubmit,
+    setValue,
+    errors: formErrors
+  }: any = useForm({
     validationSchema: CommentSchema
   });
   const markdown = watch('body', body);
+  const handleMarkdown = (e: any) => {
+    setValue('body', e.target.value);
+  };
 
   // using || to get the states of both comment editing & bug updating
   const [isEditingPending, editingError] = useSelector((state: any) => [
@@ -79,15 +89,15 @@ const Comment: React.FC<CommentProps> = ({
           <StyledEditor>
             <Editor
               markdown={markdown}
+              handleMarkdown={handleMarkdown}
               errors={formErrors}
-              inputRef={register({ required: 'Body is required' })}
+              inputRef={register}
             />
             <ButtonGroup style={{ float: 'right' }}>
               <Button
+                danger
                 icon="times"
                 size="sm"
-                danger
-                type="submit"
                 onClick={handleEditorState}
               >
                 Cancel
@@ -128,7 +138,7 @@ const Comment: React.FC<CommentProps> = ({
             )}
           </Flex>
           <ReactMarkdown
-            renderers={{ code: CodeBlock }}
+            renderers={{ code: CodeBlock, text: MentionPlugin }}
             className="markdown-preview"
             source={markdown}
           />

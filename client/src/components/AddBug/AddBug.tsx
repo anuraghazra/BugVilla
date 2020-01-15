@@ -28,13 +28,16 @@ const AddBug: React.FC = () => {
     validationSchema: AddBugSchema
   });
   const markdown = watch('body');
+  const handleMarkdown = (e: any) => {
+    setValue('body', e.target.value);
+  };
 
   const onSubmit = async (data: { title: string; body: string }) => {
     callAPI({ method: 'POST', url: '/api/bugs', data }, () => {
       reset();
       setValue('body', '');
       history.push('/dashboard/bugs');
-    })
+    });
   };
 
   return (
@@ -58,9 +61,10 @@ const AddBug: React.FC = () => {
             />
           </StyledH3Input>
           <Editor
+            handleMarkdown={handleMarkdown}
             markdown={markdown}
             errors={errors}
-            inputRef={register({ required: 'Body is required' })}
+            inputRef={register}
           />
 
           <Button

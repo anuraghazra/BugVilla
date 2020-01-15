@@ -42,6 +42,7 @@ export interface AuthorProps {
 const SingleBug: React.FC = () => {
   const dispatch = useDispatch<any>();
   const { bugId } = useParams<any>();
+
   const {
     watch,
     setValue,
@@ -50,6 +51,9 @@ const SingleBug: React.FC = () => {
     errors: formErrors
   }: any = useForm({ validationSchema: addCommentSchema });
   const markdown = watch('body');
+  const handleMarkdown = (e: any) => {
+    setValue('body', e.target.value);
+  };
 
   const bug = useSelector((state: any) => state.singlebug.bug);
   const {
@@ -141,8 +145,9 @@ const SingleBug: React.FC = () => {
               <StyledEditor>
                 <Editor
                   markdown={markdown}
+                  handleMarkdown={handleMarkdown}
                   errors={formErrors}
-                  inputRef={register({ required: 'Body is required' })}
+                  inputRef={register}
                 />
                 <ButtonGroup className="bug__button">
                   <CloseReopenButton

@@ -9,17 +9,24 @@ const StyledEditor = styled.div`
   .editor__header {
     margin-bottom: 20px;
   }
-  .editor__tabpanel-area {
+
+  .editor__tabpanel {
     border-radius: 5px;
     width: 100%;
     min-height: 250px;
-    padding: 20px;
-    border: 1px solid ${p => p.theme.colors.common.offwhite};
     color: ${p => p.theme.colors.text.black};
-    resize: vertical;
+    padding: 20px;
 
-    &::placeholder {
-      color: ${p => p.theme.colors.text.gray};
+    textarea {
+      padding: 20px;
+      border: 1px solid ${p => p.theme.colors.common.offwhite};
+      min-height: 250px;
+      resize: vertical;
+      width: 100%;
+      height: 100%;
+      &::placeholder {
+        color: ${p => p.theme.colors.text.gray};
+      }
     }
   }
 
@@ -49,7 +56,38 @@ const StyledEditor = styled.div`
       }
     }
   }
+`;
 
+export const StyledMentionList = styled.div`
+  .editor__tabpanel__suggestions {
+    transform: translateY(30px);
+    border-radius: 5px;
+  }
+  
+  .editor__tabpanel__suggestions__list {
+    width: fit-content;
+    padding: 15px;
+    background-color: ${p => p.theme.colors.common.white};
+    border-radius: 5px;
+    border: ${p => p.theme.border};
+    overflow: hidden;
+  }
+
+  .editor__tabpanel__suggestions__item {
+    display: block;
+    width: 150px;
+    padding: 10px;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    &:hover {
+      color: ${p => p.theme.colors.common.white};
+      background-color: ${p => p.theme.colors.brand.primary};
+    }
+  }
+  .editor__tabpanel__suggestions__item__highlight {
+    font-family: ${p => p.theme.font.primaryBold};
+  }
 `;
 
 export default StyledEditor;
