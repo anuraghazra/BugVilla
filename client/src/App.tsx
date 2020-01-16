@@ -35,7 +35,7 @@ const App: React.FC = () => {
                 return <Home right={Login}></Home>;
               }}
             />
-            <AuthRoute path="/dashboard" component={Dashboard} />
+            <AuthRoute path="/" component={Dashboard} />
             <Route component={NotFound} />
           </Switch>
         </div>

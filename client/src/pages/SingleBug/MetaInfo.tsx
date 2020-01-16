@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { AuthorProps } from './SingleBug';
 import { formatDate } from 'utils';
@@ -31,14 +32,15 @@ const MetaInfo: React.FC<MetaProps> = ({
           style={{ marginLeft: 15 }}
           width="30px"
           height="30px"
-          src={`/api/user/${author.username}/avatar/raw?size=45`}
+          size={45}
+          username={author.username}
         />
       )}
       <span className="ml-15">
         {isOpen ? 'Opened' : 'Closed'} by
-        <a className="text--medium" href={`/users/${author.username}`}>
+        <Link className="text--medium" to={`/profiles/${author.username}`}>
           &nbsp;{author.name}&nbsp;
-        </a>
+        </Link>
         on {formatDate(date)}
         {commentsCount ? <span> / {commentsCount} comments</span> : null}
       </span>

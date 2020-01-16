@@ -34,7 +34,7 @@ export const BugMetaInfo: React.FC<BugMetaProps> = ({
 }) => (
   <StyledMetaInfo className="text--light">
     <span className="bug__number">#{number}</span> / on {date} by{' '}
-    <a href={`/users/${author.username}`}>{author.name}</a>
+    <Link to={`/profiles/${author.username}`}>{author.name}</Link>
   </StyledMetaInfo>
 );
 

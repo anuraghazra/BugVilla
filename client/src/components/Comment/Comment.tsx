@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getTimeDiff } from 'utils';
-import { AuthorProps, addCommentSchema as CommentSchema } from '../../pages/SingleBug/SingleBug';
+import {
+  AuthorProps,
+  addCommentSchema as CommentSchema
+} from '../../pages/SingleBug/SingleBug';
 
 import Flex from 'components/common/Flex';
 import Button, { ButtonGroup } from 'components/common/Button';
@@ -115,12 +119,16 @@ const Comment: React.FC<CommentProps> = ({
             <Avatar
               width="45px"
               height="45px"
-              src={`/api/user/${author.username}/avatar/raw?size=45`}
+              size={45}
+              username={author.username}
             />
             <span className="color--gray ml-15">
-              <a className="text--medium" href={`/users/${author.username}`}>
+              <Link
+                className="text--medium"
+                to={`/profiles/${author.username}`}
+              >
                 {author.name}{' '}
-              </a>
+              </Link>
               commented {getTimeDiff(date)}
             </span>
             {isAuthorOfComment && (

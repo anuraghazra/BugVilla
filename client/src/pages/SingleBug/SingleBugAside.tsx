@@ -13,7 +13,7 @@ import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 const getParticipants = (bug: any): string[] => {
   if (bug && bug.comments) {
     return bug.comments
-      .map((c: any) => `/api/user/${c.author.username}/avatar/raw?size=45`)
+      .map((c: any) => c.author.username)
       .filter(
         (item: string, pos: number, array: string[]) =>
           array.indexOf(item) === pos
@@ -97,8 +97,9 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
               key={i}
               width="40px"
               height="40px"
-              src={participant}
               style={{ marginRight: 10 }}
+              size={45}
+              username={participant}
             />
           ))}
         </Flex>

@@ -50,7 +50,8 @@ const Editor: React.FC<EditorProps> = ({
           <Avatar
             width="45px"
             height="45px"
-            src={`/api/user/${user.username}/avatar/raw?size=45`}
+            size={45}
+            username={user.username}
           />
           <TabList>
             <Tab>Write</Tab>
