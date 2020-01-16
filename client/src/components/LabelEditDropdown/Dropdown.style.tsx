@@ -10,12 +10,15 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
 
   opacity: 0;
   pointer-events: none;
+  transform: translateY(-25px);
+  transition: 0.2s;
 
   ${p =>
     p.isOpen &&
     css`
       opacity: 1;
       pointer-events: all;
+      transform: translateY(0);
     `}
 
   .dropdown__items {

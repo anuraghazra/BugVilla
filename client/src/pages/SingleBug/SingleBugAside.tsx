@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { editLabels } from 'store/ducks/single-bug';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Dropdown from 'components/Dropdown/Dropdown';
-import Label, { BulletLabel } from 'components/common/Label';
+import Label from 'components/common/Label';
 import Flex from 'components/common/Flex';
 import Avatar from 'components/Avatar/Avatar';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
+import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
@@ -28,8 +28,6 @@ interface SingleBugAsideProps {
 }
 const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   const dispatch = useDispatch<any>();
-  const [isDropdownOpen, setDropdownState] = useState(false);
-
   const selectedLabels = useSelector(
     (state: any) => state.singlebug.labelsCheckbox
   );
@@ -38,37 +36,15 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
     state.error['singlebug/EDIT_LABELS']
   ]);
 
-  const openDropdown = () => {
-    setDropdownState(true);
-  };
-  const closeDropdown = (e: any) => {
-    if (e.target.closest('.label__header')) return;
-    if (!e.target.closest('.label__dropdown')) {
-      setDropdownState(false);
-    }
-  };
-
-  const handleSaveLabel = () => {
+  const handleSaveLabel = (toggleDropdown: Function) => {
     if (selectedLabels.length > 0) {
       dispatch(editLabels(bugId, selectedLabels)).then(() => {
-        setDropdownState(false);
+        toggleDropdown(false);
       });
     }
   };
 
-  useEffect(() => {
-    return document.body.addEventListener('click', closeDropdown);
-  }, []);
-
   let participants: string[] = getParticipants(bug);
-
-  // initial data
-  let checkboxes = [
-    { name: 'bug' },
-    { name: 'feature' },
-    { name: 'help wanted' },
-    { name: 'enhancement' }
-  ];
 
   return (
     <>
@@ -76,32 +52,34 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         <Toast isVisible={!!labelEditError} message={labelEditError} />
 
         <h4 className="label__header color--gray">
-          Labels{' '}
-          <FontAwesomeIcon
-            className="open_modal_btn"
-            onClick={openDropdown}
-            size="sm"
-            icon="cog"
-          />
-          <Dropdown
+          Labels
+          <LabelEditDropdown
             defaultChecked={bug.labels}
             className="label__dropdown"
-            isOpen={isDropdownOpen}
-            options={checkboxes}
-            renderItem={(value: any) => (
-              <BulletLabel type={value}>{value}</BulletLabel>
+            trigger={(toggle: any) => (
+              <FontAwesomeIcon
+                className="open_modal_btn"
+                onClick={toggle}
+                size="sm"
+                icon="cog"
+              />
             )}
           >
-            <Button
-              icon="tag"
-              size="sm"
-              isLoading={labelEditPending}
-              onClick={handleSaveLabel}
-            >
-              Update labels
-            </Button>
-          </Dropdown>
+            {(toggleDropdown: Function) => (
+              <Button
+                icon="tag"
+                size="sm"
+                isLoading={labelEditPending}
+                onClick={() => {
+                  handleSaveLabel(toggleDropdown);
+                }}
+              >
+                Update labels
+              </Button>
+            )}
+          </LabelEditDropdown>
         </h4>
+
         <Flex>
           {bug.labels.length > 0 &&
             bug.labels.map((label: string, i: number) => (

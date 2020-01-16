@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getTimeDiff } from 'utils';
-import { AuthorProps, addCommentSchema as CommentSchema } from './SingleBug';
+import { AuthorProps, addCommentSchema as CommentSchema } from '../../pages/SingleBug/SingleBug';
 
 import Flex from 'components/common/Flex';
 import Button, { ButtonGroup } from 'components/common/Button';
@@ -61,6 +61,7 @@ const Comment: React.FC<CommentProps> = ({
 
   const handleEditorState = (e: any) => {
     e.preventDefault();
+    setValue('body', '');
     setIsEditing(!isEditing);
   };
 
@@ -94,12 +95,7 @@ const Comment: React.FC<CommentProps> = ({
               inputRef={register}
             />
             <ButtonGroup style={{ float: 'right' }}>
-              <Button
-                danger
-                icon="times"
-                size="sm"
-                onClick={handleEditorState}
-              >
+              <Button danger icon="times" size="sm" onClick={handleEditorState}>
                 Cancel
               </Button>
               <Button
@@ -123,8 +119,8 @@ const Comment: React.FC<CommentProps> = ({
             />
             <span className="color--gray ml-15">
               <a className="text--medium" href={`/users/${author.username}`}>
-                {author.name}
-              </a>{' '}
+                {author.name}{' '}
+              </a>
               commented {getTimeDiff(date)}
             </span>
             {isAuthorOfComment && (

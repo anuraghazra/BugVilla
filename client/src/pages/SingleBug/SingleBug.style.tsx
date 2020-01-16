@@ -31,8 +31,13 @@ const SingleBugWrapper = styled.section`
     .label__dropdown {
       position: absolute;
       top: 30px;
-      right: 10px;
+      left: 0;
       text-align: center;
+
+      @media screen and (${p => p.theme.media.mobile}) {
+        top: 30px;
+        left: 0;
+      }
     }
   }
 `;

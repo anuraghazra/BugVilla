@@ -7,9 +7,7 @@ import Sidebar from 'components/Sidebar/Sidebar';
 import { DashboardWrapper, DashboardBody } from './Dashboard.style';
 import AuthRoute from 'components/AuthRoute';
 import AddBug from 'components/AddBug/AddBug';
-import NotFound from 'components/NotFound';
-import { Route, Redirect } from 'react-router-dom';
-import SingleBug from 'components/SingleBug/SingleBug';
+import SingleBug from 'pages/SingleBug/SingleBug';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
