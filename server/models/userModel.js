@@ -58,6 +58,10 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: mongoose.Schema.Types.ObjectId
+  },
+  date_joined: {
+    type: Date,
+    default: Date.now
   }
 })
 
@@ -110,7 +114,8 @@ const validateUser = (user) => {
       Joi.any()
         .required()
         .valid(Joi.ref('password')),
-    avatar: Joi.string()
+    avatar: Joi.string(),
+    date_joined: Joi.date().default(Date.now),
   })
   return schema.validate(user)
 }

@@ -11,6 +11,7 @@ router.post('/signup', avatarUpload, UserController.signup);
 router.post("/login", UserController.login);
 router.get('/:username', UserController.getByUsername);
 router.get('/:username/comments', UserController.getCommentsByUser);
+router.get('/:username/comments/count', UserController.getCommentsCountByUser);
 router.get('/:username/bugs', UserController.getBugsByUser);
 
 

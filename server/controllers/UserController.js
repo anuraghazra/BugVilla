@@ -224,6 +224,32 @@ exports.getCommentsByUser = async (req, res) => {
 }
 
 /**
+ * @route GET /user/:username/comments/count
+ * @type RequestHandler
+ */
+exports.getCommentsCountByUser = async (req, res) => {
+  try {
+    // https://docs.mongodb.com/manual/reference/operator/aggregation/count/
+    let data = await Bug.aggregate([
+      { $match: { 'comments.author.username': req.params.username } },
+      { $unwind: '$comments' },
+      { $match: { 'comments.author.username': req.params.username } },
+      {
+        $count: "counts"
+      }
+    ])
+
+    if (!data) return res.notFound({ error: "Not Found!" })
+    res.ok({ data: data[0] || { count: '0' } });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+
+/**
  * @route GET /user/:username/bugs
  * @type RequestHandler
  */
