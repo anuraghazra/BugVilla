@@ -65,7 +65,6 @@ const JoiLabelSchema = Joi.array()
     .string()
     .min(2)
     .max(50)
-    .required()
   )
 
 const validateLabel = (label) => {

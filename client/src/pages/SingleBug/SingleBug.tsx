@@ -71,26 +71,24 @@ const SingleBug: React.FC = () => {
               author={bug.author}
               date={bug.date_opened}
             />
-            {bug.comments.length > 0 &&
-              bug.comments.map((comment: any) => (
-                <Comment
-                  bugId={bugId}
-                  commentId={comment.id}
-                  key={comment.id}
-                  body={comment.body}
-                  author={comment.author}
-                  date={comment.date}
-                />
-              ))}
-            {bug.activities.length > 0 &&
-              bug.activities.map((activity: any, i: number) => (
-                <Activity
-                  key={i}
-                  author={activity.author}
-                  action={activity.action}
-                  date={activity.date}
-                />
-              ))}
+            {bug.comments.map((comment: any) => (
+              <Comment
+                bugId={bugId}
+                commentId={comment.id}
+                key={comment.id}
+                body={comment.body}
+                author={comment.author}
+                date={comment.date}
+              />
+            ))}
+            {bug.activities.map((activity: any, i: number) => (
+              <Activity
+                key={i}
+                author={activity.author}
+                action={activity.action}
+                date={activity.date}
+              />
+            ))}
             <CommentEditorForm bugIsOpen={bug.isOpen} />
           </section>
           <section className="singlebug__aside">

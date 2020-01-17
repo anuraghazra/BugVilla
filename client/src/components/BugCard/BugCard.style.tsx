@@ -7,6 +7,13 @@ export const StyledBugCard = styled.div`
   border: 1px solid #e7ecfb;
   border-radius: 10px;
   padding: 25px;
+  transition: 0.2s;
+  transform: translateY(0);
+
+  &:hover {
+    transform: translateY(-2px);
+    transition: 0.2s;
+  }
 
   .bug__title {
     font-family: ${p => p.theme.font.primaryMedium};
@@ -22,7 +29,6 @@ export const StyledBugCard = styled.div`
     margin: 15px 0;
   }
 
-
   .bug__body--text {
     font-size: 16px;
     color: ${p => p.theme.colors.text.gray};
@@ -36,6 +42,7 @@ export const StyledMetaInfo = styled.span`
   color: ${p => p.theme.colors.text.gray};
 
   a {
+    height: 30px;
     font-size: 14px;
     color: ${p => p.theme.colors.text.gray};
 
@@ -47,7 +54,7 @@ export const StyledMetaInfo = styled.span`
   .bug__number {
     font-size: 18px;
   }
-`
+`;
 
 export const BugCardIcon = styled.div<{ isOpen?: boolean }>`
   position: absolute;

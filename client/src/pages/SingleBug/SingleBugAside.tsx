@@ -37,11 +37,9 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   ]);
 
   const handleSaveLabel = (toggleDropdown: Function) => {
-    if (selectedLabels.length > 0) {
-      dispatch(editLabels(bugId, selectedLabels)).then(() => {
-        toggleDropdown(false);
-      });
-    }
+    dispatch(editLabels(bugId, selectedLabels)).then(() => {
+      toggleDropdown(false);
+    });
   };
 
   let participants: string[] = getParticipants(bug);
@@ -81,12 +79,11 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         </h4>
 
         <Flex>
-          {bug.labels.length > 0 &&
-            bug.labels.map((label: string, i: number) => (
-              <Label className="mt-5" type={label} key={i}>
-                {label}
-              </Label>
-            ))}
+          {bug.labels.map((label: string, i: number) => (
+            <Label className="mt-5" type={label} key={i}>
+              {label}
+            </Label>
+          ))}
         </Flex>
       </div>
       <div>
