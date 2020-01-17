@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import * as ducks from './ducks';
+import api from './middlewares/apiMiddleware';
 
 const reducers = combineReducers(ducks);
 const INITIAL_STATE = {};
@@ -14,7 +15,7 @@ const composeSetup =
 const store = createStore(
   reducers,
   INITIAL_STATE,
-  composeSetup(applyMiddleware(thunk))
+  composeSetup(applyMiddleware(thunk, api))
 );
 
 // const unsubscribe = store.subscribe(() => console.log(store.getState()))

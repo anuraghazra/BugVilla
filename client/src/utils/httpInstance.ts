@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import auth from './authHelper';
 
-const instance = axios.create({
+const instance: AxiosInstance = axios.create({
   baseURL: '/'
 });
 
-const requestHandler = (config: any) => {
+const requestHandler = (config: AxiosRequestConfig) => {
   // Modify config here
   if (auth.getToken()) {
     config.headers['Authorization'] = `Bearer ${auth.getToken()}`;
@@ -13,12 +13,9 @@ const requestHandler = (config: any) => {
   return config;
 };
 
-instance.interceptors.request.use(requestHandler, (error: any) => {
+instance.interceptors.request.use(requestHandler, (error: AxiosError) => {
   // handle error
-  if (error.response) {
-    console.log(error.response);
-    console.log(error.response.data.message);
-  }
+  console.log(error.response);
 });
 
 export default instance;

@@ -29,6 +29,7 @@ const Editor: React.FC<EditorProps> = ({
   handleMarkdown
 }) => {
   const user = useSelector((state: any) => state.auth.user);
+  const [references, setReferences] = useState<string[]>([]);
 
   // fetch mention suggetions
   const { data } = useFetch('/api/user');
@@ -42,6 +43,13 @@ const Editor: React.FC<EditorProps> = ({
       setAllUsers(users);
     }
   }, [data]);
+
+  const onMentionBug = (id: string) => {
+    setReferences(() => {
+      let refs = [id];
+      return refs;
+    });
+  };
 
   return (
     <>
@@ -73,6 +81,14 @@ const Editor: React.FC<EditorProps> = ({
                   className="mentions__item"
                   trigger="@"
                   displayTransform={(id: any) => `@${id} `}
+                  data={allUsers}
+                />
+                <Mention
+                  markup="{{__id__}} Yeah"
+                  className="mentions__item"
+                  trigger="#"
+                  onAdd={onMentionBug}
+                  displayTransform={(id: any) => `#${id} `}
                   data={allUsers}
                 />
               </MentionsInput>

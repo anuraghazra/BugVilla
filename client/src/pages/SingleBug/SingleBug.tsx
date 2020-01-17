@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
+import { Dispatch } from 'redux';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -31,7 +32,7 @@ export interface AuthorProps {
 }
 
 const SingleBug: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<Dispatch>();
   const { bugId } = useParams<any>();
 
   const bug = useSelector((state: any) => state.singlebug.bug);

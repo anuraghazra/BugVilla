@@ -1,6 +1,8 @@
-import http from 'utils/httpInstance';
+import { AxiosError } from 'axios';
+import { Dispatch } from 'redux';
 
 // action
+export const API = 'API';
 export const CLEAR_BUG_DATA = 'singlebug/CLEAR_BUG_DATA';
 export const FETCH_BUG_REQUEST = 'singlebug/FETCH_BUG_REQUEST';
 export const FETCH_BUG_SUCCESS = 'singlebug/FETCH_BUG_SUCCESS';
@@ -58,8 +60,8 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         ...state,
         bug: {
           ...state.bug,
-          activities: action.payload,
-          isOpen: action.bug_state === 'open' ? true : false
+          activities: action.payload.data,
+          isOpen: action.payload.bug_state === 'open' ? true : false
         }
       }
     case UPDATE_LABEL_CHECKBOX:
@@ -107,114 +109,99 @@ export default reducer;
 
 // action creators
 const errorAction = (action: string, payload: any) => ({
-  type: action, payload: payload || 'Something went wrong'
+  type: action,
+  payload: payload || 'Something went wrong'
 });
 
 export const updateLabelCheckbox = (data: string[]) => {
-  return { type: UPDATE_LABEL_CHECKBOX, payload: data }
-}
+  return { type: UPDATE_LABEL_CHECKBOX, payload: data };
+};
 
 // side effects
-export const fetchBugWithId = (bugId: number | string) => {
-  return async (dispatch: any) => {
-    dispatch({ type: CLEAR_BUG_DATA });
-    dispatch({ type: FETCH_BUG_REQUEST });
-    try {
-      const res = await http({
-        method: 'GET',
-        url: `/api/bugs/${bugId}`,
-      });
-      let { data } = res.data;
-      dispatch({ type: FETCH_BUG_SUCCESS, payload: data });
-    } catch (err) {
-      dispatch(errorAction(FETCH_BUG_FAILURE, err?.response?.data?.error))
-    }
+export const fetchBugWithId = (bugId: number | string) => ({
+  type: API,
+  payload: {
+    method: 'GET',
+    url: `/api/bugs/${bugId}`,
+    request: (dispatch: any) => {
+      dispatch({ type: CLEAR_BUG_DATA });
+      dispatch({ type: FETCH_BUG_REQUEST });
+    },
+    success: FETCH_BUG_SUCCESS,
+    error: FETCH_BUG_FAILURE
   }
-}
+});
 
-export const addComment = (bugId: number | string, formData: { body: string }) => {
-  return async (dispatch: any) => {
-    dispatch({ type: ADD_COMMENT_REQUEST });
-    try {
-      const res = await http.patch(`/api/bugs/${bugId}/comments`, formData);
-      let { data } = res.data;
-      dispatch({
-        type: ADD_COMMENT_SUCCESS,
-        payload: data
-      });
-    } catch (err) {
-      dispatch(errorAction(ADD_COMMENT_FAILURE, err?.response?.data?.error))
-    }
+export const addComment = (bugId: number | string, formData: { body: string }) => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/comments`,
+    formData: formData,
+    request: ADD_COMMENT_REQUEST,
+    success: ADD_COMMENT_SUCCESS,
+    error: ADD_COMMENT_FAILURE
   }
-}
+});
 
-export const editComment = (bugId: number | string, commentId: string, formData: { body: string }) => {
-  return async (dispatch: any) => {
-    dispatch({ type: EDIT_COMMENT_REQUEST });
-    try {
-      const res = await http.patch(`/api/bugs/${bugId}/comments/${commentId}`, formData);
-      let { data } = res.data;
-      dispatch({
-        type: EDIT_COMMENT_SUCCESS,
-        payload: data
-      });
-    } catch (err) {
-      dispatch(errorAction(EDIT_COMMENT_FAILURE, err?.response?.data?.error))
-    }
+export const editComment = (
+  bugId: number | string,
+  commentId: string,
+  formData: { body: string }
+) => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/comments/${commentId}`,
+    formData: formData,
+    request: EDIT_COMMENT_REQUEST,
+    success: EDIT_COMMENT_SUCCESS,
+    error: EDIT_COMMENT_FAILURE
   }
-}
+});
 
-export const updateBug = (bugId: number | string, formData: { body: string }) => {
-  return async (dispatch: any) => {
-    dispatch({ type: UPDATE_BUG_REQUEST });
-    try {
-      const res = await http.patch(`/api/bugs/${bugId}`, formData);
-      let { data } = res.data;
-      dispatch({
-        type: UPDATE_BUG_SUCCESS,
-        payload: data
-      });
-    } catch (err) {
-      dispatch(errorAction(UPDATE_BUG_FAILURE, err?.response?.data?.error))
-    }
+export const updateBug = (bugId: number | string, formData: { body: string }) => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}`,
+    formData: formData,
+    request: UPDATE_BUG_REQUEST,
+    success: UPDATE_BUG_SUCCESS,
+    error: UPDATE_BUG_FAILURE
   }
-}
+});
 
-export const openOrCloseBug = (bugId: number | string, state: string) => {
-  return async (dispatch: any) => {
-    dispatch({ type: TOGGLE_BUG_REQUEST });
-    try {
-      const res = await http.patch(`/api/bugs/${bugId}/${state}`);
-      let { data } = res.data;
+export const openOrCloseBug = (bugId: number | string, state: string) => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/${state}`,
+    request: TOGGLE_BUG_REQUEST,
+    success: (dispatch: Dispatch, data: any) => {
       dispatch({
         type: TOGGLE_BUG_SUCCESS,
-        payload: data,
-        bug_state: state
+        payload: { data, bug_state: state },
       });
-    } catch (err) {
-      dispatch(errorAction(TOGGLE_BUG_FAILURE, err?.response?.data?.error))
-    }
+    },
+    error: TOGGLE_BUG_FAILURE
   }
-}
+});
 
-export const editLabels = (bugId: number | string, labelData: string[]) => {
-  return async (dispatch: any) => {
-    dispatch({ type: EDIT_LABELS_REQUEST });
-    try {
-      const res = await http({
-        method: 'PATCH',
-        url: `/api/bugs/${bugId}/labels`,
-        data: { labels: labelData }
-      });
-      let { data } = res.data;
-      dispatch({
-        type: EDIT_LABELS_SUCCESS,
-        payload: data,
-      });
-      dispatch({ type: CLEAR_LABEL_CHECKBOX })
-    } catch (err) {
-      dispatch({ type: CLEAR_LABEL_CHECKBOX })
-      dispatch(errorAction(EDIT_LABELS_FAILURE, err?.response?.data?.error))
+export const editLabels = (bugId: number | string, labelData: string[]) => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/labels`,
+    formData: { labels: labelData },
+    request: EDIT_LABELS_REQUEST,
+    success: (dispatch: Dispatch, data: any) => {
+      dispatch({ type: EDIT_LABELS_SUCCESS, payload: data });
+      dispatch({ type: CLEAR_LABEL_CHECKBOX });
+    },
+    error: (dispatch: Dispatch, err: AxiosError) => {
+      dispatch({ type: CLEAR_LABEL_CHECKBOX });
+      dispatch(errorAction(EDIT_LABELS_FAILURE, err?.response?.data?.error));
     }
   }
-}
+});
