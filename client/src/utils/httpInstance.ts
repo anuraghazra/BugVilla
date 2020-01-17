@@ -13,9 +13,11 @@ const requestHandler = (config: AxiosRequestConfig) => {
   return config;
 };
 
-instance.interceptors.request.use(requestHandler, (error: AxiosError) => {
+instance.interceptors.request.use(requestHandler);
+instance.interceptors.response.use(undefined, (error: AxiosError) => {
   // handle error
   console.log(error.response);
+  return Promise.reject(error.response?.data?.error)
 });
 
 export default instance;

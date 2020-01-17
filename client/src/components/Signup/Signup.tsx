@@ -37,7 +37,7 @@ const Signup: React.FC = () => {
 
   return (
     <SignupWrapper>
-      <Toast isVisible={signupError} message={signupError?.error} />
+      <Toast isVisible={!!signupError} message={signupError} />
       
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />

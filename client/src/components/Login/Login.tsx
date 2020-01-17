@@ -41,7 +41,7 @@ const Login: React.FC = () => {
 
   return (
     <LoginWrapper>
-      <Toast isVisible={loginError} message={loginError?.error} />
+      <Toast isVisible={!!loginError} message={loginError} />
       
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />

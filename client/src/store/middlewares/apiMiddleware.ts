@@ -23,8 +23,6 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
   if (action.type !== 'API') return next(action);
 
   const { request, success, error, method, url, formData } = action.payload;
-  console.log(request, success, error, method, url)
-
   if (typeof request === 'function') {
     request(dispatch)
   } else {
@@ -46,7 +44,7 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
     if (typeof error === 'function') {
       error(dispatch, err);
     } else {
-      dispatch({ type: error, payload: err?.response?.data?.error || 'Something went wrong' });
+      dispatch({ type: error, payload: err || 'Something went wrong' });
     }
   }
 }

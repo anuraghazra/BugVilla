@@ -87,7 +87,7 @@ const Comment: React.FC<CommentProps> = ({
 
   return (
     <StyledComment style={{ padding: showCommentEditor ? 0 : 20 }}>
-      {/* <Toast isVisible={!!editingError} message={editingError} /> */}
+      <Toast isVisible={!!editingError} message={editingError} />
 
       {showCommentEditor ? (
         <form onSubmit={handleSubmit(onSubmit)}>

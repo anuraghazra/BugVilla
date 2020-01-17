@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
+import { CLEAR_ALL_ERRORS } from './errors';
 
 // action
 export const API = 'API';
@@ -124,6 +125,7 @@ export const fetchBugWithId = (bugId: number | string) => ({
     method: 'GET',
     url: `/api/bugs/${bugId}`,
     request: (dispatch: any) => {
+      dispatch({ type: CLEAR_ALL_ERRORS });
       dispatch({ type: CLEAR_BUG_DATA });
       dispatch({ type: FETCH_BUG_REQUEST });
     },
@@ -199,9 +201,9 @@ export const editLabels = (bugId: number | string, labelData: string[]) => ({
       dispatch({ type: EDIT_LABELS_SUCCESS, payload: data });
       dispatch({ type: CLEAR_LABEL_CHECKBOX });
     },
-    error: (dispatch: Dispatch, err: AxiosError) => {
+    error: (dispatch: Dispatch, err: string) => {
       dispatch({ type: CLEAR_LABEL_CHECKBOX });
-      dispatch(errorAction(EDIT_LABELS_FAILURE, err?.response?.data?.error));
+      dispatch(errorAction(EDIT_LABELS_FAILURE, err));
     }
   }
 });

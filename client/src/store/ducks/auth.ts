@@ -1,6 +1,7 @@
-import http from 'utils/httpInstance';
 import auth from 'utils/authHelper';
 import history from 'utils/history';
+import { Dispatch } from 'redux';
+import { API } from './single-bug';
 
 // action
 export const AUTH_LOGOUT = 'auth/LOGOUT';
@@ -103,11 +104,11 @@ export const logUserOut = () => ({ type: AUTH_LOGOUT });
 export const setUser = (data: UserProps | null) => ({ type: AUTH_SET_USER, payload: data })
 export const loginLoading = () => ({ type: LOGIN_LOADING })
 export const loginSuccess = (data: UserProps) => ({ type: LOGIN_SUCCESS, payload: data })
-export const loginError = (data: any) => ({ type: LOGIN_ERROR, payload: data })
+export const loginError = (data: string) => ({ type: LOGIN_ERROR, payload: data })
 
 export const signupLoading = () => ({ type: SIGNUP_LOADING })
 export const signupSuccess = (data: any) => ({ type: SIGNUP_SUCCESS, payload: data })
-export const signupError = (data: any) => ({ type: SIGNUP_ERROR, payload: data })
+export const signupError = (data: string) => ({ type: SIGNUP_ERROR, payload: data })
 
 export const loginClearError = () => ({ type: LOGIN_CLEAR_ERROR })
 export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
@@ -115,38 +116,34 @@ export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
 
 
 // side effects
-export const signUserUp = (formData: FormData) => {
-  return async (dispatch: any) => {
-    dispatch(signupLoading());
-
-    try {
-      const res = await http({
-        method: 'POST',
-        url: '/api/user/signup',
-        data: formData,
-      });
-      let { data } = res.data;
+export const signUserUp = (formData: FormData) => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: '/api/user/signup',
+    formData,
+    request: SIGNUP_LOADING,
+    success: (dispatch: Dispatch, data: any) => {
       dispatch(signupSuccess(data));
       dispatch(signupClearError());
       history.push('/login')
-    } catch (err) {
-      dispatch(signupError(err.response.data))
+    },
+    error: (dispatch: Dispatch, err: string) => {
+      auth.logout();
+      dispatch(signupClearError())
+      dispatch(signupError(err))
     }
   }
-}
+})
 
-
-export const loginUser = (formData: { name: string, email: string }) => {
-  return async (dispatch: any) => {
-    dispatch(loginLoading());
-
-    try {
-      const res = await http({
-        method: 'POST',
-        url: '/api/user/login',
-        data: formData,
-      });
-      const { data } = res.data;
+export const loginUser = (formData: { name: string, email: string }) => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: '/api/user/login',
+    formData,
+    request: LOGIN_LOADING,
+    success: (dispatch: Dispatch, data: any) => {
       dispatch(loginSuccess({
         username: data.username,
         name: data.name,
@@ -155,30 +152,11 @@ export const loginUser = (formData: { name: string, email: string }) => {
       dispatch(loginClearError());
       auth.setToken(data.token)
       history.push('/dashboard/bugs')
-    } catch (err) {
+    },
+    error: (dispatch: Dispatch, err: string) => {
       auth.logout();
-      dispatch(loginError(err.response.data))
+      dispatch(loginClearError())
+      dispatch(loginError(err))
     }
   }
-}
-
-
-// export const verifyLogin = () => {
-//   return async (dispatch: any) => {
-//     dispatch(loginLoading());
-
-//     try {
-//       const res = await http({
-//         method: 'GET',
-//         url: '/api/user/verify',
-//       });
-
-//       const { data } = res.data;
-//       console.log(data);
-//       dispatch(loginSuccess(data));
-//       dispatch(loginClearError());
-//     } catch (err) {
-//       dispatch(loginError(err.response.data.error))
-//     }
-//   }
-// }
+})
