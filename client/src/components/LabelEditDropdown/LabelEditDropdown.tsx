@@ -7,8 +7,8 @@ import { BulletLabel } from 'components/common/Label';
 import BaseDropdown from 'components/common/BaseDropdown';
 
 interface DropdownProps {
-  trigger: any;
-  defaultChecked: any;
+  trigger: (toggle: any) => any;
+  defaultChecked: string[];
   className: string;
   children: any;
 }
@@ -40,7 +40,7 @@ const LabelEditDropdown: React.FC<DropdownProps> = ({
     }
   }, []);
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCheckedItems({
       ...checkedItems,
       [event.target.name]: event.target.checked

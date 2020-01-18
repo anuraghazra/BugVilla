@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface StyledProps {
+interface StyledToastProps {
   isVisible?: boolean;
 }
-const StyledToast = styled.span<StyledProps>`
+const StyledToast = styled.span<StyledToastProps>`
   position: fixed;
   bottom: 50px;
   left: 50%;
@@ -40,12 +40,12 @@ const StyledToast = styled.span<StyledProps>`
   }
 `;
 
-interface Props {
+interface ToastProps {
   isVisible?: boolean;
   message: string;
 }
 
-const Toast: React.FC<Props> = ({ isVisible, message }) => {
+const Toast: React.FC<ToastProps> = ({ isVisible, message }) => {
   const [isToastVisible, setToastVisibility] = useState<any>(null);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 import { CLEAR_ALL_ERRORS } from './errors';
+import { ApiAction } from 'store/middlewares/apiMiddleware';
 
 // action
 export const API = 'API';
@@ -119,7 +119,7 @@ export const updateLabelCheckbox = (data: string[]) => {
 };
 
 // side effects
-export const fetchBugWithId = (bugId: number | string) => ({
+export const fetchBugWithId = (bugId: number | string): ApiAction => ({
   type: API,
   payload: {
     method: 'GET',
@@ -134,7 +134,10 @@ export const fetchBugWithId = (bugId: number | string) => ({
   }
 });
 
-export const addComment = (bugId: number | string, formData: { body: string }) => ({
+export const addComment = (
+  bugId: number | string,
+  formData: { body: string }
+): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
@@ -150,7 +153,7 @@ export const editComment = (
   bugId: number | string,
   commentId: string,
   formData: { body: string }
-) => ({
+): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
@@ -162,7 +165,10 @@ export const editComment = (
   }
 });
 
-export const updateBug = (bugId: number | string, formData: { body: string }) => ({
+export const updateBug = (
+  bugId: number | string,
+  formData: { body: string }
+): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
@@ -174,7 +180,10 @@ export const updateBug = (bugId: number | string, formData: { body: string }) =>
   }
 });
 
-export const openOrCloseBug = (bugId: number | string, state: string) => ({
+export const openOrCloseBug = (
+  bugId: number | string,
+  state: string
+): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
@@ -190,7 +199,10 @@ export const openOrCloseBug = (bugId: number | string, state: string) => ({
   }
 });
 
-export const editLabels = (bugId: number | string, labelData: string[]) => ({
+export const editLabels = (
+  bugId: number | string,
+  labelData: string[]
+): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',

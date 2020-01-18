@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import Bugs from 'pages/Bugs/Bugs';
 import Navbar from 'components/Navbar/Navbar';
@@ -16,6 +16,14 @@ const Dashboard: React.FC = () => {
   const handleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    document.addEventListener('click', (e: any) => {
+      if (e.target.closest('a')) {
+        setIsSidebarOpen(false);
+      }
+    });
+  }, []);
 
   return (
     <DashboardWrapper>

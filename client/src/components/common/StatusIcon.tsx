@@ -20,11 +20,11 @@ const StatusIconWrapper = styled.div<{ isOpen?: boolean }>`
       : p.theme.colors.common.redlight};
 `;
 
-interface Props {
+interface StatusIconProps {
   isOpen?: boolean;
   [x: string]: any;
 }
-const StatusIcon: React.FC<Props> = ({ isOpen, ...props }) => (
+const StatusIcon: React.FC<StatusIconProps> = ({ isOpen, ...props }) => (
   <StatusIconWrapper isOpen={isOpen} {...props}>
     <FontAwesomeIcon icon={isOpen ? 'exclamation' : 'ban'} />
   </StatusIconWrapper>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import Avatar from 'components/Avatar/Avatar';
@@ -9,7 +9,7 @@ import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
 import auth from 'utils/authHelper';
 
 interface SidebarProps {
-  isOpen?: any;
+  isOpen?: boolean;
 }
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const user = useSelector((state: any) => state.auth.user);
@@ -45,12 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <IconLink isNav icon="tag" to="/labels">
             Labels
           </IconLink>
-          <IconLink
-            isNav
-            icon="door-open"
-            to="/login"
-            onClick={() => auth.logout()}
-          >
+          <IconLink isNav icon="door-open" to="/login" onClick={auth.logout}>
             Logout
           </IconLink>
         </Flex>

@@ -21,7 +21,7 @@ const NavbarWrapper = styled.nav`
 `;
 
 interface NavbarProps {
-  handleSidebar?: any;
+  handleSidebar?: () => void;
 }
 const Navbar: React.FC<NavbarProps> = ({ handleSidebar }) => {
   return (

@@ -70,14 +70,14 @@ export const InputWrapper = styled.div`
   }
 `;
 
-interface Props {
+interface InputProps {
   icon: any;
   inputRef?: any;
   errors?: any;
   [x: string]: any;
 }
 
-const Input: React.FC<Props> = React.forwardRef(
+const Input: React.FC<InputProps> = React.forwardRef(
   ({ icon, errors, inputRef, ...props }) => {
     return (
       <InputWrapper>

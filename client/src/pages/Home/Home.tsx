@@ -8,10 +8,10 @@ import IconLink from 'components/common/IconLink';
 import history from 'utils/history';
 import auth from 'utils/authHelper';
 
-interface Props {
+interface HomeProps {
   right: any;
 }
-const Home: React.FC<Props> = ({ right: Right }) => {
+const Home: React.FC<HomeProps> = ({ right: Right }) => {
   useEffect(() => {
     if (auth.loggedIn()) {
       history.push('/dashboard/bugs');

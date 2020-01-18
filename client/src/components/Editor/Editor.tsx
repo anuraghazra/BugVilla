@@ -19,7 +19,7 @@ interface EditorProps {
   markdown: string;
   inputRef?: any;
   errors?: any;
-  handleMarkdown?: any;
+  handleMarkdown?: (e: any) => void;
 }
 
 const Editor: React.FC<EditorProps> = ({

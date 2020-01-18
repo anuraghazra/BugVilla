@@ -2,11 +2,18 @@ import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface ButtonProps {
+interface StyledButtonProps {
   width?: string;
   success?: boolean;
   danger?: boolean;
-  size?: string;
+  size?: 'sm' | 'md';
+}
+
+interface ButtonProps extends StyledButtonProps {
+  icon?: any;
+  isLoading?: boolean;
+  children: React.ReactNode;
+  [x: string]: any;
 }
 
 export const ButtonGroup = styled.div`
@@ -16,7 +23,7 @@ export const ButtonGroup = styled.div`
 `;
 
 // prettier-ignore
-const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivElement>>`
+const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTMLDivElement>>`
   background-color: ${p => p.theme.colors.brand.primary};
   color: ${p => p.theme.colors.common.white};
   ${p => p.success && css`
@@ -59,22 +66,8 @@ const StyledButton = styled.button<ButtonProps & React.HTMLAttributes<HTMLDivEle
   }
 `;
 
-enum Size {
-  sm = 'sm',
-  md = 'md'
-}
-interface Props {
-  icon?: any;
-  size?: 'sm' | 'md';
-  width?: string;
-  success?: boolean;
-  danger?: boolean;
-  isLoading?: boolean;
-  children: React.ReactNode;
-  [x: string]: any;
-}
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<ButtonProps> = ({
   size,
   width,
   icon,

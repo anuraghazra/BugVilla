@@ -47,7 +47,7 @@ const Link = styled(NavLink)<LinkProps>`
   ${p => p.isNav && NavCircleIconLink}
 `;
 
-interface Props {
+interface IconLinkProps {
   to: string;
   icon?: any;
   children: React.ReactNode;
@@ -55,13 +55,19 @@ interface Props {
   [x: string]: any;
 }
 
-const defaultProps: Props = {
+const defaultProps: IconLinkProps = {
   to: '/',
   children: 'null',
   icon: 'arrow-right'
 };
 
-const IconLink: React.FC<Props> = ({ to, icon, children, isNav, ...props }) => {
+const IconLink: React.FC<IconLinkProps> = ({
+  to,
+  icon,
+  children,
+  isNav,
+  ...props
+}) => {
   return (
     <Link isNav={isNav} {...props} to={to}>
       {children}

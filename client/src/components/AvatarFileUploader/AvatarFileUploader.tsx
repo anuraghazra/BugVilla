@@ -6,7 +6,7 @@ import AvatarContainer from './AvatarFileUploader.style';
 
 interface Props {
   name?: string;
-  inputRef?: any;
+  inputRef?: React.RefObject<HTMLInputElement>;
   file: any;
   handleFile: (file: any) => void;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 
 const StyledLabel = styled.div`
   font-size: 14px;
@@ -64,7 +64,8 @@ export const StyledBulletLabel = styled(StyledLabel)`
 `;
 
 interface LabelProps {
-  type: string;
+  /** 'bug' | 'feature' | 'help wanted' | 'enhancement' */
+  type: string; 
   children: React.ReactNode;
   [x: string]: any;
 }

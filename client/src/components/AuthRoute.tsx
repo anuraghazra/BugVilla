@@ -2,12 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-interface Props {
+interface AuthRouteProps {
   component: Function;
   [x: string]: any;
 }
 
-const AuthRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
+const AuthRoute: React.FC<AuthRouteProps> = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(
     (state: any) => state.auth.isAuthenticated
   );

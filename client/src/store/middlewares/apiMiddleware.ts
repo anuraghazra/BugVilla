@@ -1,17 +1,16 @@
 import http from 'utils/httpInstance';
-import { Method, AxiosError } from 'axios';
+import { Method } from 'axios';
 import { Dispatch } from 'redux';
 
-
-interface ApiActionType {
-  type: string;
+export interface ApiAction {
+  type: 'API';
   payload: {
     method: Method;
     url: string;
     formData?: any;
-    request: (dispatch: Dispatch) => any;
-    success: (dispatch: Dispatch, data: any) => any;
-    error: (dispatch: Dispatch, err: AxiosError) => any;
+    request: string | ((dispatch: Dispatch) => void);
+    success: string | ((dispatch: Dispatch, data: any) => void);
+    error: string | ((dispatch: Dispatch, err: string) => void);
   }
 }
 
@@ -19,7 +18,7 @@ interface apiProps {
   getState: any;
   dispatch: Dispatch
 }
-const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: ApiActionType) => {
+const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: ApiAction) => {
   if (action.type !== 'API') return next(action);
 
   const { request, success, error, method, url, formData } = action.payload;
