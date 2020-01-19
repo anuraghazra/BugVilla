@@ -63,7 +63,7 @@ const SingleBug: React.FC = () => {
                 isOpen={bug.isOpen}
                 date={bug.date_opened}
                 author={bug.author}
-                commentsCount={bug.comments.length}
+                commentsCount={bug?.comments?.length}
               />
             </DashboardHeader>
             <Comment
@@ -73,24 +73,26 @@ const SingleBug: React.FC = () => {
               author={bug.author}
               date={bug.date_opened}
             />
-            {bug.comments.map((comment: any) => (
-              <Comment
-                bugId={bugId}
-                commentId={comment.id}
-                key={comment.id}
-                body={comment.body}
-                author={comment.author}
-                date={comment.date}
-              />
-            ))}
-            {bug.activities.map((activity: any, i: number) => (
-              <Activity
-                key={i}
-                author={activity.author}
-                action={activity.action}
-                date={activity.date}
-              />
-            ))}
+            {bug.comments &&
+              bug.comments.map((comment: any) => (
+                <Comment
+                  bugId={bugId}
+                  commentId={comment.id}
+                  key={comment.id}
+                  body={comment.body}
+                  author={comment.author}
+                  date={comment.date}
+                />
+              ))}
+            {bug.activities &&
+              bug.activities.map((activity: any, i: number) => (
+                <Activity
+                  key={i}
+                  author={activity.author}
+                  action={activity.action}
+                  date={activity.date}
+                />
+              ))}
             <CommentEditorForm bugIsOpen={bug.isOpen} />
           </section>
           <section className="singlebug__aside">

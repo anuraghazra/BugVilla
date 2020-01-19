@@ -83,11 +83,12 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         </h4>
 
         <Flex>
-          {bug.labels.map((label: string, i: number) => (
-            <Label className="mt-5" type={label} key={i}>
-              {label}
-            </Label>
-          ))}
+          {bug.labels &&
+            bug.labels.map((label: string, i: number) => (
+              <Label className="mt-5" type={label} key={i}>
+                {label}
+              </Label>
+            ))}
         </Flex>
       </div>
       <div>
