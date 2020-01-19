@@ -33,12 +33,12 @@ export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
 export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
 
 
-interface DefaultStateProps {
+export interface SinglebugReducerState {
   bug: any,
   labelsCheckbox: string[]
 }
 
-const DEFAULT_STATE: DefaultStateProps = {
+const DEFAULT_STATE: SinglebugReducerState = {
   bug: null,
   labelsCheckbox: []
 }

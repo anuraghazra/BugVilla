@@ -22,6 +22,7 @@ import StyledEditor from 'components/Editor/Editor.style';
 import StyledComment from './Comment.style';
 import { editComment, updateBug } from 'store/ducks/single-bug';
 import MentionPlugin from 'components/Editor/MentionPlugin';
+import { StoreState } from 'store';
 
 interface CommentProps {
   author: AuthorProps;
@@ -39,7 +40,7 @@ const Comment: React.FC<CommentProps> = ({
   commentId
 }) => {
   const dispatch = useDispatch<any>();
-  const userId = useSelector((state: any) => state.auth.user.id);
+  const userId = useSelector((state: StoreState) => state.auth.user.id);
   const [isEditing, setIsEditing] = useState(false);
 
   const {
@@ -57,10 +58,12 @@ const Comment: React.FC<CommentProps> = ({
   };
 
   // using || to get the states of both comment editing & bug updating
-  const [isEditingPending, editingError] = useSelector((state: any) => [
-    state.loading['singlebug/EDIT_COMMENT'] ||
-      state.loading['singlebug/UPDATE_BUG'],
-    state.error['singlebug/EDIT_COMMENT'] || state.error['singlebug/UPDATE_BUG']
+  const [
+    isEditingPending,
+    editingError
+  ] = useSelector(({ loading, error }: StoreState) => [
+    loading['singlebug/EDIT_COMMENT'] || loading['singlebug/UPDATE_BUG'],
+    error['singlebug/EDIT_COMMENT'] || error['singlebug/UPDATE_BUG']
   ]);
 
   const handleEditorState = (e: any) => {

@@ -22,21 +22,21 @@ interface UserProps {
   name?: string;
   id?: number;
 }
-interface DefaultStateProps {
+export interface AuthReducerState {
   isAuthenticated: boolean,
   isLoginPending: boolean,
   isSignupPending: boolean,
-  loginError: null | object,
-  signupError: null | object,
+  loginError: string,
+  signupError: string,
   user: UserProps;
 }
 
-const DEFAULT_STATE: DefaultStateProps = {
+const DEFAULT_STATE: AuthReducerState = {
   isAuthenticated: false,
   isLoginPending: false,
   isSignupPending: false,
-  loginError: null,
-  signupError: null,
+  loginError: '',
+  signupError: '',
   user: {},
 }
 

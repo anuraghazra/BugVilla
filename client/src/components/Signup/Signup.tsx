@@ -15,11 +15,14 @@ import SignupWrapper, { StyledH3Input } from './Signup.style';
 import SignupSchema from './SignupSchema';
 
 import { signUserUp, signupClearError } from 'store/ducks/auth';
+import { StoreState } from 'store';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: any) => state.auth.isSignupPending);
-  const signupError = useSelector((state: any) => state.auth.signupError);
+  const [isLoading, signupError] = useSelector(({ auth }: StoreState) => [
+    auth.isSignupPending,
+    auth.signupError
+  ]);
   const [file, setFile] = useState<any>();
 
   const { register, handleSubmit, errors, watch }: any = useForm({
@@ -38,7 +41,7 @@ const Signup: React.FC = () => {
   return (
     <SignupWrapper>
       <Toast isVisible={!!signupError} message={signupError} />
-      
+
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>

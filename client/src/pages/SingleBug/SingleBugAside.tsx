@@ -8,6 +8,7 @@ import Avatar from 'components/Avatar/Avatar';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
+import { StoreState } from 'store';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
@@ -31,7 +32,10 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   const selectedLabels = useSelector(
     (state: any) => state.singlebug.labelsCheckbox
   );
-  const [labelEditPending, labelEditError] = useSelector((state: any) => [
+  const [
+    labelEditPending,
+    labelEditError
+  ] = useSelector((state: StoreState) => [
     state.loading['singlebug/EDIT_LABELS'],
     state.error['singlebug/EDIT_LABELS']
   ]);
@@ -89,7 +93,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
       <div>
         <h4 className="color--gray">{participants.length} participants</h4>
         <Flex>
-          {participants.map((participant: any, i: number) => (
+          {participants.map((participant: string, i: number) => (
             <Avatar
               key={i}
               width="40px"

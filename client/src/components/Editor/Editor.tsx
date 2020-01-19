@@ -14,6 +14,7 @@ import { InputWrapper } from 'components/common/Form/Input';
 import CodeBlock from './CodeBlock';
 import MentionPlugin from './MentionPlugin';
 import { StyledMentionList } from './Editor.style';
+import { StoreState } from 'store';
 
 interface EditorProps {
   markdown: string;
@@ -28,7 +29,7 @@ const Editor: React.FC<EditorProps> = ({
   errors,
   handleMarkdown
 }) => {
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: StoreState) => state.auth.user);
   const [references, setReferences] = useState<string[]>([]);
 
   // fetch mention suggetions

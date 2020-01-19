@@ -12,6 +12,7 @@ import BugVillaLogo from 'components/common/Logo';
 
 import { loginUser, loginClearError } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
+import { StoreState } from 'store';
 
 const LoginSchema = yup.object().shape({
   email: yup
@@ -29,8 +30,10 @@ const LoginSchema = yup.object().shape({
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: any) => state.auth.isLoginPending);
-  const loginError = useSelector((state: any) => state.auth.loginError);
+  const [isLoading, loginError] = useSelector(({ auth }: StoreState) => [
+    auth.isLoginPending,
+    auth.loginError
+  ]);
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: LoginSchema
   });
@@ -42,7 +45,7 @@ const Login: React.FC = () => {
   return (
     <LoginWrapper>
       <Toast isVisible={!!loginError} message={loginError} />
-      
+
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <h2 className="text--bold">Welcome back!</h2>

@@ -16,6 +16,7 @@ import SingleBugAside from './SingleBugAside';
 import CommentEditorForm from './CommentEditorForm';
 
 import { fetchBugWithId } from 'store/ducks/single-bug';
+import { StoreState } from 'store';
 
 export const addCommentSchema = yup.object().shape({
   body: yup
@@ -35,8 +36,8 @@ const SingleBug: React.FC = () => {
   const dispatch = useDispatch<Dispatch>();
   const { bugId } = useParams<any>();
 
-  const bug = useSelector((state: any) => state.singlebug.bug);
-  const [isFetching, fetchError] = useSelector((state: any) => [
+  const bug = useSelector((state: StoreState) => state.singlebug.bug);
+  const [isFetching, fetchError] = useSelector((state: StoreState) => [
     state.loading['singlebug/FETCH_BUG'],
     state.error['singlebug/FETCH_BUG']
   ]);

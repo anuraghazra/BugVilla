@@ -7,12 +7,13 @@ import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
 import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
 import auth from 'utils/authHelper';
+import { StoreState } from 'store';
 
 interface SidebarProps {
   isOpen?: boolean;
 }
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: StoreState) => state.auth.user);
 
   return (
     <SidebarWrapper isOpen={isOpen}>

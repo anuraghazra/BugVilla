@@ -12,6 +12,7 @@ import CloseReopenButton from './CloseReopenButton';
 
 import { addCommentSchema } from './SingleBug';
 import { addComment, openOrCloseBug } from 'store/ducks/single-bug';
+import { StoreState } from 'store';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();
@@ -52,7 +53,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
       'singlebug/ADD_COMMENT': commentError,
       'singlebug/TOGGLE_BUG': toggleError
     }
-  } = useSelector((state: any) => ({
+  } = useSelector((state: StoreState) => ({
     loading: state.loading,
     error: state.error
   }));
