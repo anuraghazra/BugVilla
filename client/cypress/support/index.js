@@ -13,3 +13,11 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 import '@testing-library/cypress/add-commands';
+Cypress.on('fail', (error, runnable) => {
+  debugger
+
+  // we now have access to the err instance
+  // and the mocha runnable this failed on
+
+  throw error // throw error to have test still fail
+})
