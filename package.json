@@ -10,6 +10,7 @@
     "server:watch": "nodemon ./server/server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "develop": "concurrently \"npm run server:watch\" \"cd client && npm start\"",
+    "cypress": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
     "prod": "concurrently \"npm run server:watch\" \"cd client && serve -s build\"",
     "test": "jest"
   },
