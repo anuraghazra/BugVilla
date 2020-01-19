@@ -147,7 +147,7 @@ const Comment: React.FC<CommentProps> = ({
           <ReactMarkdown
             renderers={{ code: CodeBlock, text: MentionPlugin }}
             className="markdown-preview"
-            source={markdown}
+            source={body}
           />
         </>
       )}
