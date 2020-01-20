@@ -42,8 +42,10 @@
     "yup": "^0.28.0"
   },
   "scripts": {
-    "test:e2e": "start-server-and-test start http://localhost:3000 cypress",
-    "cypress": "cypress open",
+    "test:e2e": "start-server-and-test start http://localhost:3000 cy:open",
+    "test:e2e:run": "start-server-and-test start http://localhost:3000 cy:run",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
