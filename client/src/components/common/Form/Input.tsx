@@ -77,24 +77,22 @@ interface InputProps {
   [x: string]: any;
 }
 
-const Input: React.FC<InputProps> = React.forwardRef(
-  ({ icon, errors, inputRef, ...props }) => {
-    return (
-      <InputWrapper>
-        <InputLabel indicateError={errors && errors[props.name]}>
-          <StyledInput type="text" ref={inputRef} {...props} />
-          <span>
-            <FontAwesomeIcon icon={icon} />
-          </span>
-        </InputLabel>
-        {errors && (
-          <div className={`text--error ${errors[props.name] && 'show-error'}`}>
-            <ErrorMessage errors={errors} name={props.name} />
-          </div>
-        )}
-      </InputWrapper>
-    );
-  }
-);
+const Input: React.FC<InputProps> = ({ icon, errors, inputRef, ...props }) => {
+  return (
+    <InputWrapper>
+      <InputLabel indicateError={errors && errors[props.name]}>
+        <StyledInput type="text" ref={inputRef} {...props} />
+        <span>
+          <FontAwesomeIcon icon={icon} />
+        </span>
+      </InputLabel>
+      {errors && (
+        <div className={`text--error ${errors[props.name] && 'show-error'}`}>
+          <ErrorMessage errors={errors} name={props.name} />
+        </div>
+      )}
+    </InputWrapper>
+  );
+};
 
 export default Input;
