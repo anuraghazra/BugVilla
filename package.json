@@ -8,6 +8,7 @@
     "start:client": "cd client && npm start",
     "server:debug": "nodemon --inspect ./server/server.js",
     "server:watch": "nodemon ./server/server.js",
+    "heroku-prebuild": "cd client && npm install --dev",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "develop": "concurrently \"npm run server:watch\" \"cd client && npm start\"",
     "cy:open": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
