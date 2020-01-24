@@ -14,20 +14,20 @@ import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader
 import SignupWrapper, { StyledH3Input } from './Signup.style';
 import SignupSchema from './SignupSchema';
 
-import { signUserUp, signupClearError } from 'store/ducks/auth';
+import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
+  const [file, setFile] = useState<File>();
+  const { register, handleSubmit, errors, watch }: any = useForm({
+    validationSchema: SignupSchema
+  });
+
   const [isLoading, signupError] = useSelector(({ auth }: StoreState) => [
     auth.isSignupPending,
     auth.signupError
   ]);
-  const [file, setFile] = useState<any>();
-
-  const { register, handleSubmit, errors, watch }: any = useForm({
-    validationSchema: SignupSchema
-  });
 
   const onSubmit = (data: any) => {
     const formData = new FormData();

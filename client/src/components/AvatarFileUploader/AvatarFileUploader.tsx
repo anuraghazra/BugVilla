@@ -4,11 +4,14 @@ import { useDropzone } from 'react-dropzone';
 import dummyImage from 'assets/images/avatar_dummy.png';
 import AvatarContainer from './AvatarFileUploader.style';
 
+interface PreviewFile extends File {
+  preview?: any;
+}
 interface Props {
   name?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
-  file: any;
-  handleFile: (file: any) => void;
+  file?: PreviewFile;
+  handleFile: (file: PreviewFile) => void;
 }
 
 const AvatarFileUploader: React.FC<Props> = ({
@@ -21,7 +24,7 @@ const AvatarFileUploader: React.FC<Props> = ({
     accept: 'image/*',
     multiple: false,
     maxSize: 1 * 1024 * 1024,
-    onDrop: (acceptedFiles: any) => {
+    onDrop: (acceptedFiles: PreviewFile[]): void => {
       acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
       handleFile(acceptedFiles[0]);
     }
