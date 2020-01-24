@@ -35,12 +35,10 @@ export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
 
 export interface SinglebugReducerState {
   bug: any,
-  labelsCheckbox: string[]
 }
 
 const DEFAULT_STATE: SinglebugReducerState = {
   bug: null,
-  labelsCheckbox: []
 }
 
 // reducers
@@ -54,33 +52,6 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         bug: {
           ...state.bug,
           comments: action.payload
-        }
-      }
-    case TOGGLE_BUG_SUCCESS:
-      return {
-        ...state,
-        bug: {
-          ...state.bug,
-          activities: action.payload.data,
-          isOpen: action.payload.bug_state === 'open' ? true : false
-        }
-      }
-    case UPDATE_LABEL_CHECKBOX:
-      return {
-        ...state,
-        labelsCheckbox: [...action.payload]
-      }
-    case CLEAR_LABEL_CHECKBOX:
-      return {
-        ...state,
-        labelsCheckbox: []
-      }
-    case EDIT_LABELS_SUCCESS:
-      return {
-        ...state,
-        bug: {
-          ...state.bug,
-          labels: action.payload
         }
       }
     case EDIT_COMMENT_SUCCESS:
@@ -99,6 +70,23 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           body: action.payload.body
         }
       }
+    case TOGGLE_BUG_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          activities: action.payload.data,
+          isOpen: action.payload.bug_state === 'open' ? true : false
+        }
+      }
+    case EDIT_LABELS_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          labels: action.payload
+        }
+      }
     case CLEAR_BUG_DATA:
       return { ...state, bug: null }
     default:
@@ -114,9 +102,9 @@ const errorAction = (action: string, payload: any) => ({
   payload: payload || 'Something went wrong'
 });
 
-export const updateLabelCheckbox = (data: string[]) => {
-  return { type: UPDATE_LABEL_CHECKBOX, payload: data };
-};
+// export const updateLabelCheckbox = (data: string[] | unknown) => {
+//   return { type: UPDATE_LABEL_CHECKBOX, payload: data };
+// };
 
 // side effects
 export const fetchBugWithId = (bugId: number | string): ApiAction => ({
@@ -211,10 +199,8 @@ export const editLabels = (
     request: EDIT_LABELS_REQUEST,
     success: (dispatch: Dispatch, data: any) => {
       dispatch({ type: EDIT_LABELS_SUCCESS, payload: data });
-      dispatch({ type: CLEAR_LABEL_CHECKBOX });
     },
     error: (dispatch: Dispatch, err: string) => {
-      dispatch({ type: CLEAR_LABEL_CHECKBOX });
       dispatch(errorAction(EDIT_LABELS_FAILURE, err));
     }
   }

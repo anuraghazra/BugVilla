@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateLabelCheckbox } from 'store/ducks/single-bug';
 
 import Flex from 'components/common/Flex';
 import { BulletLabel } from 'components/common/Label';
 import BaseDropdown from 'components/common/BaseDropdown';
 
 interface DropdownProps {
+  updateSelectedLabels: (labels: string[]) => void;
   trigger: (toggle: any) => any;
   defaultChecked: string[];
   className: string;
@@ -14,69 +13,59 @@ interface DropdownProps {
 }
 
 // initial data
-let checkboxes = [
-  { name: 'bug' },
-  { name: 'feature' },
-  { name: 'help wanted' },
-  { name: 'enhancement' }
-];
+let checkboxes: string[] = ['bug', 'feature', 'help wanted', 'enhancement'];
+
 const LabelEditDropdown: React.FC<DropdownProps> = ({
+  updateSelectedLabels,
   defaultChecked,
   className,
   children,
   trigger
 }) => {
-  const dispatch = useDispatch();
-  const [checkedItems, setCheckedItems] = useState<any>({});
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   useEffect(() => {
-    // convert ['bug, 'feature] -> {bug: true, feature: true}
     if (defaultChecked) {
-      let defaultCheckedItems = defaultChecked.reduce(
-        (obj: any, item: any) => Object.assign(obj, { [item]: true }),
-        {}
-      );
-      setCheckedItems(defaultCheckedItems);
+      setCheckedItems(defaultChecked);
     }
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckedItems({
-      ...checkedItems,
-      [event.target.name]: event.target.checked
-    });
-  };
-
   useEffect(() => {
-    let labels = Object.entries(checkedItems)
-      .map((e: any) => {
-        return e[1] === true && e[0];
-      })
-      .filter(Boolean);
-    dispatch(updateLabelCheckbox(labels));
+    updateSelectedLabels(checkedItems);
   }, [checkedItems]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.name;
+    let newItems = checkedItems;
+    if (newItems.includes(value)) {
+      newItems.splice(newItems.indexOf(value), 1);
+    } else {
+      newItems = [...newItems, value];
+    }
+    setCheckedItems([...newItems]);
+  };
 
   return (
     <BaseDropdown className={className} trigger={trigger}>
       {(toggleDropdown: any) => (
         <>
           <div className="dropdown__items">
-            {checkboxes.map((item: any, i: number) => (
+            {checkboxes.map(name => (
               <label
-                key={i}
+                key={name}
                 className={`dropdown__item ${
-                  checkedItems[item.name] ? 'label__selected' : ''
+                  checkedItems.includes(name) ? 'label__selected' : ''
                 }`}
               >
                 <input
                   className="dropdown__checkbox"
                   type="checkbox"
-                  name={item.name}
-                  checked={!!checkedItems[item.name]}
+                  name={name}
+                  checked={!!checkedItems.includes(name)}
                   onChange={handleChange}
                 />
                 <Flex>
-                  <BulletLabel type={item.name}>{item.name}</BulletLabel>
+                  <BulletLabel type={name}>{name}</BulletLabel>
                 </Flex>
               </label>
             ))}

@@ -16,6 +16,11 @@ import MentionPlugin from './MentionPlugin';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
 
+const MarkdownPlugins = {
+  code: CodeBlock,
+  text: MentionPlugin
+};
+
 interface EditorProps {
   markdown: string;
   inputRef?: any;
@@ -100,10 +105,7 @@ const Editor: React.FC<EditorProps> = ({
           <ReactMarkdown
             className="editor__tabpanel markdown-preview"
             source={markdown}
-            renderers={{
-              code: CodeBlock,
-              text: MentionPlugin
-            }}
+            renderers={MarkdownPlugins}
           />
         </TabPanel>
       </Tabs>

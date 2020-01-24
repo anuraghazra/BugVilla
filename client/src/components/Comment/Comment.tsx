@@ -24,6 +24,11 @@ import { editComment, updateBug } from 'store/ducks/single-bug';
 import MentionPlugin from 'components/Editor/MentionPlugin';
 import { StoreState } from 'store';
 
+const MarkdownPlugins = {
+  code: CodeBlock,
+  text: MentionPlugin
+};
+
 interface CommentProps {
   author: AuthorProps;
   date: string;
@@ -145,7 +150,7 @@ const Comment: React.FC<CommentProps> = ({
             )}
           </Flex>
           <ReactMarkdown
-            renderers={{ code: CodeBlock, text: MentionPlugin }}
+            renderers={MarkdownPlugins}
             className="markdown-preview"
             source={body}
           />

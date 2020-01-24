@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { editLabels } from 'store/ducks/single-bug';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { StoreState } from 'store';
+import { editLabels } from 'store/ducks/single-bug';
+
 import Label from 'components/common/Label';
 import Flex from 'components/common/Flex';
-import Avatar from 'components/Avatar/Avatar';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
+import Avatar from 'components/Avatar/Avatar';
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
-import { StoreState } from 'store';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
@@ -29,9 +31,7 @@ interface SingleBugAsideProps {
 }
 const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   const dispatch = useDispatch<any>();
-  const selectedLabels = useSelector(
-    (state: any) => state.singlebug.labelsCheckbox
-  );
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [
     labelEditPending,
     labelEditError
@@ -56,9 +56,10 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         <h4 className="label__header color--gray">
           Labels
           <LabelEditDropdown
+            updateSelectedLabels={labels => setSelectedLabels(labels)}
             defaultChecked={bug.labels}
             className="label__dropdown"
-            trigger={(toggle: any) => (
+            trigger={toggle => (
               <FontAwesomeIcon
                 className="open_modal_btn"
                 onClick={toggle}

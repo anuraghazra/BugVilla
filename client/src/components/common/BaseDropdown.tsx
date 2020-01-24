@@ -33,7 +33,6 @@ const BaseDropdown: React.FC<BaseDropdownProps> = ({
 
   // if type is object then its a ReactElement,
   // add OnClick handler to it automatically
-  console.log(typeof children);
   return (
     <>
       {trigger(toggleDropdown)}
