@@ -6,6 +6,7 @@ const StyledLabel = styled.div`
   padding: 5px 10px;
   border-radius: 50px;
   margin-right: 10px;
+  margin-bottom: 5px;
 
   &.bug {
     color: ${p => p.theme.colors.common.red};
@@ -38,7 +39,8 @@ export const StyledBulletLabel = styled(StyledLabel)`
   display: flex;
   padding: 5px 10px;
   border-radius: 5px;
-
+  margin-bottom: 0px;
+  
   .bullet {
     width: 10px;
     height: 10px;
