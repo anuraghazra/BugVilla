@@ -83,11 +83,14 @@ const Input: React.FC<InputProps> = ({ icon, errors, inputRef, ...props }) => {
       <InputLabel indicateError={errors && errors[props.name]}>
         <StyledInput type="text" ref={inputRef} {...props} />
         <span>
-          <FontAwesomeIcon icon={icon} />
+          <FontAwesomeIcon data-testid="icon" icon={icon} />
         </span>
       </InputLabel>
       {errors && (
-        <div className={`text--error ${errors[props.name] && 'show-error'}`}>
+        <div
+          data-testid="input-error"
+          className={`text--error ${errors[props.name] && 'show-error'}`}
+        >
           <ErrorMessage errors={errors} name={props.name} />
         </div>
       )}

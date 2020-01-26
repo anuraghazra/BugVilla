@@ -66,7 +66,6 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   }
 `;
 
-
 const Button: React.FC<ButtonProps> = ({
   size,
   width,
@@ -77,7 +76,11 @@ const Button: React.FC<ButtonProps> = ({
 }) => (
   <StyledButton {...props} size={size} disabled={isLoading} width={width}>
     {icon && (
-      <FontAwesomeIcon spin={isLoading} icon={isLoading ? 'spinner' : icon} />
+      <FontAwesomeIcon
+        data-testid="icon"
+        spin={isLoading}
+        icon={isLoading ? 'spinner' : icon}
+      />
     )}
     {children}
   </StyledButton>

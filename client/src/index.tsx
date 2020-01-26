@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './styles/index.css';
 import './styles/fontStyles.css';
 
-import './fontLib';
+import registerIcons from './fontLib';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -12,6 +12,8 @@ import { setUser } from 'store/ducks/auth';
 import { Provider } from 'react-redux';
 
 import auth from 'utils/authHelper';
+
+registerIcons();
 
 if (auth.loggedIn()) {
   store.dispatch(setUser(auth.getUser()));

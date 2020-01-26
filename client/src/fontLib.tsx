@@ -19,27 +19,30 @@ import {
   faDoorOpen,
   faEllipsisV,
   faExclamation,
-  faExclamationTriangle,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(
-  faArrowRight,
-  faLink,
-  faPlus,
-  faEnvelope,
-  faLock,
-  faEdit,
-  faUser,
-  faSpinner,
-  faTimes,
-  faHome,
-  faTag,
-  faCog,
-  faBan,
-  faBars,
-  faHistory,
-  faDoorOpen,
-  faEllipsisV,
-  faExclamation,
-  faExclamationTriangle
-);
+
+export default function registerIcons() {
+  library.add(
+    faArrowRight,
+    faLink,
+    faPlus,
+    faEnvelope,
+    faLock,
+    faEdit,
+    faUser,
+    faSpinner,
+    faTimes,
+    faHome,
+    faTag,
+    faCog,
+    faBan,
+    faBars,
+    faHistory,
+    faDoorOpen,
+    faEllipsisV,
+    faExclamation,
+    faExclamationTriangle
+  );
+}

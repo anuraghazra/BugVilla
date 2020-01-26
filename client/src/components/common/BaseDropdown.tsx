@@ -5,7 +5,7 @@ import React from 'react';
 interface BaseDropdownProps {
   isOpen?: boolean;
   children: any;
-  trigger?: any;
+  trigger?: (toggle: any) => any;
   [x: string]: any;
 }
 
@@ -35,8 +35,12 @@ const BaseDropdown: React.FC<BaseDropdownProps> = ({
   // add OnClick handler to it automatically
   return (
     <>
-      {trigger(toggleDropdown)}
-      <StyledDropdown isOpen={isDropdownOpen} {...props}>
+      {trigger!(toggleDropdown)}
+      <StyledDropdown
+        data-testid="dropdown-content"
+        isOpen={isDropdownOpen}
+        {...props}
+      >
         {typeof children === 'object'
           ? React.cloneElement(children, { onClick: closeDropdown })
           : children(toggleDropdown)}

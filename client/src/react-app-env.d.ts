@@ -6,3 +6,4 @@ declare module '*.svg';
 declare module 'jwt-decode';
 declare module 'react-markdown';
 declare module 'react-mentions';
+declare module 'mutation-observer';
