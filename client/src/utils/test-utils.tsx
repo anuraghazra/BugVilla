@@ -3,8 +3,11 @@ import { render } from '@testing-library/react';
 import theme from 'theme';
 import { ThemeProvider } from 'styled-components';
 
-export function renderWithStyledTheme(component: React.ReactNode) {
+export function renderWithStyledTheme(
+  component: React.ReactNode,
+  renderFunction: any = render
+) {
   return {
-    ...render(<ThemeProvider theme={theme}>{component}</ThemeProvider>)
+    ...renderFunction(<ThemeProvider theme={theme}>{component}</ThemeProvider>)
   };
 }

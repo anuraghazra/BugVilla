@@ -19,14 +19,14 @@ describe('BaseDropdown', () => {
     expect(dropdownContent).toHaveTextContent("Hey I'm dropdown content");
 
     fireEvent.click(toggleButton);
-    expect(dropdownContent).toHaveStyle(`opacity: 1`);
+    expect(dropdownContent).toBeVisible();
 
     fireEvent.click(toggleButton);
-    expect(dropdownContent).toHaveStyle(`opacity: 0`);
+    expect(dropdownContent).not.toBeVisible();
 
     // click outside
     fireEvent.click(toggleButton);
     fireEvent.click(document.body);
-    expect(dropdownContent).toHaveStyle(`opacity: 0`);
+    expect(dropdownContent).not.toBeVisible();
   });
 });

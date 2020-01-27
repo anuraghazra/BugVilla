@@ -9,7 +9,7 @@ import { getTimeDiff } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
-} from '../../pages/SingleBug/SingleBug';
+} from 'pages/SingleBug/SingleBug';
 
 import Flex from 'components/common/Flex';
 import Button, { ButtonGroup } from 'components/common/Button';

@@ -10,7 +10,7 @@ import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
-import { loginUser, loginClearError } from 'store/ducks/auth';
+import { loginUser } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
 
