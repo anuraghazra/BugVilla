@@ -11,6 +11,12 @@ const UserInfoWrapper = styled.div`
   @media screen and (${p => p.theme.media.desktop}) {
     grid-template-columns: 1fr;
   }
+
+  .text--standout {
+    font-size: 1.5em;
+    color: ${p => p.theme.colors.brand.primary};
+    font-family: ${p => p.theme.font.primaryMedium};
+  }
 `;
 
 const UserMetaInfo = styled.div`

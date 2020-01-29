@@ -22,7 +22,7 @@ const Profiles = () => {
 
   if (isLoading) return <Loading />;
   if (error) return <p>Something went wrong while fetching the data</p>;
-  console.log(users)
+
   return (
     <ProfilesWrapper>
       <DashboardHeader>

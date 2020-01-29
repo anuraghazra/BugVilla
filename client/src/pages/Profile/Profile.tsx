@@ -19,12 +19,6 @@ const breakpointColumns = {
 };
 
 const ProfileWrapper = styled.section`
-  .text--standout {
-    font-size: 1.5em;
-    color: ${p => p.theme.colors.brand.primary};
-    font-family: ${p => p.theme.font.primaryMedium};
-  }
-
   .user__bugs {
     margin-top: ${p => p.theme.spacings.top * 2}px;
   }
