@@ -22,6 +22,24 @@ exports.getBugs = async (req, res) => {
 }
 
 /**
+ * @route GET /api/bugs/suggetions
+ * @description Get all bugs suggetions, only returns bugid and title
+ * @type RequestHandler
+ */
+exports.getSuggetions = async (req, res) => {
+  try {
+    let bugs = await Bug.find({}).select('bugId title');
+    if (!bugs) return res.notFound({ errror: 'Not Found' });
+
+    res.ok({ data: bugs });
+  } catch (err) {
+    res.internalError({
+      error: `Something went wrong while getting bugs`,
+    })
+  }
+}
+
+/**
  * @route GET /api/bugs/:bugId
  * @description Get bug by bugId
  * @type RequestHandler

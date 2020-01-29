@@ -28,6 +28,28 @@ interface EditorProps {
   handleMarkdown?: (e: any) => void;
 }
 
+const useSuggetion = (url: string, prop: string[]) => {
+  const { data: suggetions } = useFetch(url);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (suggetions) {
+      const isBug = prop[1] === 'bugId';
+      const users = suggetions.data.map((suggetion: any) => {
+        let display = suggetion[prop[0]];
+        if (isBug) {
+          // if it's a bug then append the #1 (bugId) to the display
+          display = suggetion[prop[0]] + ' #' + suggetion[prop[1]];
+        }
+        return { display, id: suggetion[prop[1]] };
+      });
+      setData(users);
+    }
+  }, [suggetions]);
+
+  return data;
+};
+
 const Editor: React.FC<EditorProps> = ({
   markdown,
   inputRef,
@@ -35,27 +57,19 @@ const Editor: React.FC<EditorProps> = ({
   handleMarkdown
 }) => {
   const user = useSelector((state: StoreState) => state.auth.user);
-  const [references, setReferences] = useState<string[]>([]);
+  const [references, setReferences] = useState<number[]>([]);
 
   // fetch mention suggetions
-  const { data } = useFetch('/api/user');
-  const [allUsers, setAllUsers] = useState([]);
-  useEffect(() => {
-    if (data) {
-      const users = data.data.map((user: any) => ({
-        display: user.username,
-        id: user.username
-      }));
-      setAllUsers(users);
-    }
-  }, [data]);
+  const allUsers = useSuggetion('/api/user', ['username', 'username']);
+  const allBugs = useSuggetion('/api/bugs/suggetions', ['title', 'bugId']);
 
-  const onMentionBug = (id: string) => {
-    setReferences(() => {
-      let refs = [id];
-      return refs;
-    });
+  const onMentionBug = (id: number) => {
+    if (references.indexOf(id) === -1) {
+      setReferences([...references, id]);
+    }
   };
+
+  console.log(references);
 
   return (
     <>
@@ -95,7 +109,7 @@ const Editor: React.FC<EditorProps> = ({
                   trigger="#"
                   onAdd={onMentionBug}
                   displayTransform={(id: any) => `#${id} `}
-                  data={allUsers}
+                  data={allBugs}
                 />
               </MentionsInput>
             </StyledMentionList>

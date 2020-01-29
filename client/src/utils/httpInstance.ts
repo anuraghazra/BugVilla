@@ -10,6 +10,8 @@ const requestHandler = (config: AxiosRequestConfig) => {
   if (auth.getToken()) {
     config.headers['Authorization'] = `Bearer ${auth.getToken()}`;
   }
+
+  config.timeout = 30000;
   return config;
 };
 

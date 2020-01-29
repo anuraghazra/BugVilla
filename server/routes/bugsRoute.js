@@ -9,6 +9,7 @@ const bugOpenCloseLimiter = rateLimit({
   message: { error: "Hey stop that. don't try to break it." }
 });
 
+router.get('/suggetions', verify, BugsController.getSuggetions)
 router.get('/', verify, BugsController.getBugs)
 router.get('/:bugId', BugsController.getBugByNumber)
 router.post('/', verify, BugsController.createBug)
