@@ -1,6 +1,6 @@
 /// <reference path="./mytypes.d.ts" />
 const Joi = require('@hapi/joi');
-const { Bug, validateBug, validateLabel } = require('../models/bugModel');
+const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
 
 
 /**
@@ -188,6 +188,50 @@ exports.updateLabels = async (req, res) => {
     })
   }
 }
+
+/**
+ * @route PATCH /api/bugs/:bugId/references
+ * @description Adds references to bug
+ * @type RequestHandler
+ */
+exports.addReferences = async (req, res) => {
+  const { error, value } = validateReferences(req.body);
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  try {
+    let authorDetails = {
+      _id: req.user.id,
+      username: req.user.username,
+      name: req.user.name,
+    }
+    let updated = await Bug.updateMany(
+      { bugId: { $in: value.references } },
+      {
+        $push: {
+          references: {
+            by: authorDetails,
+            from: req.params.bugId
+          }
+        }
+      },
+      {
+        new: true, runValidators: true,
+      }
+    )
+    if (!updated) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+
+    res.ok({ data: { modified: updated.nModified } });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while referencing bug`,
+    })
+  }
+}
+
 /**
  * @route PATCH /api/bugs/:bugId/labels
  * @description Add a label to specified bugId

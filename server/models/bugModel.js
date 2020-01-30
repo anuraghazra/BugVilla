@@ -43,7 +43,15 @@ const BugSchema = new mongoose.Schema({
     type: [String],
     enum: VALID_LABELS,
   },
-  comments: [{ type: CommentSchema }]
+  comments: [{ type: CommentSchema }],
+  references: [{
+    from: { type: Number, required: true },
+    by: { type: UserInfoSchema, required: true },
+    date: {
+      type: Date,
+      default: Date.now
+    },
+  }]
 }, { strict: true })
 
 BugSchema.set('toJSON', {
@@ -71,6 +79,15 @@ const validateLabel = (label) => {
   return JoiLabelSchema.validate(label)
 }
 
+
+const JoiReferencesSchema = Joi.object({
+  references: Joi.array().items(Joi.number()).required()
+})
+
+const validateReferences = (refs) => {
+  return JoiReferencesSchema.validate(refs)
+}
+
 const validateBug = (bug) => {
   // nested schemas
   const schema = Joi.object({
@@ -86,3 +103,4 @@ const validateBug = (bug) => {
 module.exports.Bug = Bug;
 module.exports.validateBug = validateBug;
 module.exports.validateLabel = validateLabel;
+module.exports.validateReferences = validateReferences;

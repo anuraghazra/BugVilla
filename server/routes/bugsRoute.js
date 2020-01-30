@@ -15,6 +15,7 @@ router.get('/:bugId', BugsController.getBugByNumber)
 router.post('/', verify, BugsController.createBug)
 
 router.patch('/:bugId', verify, BugsController.updateBug)
+router.patch('/:bugId/references', verify, BugsController.addReferences)
 router.patch('/:bugId/close', verify, bugOpenCloseLimiter, BugsController.toggleBugOpenClose({ state: false }))
 router.patch('/:bugId/open', verify, BugsController.toggleBugOpenClose({ state: true }))
 
