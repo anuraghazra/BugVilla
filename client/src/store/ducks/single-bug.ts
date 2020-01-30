@@ -205,3 +205,18 @@ export const editLabels = (
     }
   }
 });
+
+export const addReferences = (
+  bugId: number | string,
+  references: number[]
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/references`,
+    formData: { references },
+    request: () => { },
+    success: () => { },
+    error: () => { },
+  }
+});

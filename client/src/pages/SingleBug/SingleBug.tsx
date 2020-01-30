@@ -10,6 +10,7 @@ import Loading from 'components/common/Loading';
 import DashboardHeader from 'components/DashboardHeader';
 import Comment from '../../components/Comment/Comment';
 import Activity from './Activity';
+import Reference from './Reference';
 import MetaInfo from './MetaInfo';
 import SingleBugWrapper from './SingleBug.style';
 import SingleBugAside from './SingleBugAside';
@@ -91,6 +92,15 @@ const SingleBug: React.FC = () => {
                   author={activity.author}
                   action={activity.action}
                   date={activity.date}
+                />
+              ))}
+            {bug.references &&
+              bug.references.map((ref: any, i: number) => (
+                <Reference
+                  key={i}
+                  from={ref.from}
+                  by={ref.by}
+                  date={ref.date}
                 />
               ))}
             <CommentEditorForm bugIsOpen={bug.isOpen} />

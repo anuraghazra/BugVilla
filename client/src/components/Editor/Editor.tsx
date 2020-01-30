@@ -25,6 +25,7 @@ interface EditorProps {
   markdown: string;
   inputRef?: any;
   errors?: any;
+  onMentionBug?: (e: any) => void;
   handleMarkdown?: (e: any) => void;
 }
 
@@ -54,22 +55,14 @@ const Editor: React.FC<EditorProps> = ({
   markdown,
   inputRef,
   errors,
+  onMentionBug,
   handleMarkdown
 }) => {
   const user = useSelector((state: StoreState) => state.auth.user);
-  const [references, setReferences] = useState<number[]>([]);
 
   // fetch mention suggetions
   const allUsers = useSuggetion('/api/user', ['username', 'username']);
   const allBugs = useSuggetion('/api/bugs/suggetions', ['title', 'bugId']);
-
-  const onMentionBug = (id: number) => {
-    if (references.indexOf(id) === -1) {
-      setReferences([...references, id]);
-    }
-  };
-
-  console.log(references);
 
   return (
     <>

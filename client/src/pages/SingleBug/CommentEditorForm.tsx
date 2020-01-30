@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -11,12 +11,18 @@ import StyledEditor from 'components/Editor/Editor.style';
 import CloseReopenButton from './CloseReopenButton';
 
 import { addCommentSchema } from './SingleBug';
-import { addComment, openOrCloseBug } from 'store/ducks/single-bug';
+import {
+  addComment,
+  openOrCloseBug,
+  addReferences
+} from 'store/ducks/single-bug';
 import { StoreState } from 'store';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();
   const { bugId } = useParams<any>();
+  const [references, setReferences] = useState<number[]>([]);
+
   const {
     watch,
     setValue,
@@ -29,14 +35,19 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     setValue('body', e.target.value);
   };
 
-  const onSubmit = useCallback(
-    async (formData: { body: string }) => {
-      dispatch(addComment(bugId, formData)).then(() => {
-        setValue('body', '');
-      });
-    },
-    [dispatch]
-  );
+  const onMentionBug = (id: number) => {
+    if (references.indexOf(id) === -1) {
+      setReferences([...references, id]);
+    }
+  };
+
+  const onSubmit = (formData: { body: string }) => {
+    dispatch(addComment(bugId, formData)).then(() => {
+      dispatch(addReferences(bugId, references));
+      setValue('body', '');
+    });
+  };
+
   const sendToggleRequest = useCallback(
     (state: string) => {
       dispatch(openOrCloseBug(bugId, state));
@@ -66,6 +77,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
         <StyledEditor>
           <Editor
             markdown={markdown}
+            onMentionBug={onMentionBug}
             handleMarkdown={handleMarkdown}
             errors={formErrors}
             inputRef={register}

@@ -20,7 +20,7 @@ import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
 import StyledComment from './Comment.style';
-import { editComment, updateBug } from 'store/ducks/single-bug';
+import { editComment, updateBug, addReferences } from 'store/ducks/single-bug';
 import MentionPlugin from 'components/Editor/MentionPlugin';
 import { StoreState } from 'store';
 
@@ -47,6 +47,13 @@ const Comment: React.FC<CommentProps> = ({
   const dispatch = useDispatch<any>();
   const userId = useSelector((state: StoreState) => state.auth.user.id);
   const [isEditing, setIsEditing] = useState(false);
+  const [references, setReferences] = useState<number[]>([]);
+
+  const onMentionBug = (id: number) => {
+    if (references.indexOf(id) === -1) {
+      setReferences([...references, id]);
+    }
+  };
 
   const {
     watch,
@@ -88,6 +95,7 @@ const Comment: React.FC<CommentProps> = ({
         setIsEditing(!isEditing);
       });
     }
+    dispatch(addReferences(bugId, references));
   };
 
   const isAuthorOfComment = userId === author.id;
@@ -102,6 +110,7 @@ const Comment: React.FC<CommentProps> = ({
           <StyledEditor>
             <Editor
               markdown={markdown}
+              onMentionBug={onMentionBug}
               handleMarkdown={handleMarkdown}
               errors={formErrors}
               inputRef={register}

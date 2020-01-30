@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const StatusIconWrapper = styled.div<{ isOpen?: boolean }>`
+const StatusIconWrapper = styled.div<{ isOpen?: boolean; referred?: boolean }>`
   align-items: center;
   justify-content: center;
   display: flex;
@@ -12,21 +12,39 @@ const StatusIconWrapper = styled.div<{ isOpen?: boolean }>`
   min-width: 30px;
   border-radius: 50px;
 
-  color: ${p =>
-    p.isOpen ? p.theme.colors.common.green : p.theme.colors.common.red};
-  background-color: ${p =>
-    p.isOpen
-      ? p.theme.colors.common.greenlight
-      : p.theme.colors.common.redlight};
+  ${p =>
+    p.isOpen === true
+      ? css`
+          color: ${p => p.theme.colors.common.green};
+          background-color: ${p => p.theme.colors.common.greenlight};
+        `
+      : css`
+          color: ${p => p.theme.colors.common.red};
+          background-color: ${p => p.theme.colors.common.redlight};
+        `}
+
+  ${p =>
+    p.referred &&
+    css`
+      color: ${p => p.theme.colors.brand.primary};
+      background-color: ${p => p.theme.colors.brand.accent};
+    `}
 `;
 
 interface StatusIconProps {
   isOpen?: boolean;
+  referred?: boolean;
   [x: string]: any;
 }
-const StatusIcon: React.FC<StatusIconProps> = ({ isOpen, ...props }) => (
-  <StatusIconWrapper isOpen={isOpen} {...props}>
-    <FontAwesomeIcon icon={isOpen ? 'exclamation' : 'ban'} />
+const StatusIcon: React.FC<StatusIconProps> = ({
+  isOpen,
+  referred,
+  ...props
+}) => (
+  <StatusIconWrapper isOpen={isOpen} referred={referred} {...props}>
+    <FontAwesomeIcon
+      icon={isOpen ? 'exclamation' : referred ? 'retweet' : 'ban'}
+    />
   </StatusIconWrapper>
 );
 
