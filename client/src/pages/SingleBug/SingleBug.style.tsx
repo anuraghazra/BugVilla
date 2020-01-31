@@ -19,6 +19,8 @@ const SingleBugWrapper = styled.section`
   }
 
   .singlebug__aside {
+    margin-bottom: ${p => p.theme.spacings.bottom}px;
+    
     h4 {
       margin: 20px 0;
       margin-bottom: 10px;

@@ -64,9 +64,9 @@ const LabelEditDropdown: React.FC<DropdownProps> = ({
                   checked={!!checkedItems.includes(name)}
                   onChange={handleChange}
                 />
-                <Flex>
+                <div style={{ padding: '5px 0' }}>
                   <BulletLabel type={name}>{name}</BulletLabel>
-                </Flex>
+                </div>
               </label>
             ))}
           </div>

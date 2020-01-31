@@ -46,7 +46,7 @@ export const StyledBulletLabel = styled(StyledLabel)`
   .bullet {
     width: 10px;
     height: 10px;
-    margin-top: 7px;
+    margin-top: 2px;
     margin-right: 8px;
     border-radius: 50px;
     &.bug {
