@@ -61,9 +61,11 @@ const BugCard: React.FC<BugCardProps> = ({
       {labels.length ? (
         <Flex className="bug__label-container">
           {labels.map((label: string, index: number) => (
-            <Label style={{ marginBottom: 5 }} key={index} type={label}>
-              {label}
-            </Label>
+            <Link to={`/dashboard/bugs/?label=${label}`}>
+              <Label key={index} type={label}>
+                {label}
+              </Label>
+            </Link>
           ))}
         </Flex>
       ) : null}

@@ -15,6 +15,7 @@ const composeSetup =
     : compose;
 
 export interface StoreState {
+  bugs: any[];
   auth: AuthReducerState;
   singlebug: SinglebugReducerState;
   loading: {

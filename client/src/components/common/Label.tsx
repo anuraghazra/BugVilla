@@ -7,6 +7,8 @@ const StyledLabel = styled.div`
   border-radius: 50px;
   margin-right: 10px;
   margin-bottom: 5px;
+  width: fit-content;
+  line-height: 1;
 
   &.bug {
     color: ${p => p.theme.colors.common.red};
@@ -40,7 +42,7 @@ export const StyledBulletLabel = styled(StyledLabel)`
   padding: 5px 10px;
   border-radius: 5px;
   margin-bottom: 0px;
-  
+
   .bullet {
     width: 10px;
     height: 10px;
@@ -67,21 +69,21 @@ export const StyledBulletLabel = styled(StyledLabel)`
 
 interface LabelProps {
   /** 'bug' | 'feature' | 'help wanted' | 'enhancement' */
-  type: string; 
+  type: string | null;
   children: React.ReactNode;
   [x: string]: any;
 }
-const Label: React.FC<LabelProps> = ({ children, type }) => {
-  const labelType = type.replace(/\s/, '-');
+const Label: React.FC<LabelProps> = ({ children, type, style }) => {
+  const labelType = type!.replace(/\s/, '-');
   return (
-    <StyledLabel className={`${labelType} ${labelType}--bg`}>
+    <StyledLabel style={style} className={`${labelType} ${labelType}--bg`}>
       {children}
     </StyledLabel>
   );
 };
 
 export const BulletLabel: React.FC<LabelProps> = ({ type, children }) => {
-  const labelType = type.replace(/\s/, '-');
+  const labelType = type!.replace(/\s/, '-');
 
   return (
     <StyledBulletLabel className={labelType}>

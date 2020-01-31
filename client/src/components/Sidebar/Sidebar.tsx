@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <IconLink isNav icon="user" to="/profiles">
             Profiles
           </IconLink>
-          <IconLink isNav icon="times" to="/closed">
+          <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
             Closed
           </IconLink>
           <IconLink isNav icon="tag" to="/labels">
