@@ -12,7 +12,7 @@ addons:
 install:
   - npm ci
   # seems like we have to do client side too
-  - npm heroku-prebuild
+  - npm run heroku-prebuild
 
 cache:
   # cache both npm modules and Cypress binary
