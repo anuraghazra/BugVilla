@@ -9,16 +9,15 @@ addons:
     packages:
       - libgconf-2-4
 
+install:
+  - npm ci
+  # seems like we have to do client side too
+  - npm heroku-prebuild
+
 cache:
   # cache both npm modules and Cypress binary
   directories:
     - ~/.npm
-  override:
-    - npm ci
-    - npm run cy:verify
-
-install:
-  - npm ci
 
 script:
   - set -e
