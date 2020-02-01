@@ -65,7 +65,7 @@ describe('Test Dashboard', () => {
       .wait(500)
       .get('.label__header>svg').click()
       .get('.dropdown__items')
-      .findByText(/feature/i).click()
+      .findAllByText(/feature/i).first().click()
       .findByText(/update labels/i).click()
   })
 
