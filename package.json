@@ -14,7 +14,7 @@
     "cy:open": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
     "cy:run": "concurrently \"npm start\" \"cd client && npm run test:e2e:run\"",
     "prod": "concurrently \"npm run server:watch\" \"cd client && serve -s build\"",
-    "test": "jest"
+    "test": "cd client && npm run test"
   },
   "author": "Anurag Hazra <hazru.anurag@gmail.com>",
   "license": "MIT",
