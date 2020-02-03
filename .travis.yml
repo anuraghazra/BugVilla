@@ -15,9 +15,13 @@ install:
   - npm run heroku-prebuild
 
 cache:
+  npm: true
   # cache both npm modules and Cypress binary
   directories:
     - ~/.npm
+
+before_script:
+  - npm start -- --silent &
 
 script:
   - set -e

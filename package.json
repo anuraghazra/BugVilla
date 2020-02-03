@@ -13,6 +13,7 @@
     "develop": "concurrently \"npm run server:watch\" \"cd client && npm start\"",
     "cy:open": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
     "cy:run": "concurrently \"npm start\" \"cd client && npm run test:e2e:run\"",
+    "ci:run": "cd client && npm run cy:run",
     "prod": "concurrently \"npm run server:watch\" \"cd client && serve -s build\"",
     "test": "cd client && npm run test"
   },
