@@ -11,6 +11,7 @@
     "heroku-prebuild": "cd client && npm install --dev",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "develop": "concurrently \"npm run server:watch\" \"cd client && npm start\"",
+    "develop:ci": "concurrently \"npm start\" \"cd client && npm start\"",
     "cy:open": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
     "cy:run": "concurrently \"npm start\" \"cd client && npm run test:e2e:run\"",
     "ci:run": "cd client && npm run cy:run",

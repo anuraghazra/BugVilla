@@ -21,9 +21,9 @@ cache:
     - ~/.npm
 
 before_script:
-  - npm start -- --silent &
+  - npm run develop:ci -- --silent &
 
 script:
   - set -e
   - npm run test
-  - npm run cy:run
+  - npm run ci:run
