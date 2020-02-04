@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -29,7 +29,7 @@ const NavCircleIconLink = css`
   }
 `;
 
-interface LinkProps {
+interface LinkProps extends NavLinkProps {
   isNav?: boolean;
 }
 const Link = styled(NavLink)<LinkProps>`

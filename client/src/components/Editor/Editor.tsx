@@ -29,13 +29,13 @@ interface EditorProps {
 }
 
 const useSuggestion = (url: string, prop: string[]) => {
-  const { data: suggestions } = useFetch(url);
+  const { data: suggestions } = useFetch(url, { cache: true });
   const [data, setData] = useState([]);
 
   useEffect(() => {
     if (suggestions) {
       const isBug = prop[1] === 'bugId';
-      const users = suggestions.data.map((suggestions: any) => {
+      const suggestionsArray = suggestions.data.map((suggestions: any) => {
         let display = suggestions[prop[0]];
         if (isBug) {
           // if it's a bug then append the #1 (bugId) to the display
@@ -43,7 +43,7 @@ const useSuggestion = (url: string, prop: string[]) => {
         }
         return { display, id: suggestions[prop[1]] };
       });
-      setData(users);
+      setData(suggestionsArray);
     }
   }, [suggestions]);
 

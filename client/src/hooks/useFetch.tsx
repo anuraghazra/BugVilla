@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import http from 'utils/httpInstance';
 
-const useFetch = (url: string) => {
+interface memStoreTypes {
+  [x: string]: string;
+}
+const memStore: memStoreTypes = {};
+
+const useFetch = (url: string, props: { cache?: boolean } = {}) => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
@@ -16,6 +21,7 @@ const useFetch = (url: string) => {
         });
         setIsLoading(false);
         setData(res.data);
+        if (props.cache) memStore[url] = res.data;
       } catch (err) {
         console.log(err);
         setIsLoading(false);
@@ -23,7 +29,12 @@ const useFetch = (url: string) => {
       }
     };
 
-    getData();
+    if (memStore[url]) {
+      setIsLoading(false);
+      setData(memStore[url]);
+    } else {
+      getData();
+    }
   }, [url]);
 
   return { data, setData, isLoading, error };
