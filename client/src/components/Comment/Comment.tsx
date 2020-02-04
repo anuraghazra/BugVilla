@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getTimeDiff } from 'utils';
+import { getTimeDiff, getBugRefsFromMarkdown } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
@@ -47,13 +47,6 @@ const Comment: React.FC<CommentProps> = ({
   const dispatch = useDispatch<any>();
   const userId = useSelector((state: StoreState) => state.auth.user.id);
   const [isEditing, setIsEditing] = useState(false);
-  const [references, setReferences] = useState<number[]>([]);
-
-  const onMentionBug = (id: number) => {
-    if (references.indexOf(id) === -1) {
-      setReferences([...references, id]);
-    }
-  };
 
   const {
     watch,
@@ -64,7 +57,8 @@ const Comment: React.FC<CommentProps> = ({
   }: any = useForm({
     validationSchema: CommentSchema
   });
-  const markdown = watch('body', body);
+
+  const markdown = watch('body', body) as string;
   const handleMarkdown = (e: any) => {
     setValue('body', e.target.value);
   };
@@ -95,7 +89,9 @@ const Comment: React.FC<CommentProps> = ({
         setIsEditing(!isEditing);
       });
     }
-    dispatch(addReferences(bugId, references));
+
+    const references = getBugRefsFromMarkdown(markdown);
+    references.length && dispatch(addReferences(bugId, references));
   };
 
   const isAuthorOfComment = userId === author.id;
@@ -110,7 +106,6 @@ const Comment: React.FC<CommentProps> = ({
           <StyledEditor>
             <Editor
               markdown={markdown}
-              onMentionBug={onMentionBug}
               handleMarkdown={handleMarkdown}
               errors={formErrors}
               inputRef={register}

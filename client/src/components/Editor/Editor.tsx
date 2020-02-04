@@ -25,7 +25,6 @@ interface EditorProps {
   markdown: string;
   inputRef?: any;
   errors?: any;
-  onMentionBug?: (e: any) => void;
   handleMarkdown?: (e: any) => void;
 }
 
@@ -55,7 +54,6 @@ const Editor: React.FC<EditorProps> = ({
   markdown,
   inputRef,
   errors,
-  onMentionBug,
   handleMarkdown
 }) => {
   const user = useSelector((state: StoreState) => state.auth.user);
@@ -100,7 +98,6 @@ const Editor: React.FC<EditorProps> = ({
                   markup="{{__id__}} Yeah"
                   className="mentions__item"
                   trigger="#"
-                  onAdd={onMentionBug}
                   displayTransform={(id: any) => `#${id} `}
                   data={allBugs}
                 />

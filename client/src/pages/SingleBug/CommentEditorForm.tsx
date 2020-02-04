@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
+import { getBugRefsFromMarkdown } from 'utils';
 import Button, { ButtonGroup } from 'components/common/Button';
 import Toast from 'components/common/Toast';
 
@@ -21,7 +22,6 @@ import { StoreState } from 'store';
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();
   const { bugId } = useParams<any>();
-  const [references, setReferences] = useState<number[]>([]);
 
   const {
     watch,
@@ -30,20 +30,16 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     handleSubmit,
     errors: formErrors
   }: any = useForm({ validationSchema: addCommentSchema });
+  
   const markdown = watch('body');
   const handleMarkdown = (e: any) => {
     setValue('body', e.target.value);
   };
 
-  const onMentionBug = (id: number) => {
-    if (references.indexOf(id) === -1) {
-      setReferences([...references, id]);
-    }
-  };
-
   const onSubmit = (formData: { body: string }) => {
     dispatch(addComment(bugId, formData)).then(() => {
-      dispatch(addReferences(bugId, references));
+      const references = getBugRefsFromMarkdown(markdown);
+      references.length && dispatch(addReferences(bugId, references));
       setValue('body', '');
     });
   };
@@ -77,7 +73,6 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
         <StyledEditor>
           <Editor
             markdown={markdown}
-            onMentionBug={onMentionBug}
             handleMarkdown={handleMarkdown}
             errors={formErrors}
             inputRef={register}

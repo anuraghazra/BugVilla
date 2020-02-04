@@ -18,3 +18,15 @@ export const getTimeDiff = (dt1: any): string | number => {
   if (hours < 1) return min + ' min ago';
   return hours + ' hours ago';
 }
+
+export const getBugRefsFromMarkdown = (markdown: string): number[] => {
+  const bugRegx: RegExp = /#(\d)/gim;
+
+  let matchedRefs = markdown.match(bugRegx)
+    ?.map((ref: string) => +ref.replace('#', ''))
+    ?.filter(
+      (value: number, index: number, arr: number[]) =>
+        arr.indexOf(value) === index
+    );
+  return matchedRefs || [];
+};
