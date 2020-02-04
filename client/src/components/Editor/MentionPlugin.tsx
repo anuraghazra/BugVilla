@@ -1,12 +1,15 @@
 import React from 'react';
 
 const MentionPlugin = (source: any) => {
-  let match = source.value.match(/(@|#)(.*?)\s/gim);
+  let match = source.value.match(/(@|#)(.*?)(\s|$|\.)/gim);
   if (match) {
     const parsed = match.reduce((acc: string, cur: string) => {
-      let link = `<a href="/profiles/${cur.replace('@', '')}">${cur}</a>`;
+      let link = `<a href="/profiles/${cur.replace(/@|\./gm, '')}">${cur}</a>`;
       if (cur.match('#')) {
-        link = `<a href="/dashboard/bugs/${cur.replace('#', '')}">${cur}</a>`;
+        link = `<a href="/dashboard/bugs/${cur.replace(
+          /#|\./gm,
+          ''
+        )}">${cur}</a>`;
       }
       return acc.replace(cur, link);
     }, source.value);
