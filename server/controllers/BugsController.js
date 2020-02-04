@@ -11,7 +11,7 @@ const { Bug, validateBug, validateLabel, validateReferences } = require('../mode
 exports.getBugs = async (req, res) => {
   try {
     let bugs = await Bug.find({});
-    if (!bugs) return res.notFound({ errror: 'Not Found' });
+    if (!bugs) return res.notFound({ error: 'Not Found' });
 
     res.ok({ data: bugs });
   } catch (err) {
@@ -22,14 +22,14 @@ exports.getBugs = async (req, res) => {
 }
 
 /**
- * @route GET /api/bugs/suggetions
- * @description Get all bugs suggetions, only returns bugid and title
+ * @route GET /api/bugs/suggestions
+ * @description Get all bugs suggestions, only returns bugId and title
  * @type RequestHandler
  */
-exports.getSuggetions = async (req, res) => {
+exports.getSuggestions = async (req, res) => {
   try {
     let bugs = await Bug.find({}).select('bugId title');
-    if (!bugs) return res.notFound({ errror: 'Not Found' });
+    if (!bugs) return res.notFound({ error: 'Not Found' });
 
     res.ok({ data: bugs });
   } catch (err) {

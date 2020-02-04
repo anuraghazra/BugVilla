@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
 
   if (typeof header !== 'undefined') {
     const token = header.split(' ');
-    // if no token found, return response (without going to the next middelware)
+    // if no token found, return response (without going to the next middleware)
     if (token[0] !== 'Bearer') return res.notAuthorized({ error: "Invalid authorization header." });
     if (!token[1]) return res.notAuthorized({ error: "Access denied. No token provide" });
 

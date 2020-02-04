@@ -28,24 +28,24 @@ interface EditorProps {
   handleMarkdown?: (e: any) => void;
 }
 
-const useSuggetion = (url: string, prop: string[]) => {
-  const { data: suggetions } = useFetch(url);
+const useSuggestion = (url: string, prop: string[]) => {
+  const { data: suggestions } = useFetch(url);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (suggetions) {
+    if (suggestions) {
       const isBug = prop[1] === 'bugId';
-      const users = suggetions.data.map((suggetion: any) => {
-        let display = suggetion[prop[0]];
+      const users = suggestions.data.map((suggestions: any) => {
+        let display = suggestions[prop[0]];
         if (isBug) {
           // if it's a bug then append the #1 (bugId) to the display
-          display = suggetion[prop[0]] + ' #' + suggetion[prop[1]];
+          display = suggestions[prop[0]] + ' #' + suggestions[prop[1]];
         }
-        return { display, id: suggetion[prop[1]] };
+        return { display, id: suggestions[prop[1]] };
       });
       setData(users);
     }
-  }, [suggetions]);
+  }, [suggestions]);
 
   return data;
 };
@@ -58,9 +58,9 @@ const Editor: React.FC<EditorProps> = ({
 }) => {
   const user = useSelector((state: StoreState) => state.auth.user);
 
-  // fetch mention suggetions
-  const allUsers = useSuggetion('/api/user', ['username', 'username']);
-  const allBugs = useSuggetion('/api/bugs/suggetions', ['title', 'bugId']);
+  // fetch mention suggestions
+  const allUsers = useSuggestion('/api/user', ['username', 'username']);
+  const allBugs = useSuggestion('/api/bugs/suggestions', ['title', 'bugId']);
 
   return (
     <>

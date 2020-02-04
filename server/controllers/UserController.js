@@ -76,7 +76,7 @@ exports.login = async (req, res) => {
   try {
     // check if user exist
     const user = await User.findOne({ email: value.email });
-    if (!user) return res.notFound({ error: "Email does not exsist" });
+    if (!user) return res.notFound({ error: "Email does not exists" });
 
     // Check/Compares password
     const validPassword = await bcrypt.compare(value.password, user.password);
