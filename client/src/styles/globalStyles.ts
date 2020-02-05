@@ -54,7 +54,7 @@ const GlobalStyles = createGlobalStyle`
 
   code, pre {
     line-height: 150%;
-    white-space: pre-line;
+    white-space: pre-wrap;
     font-size: 14px;
   }
 

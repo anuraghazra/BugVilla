@@ -6,11 +6,20 @@ interface CodeBlockProps {
   language?: string;
   value: string;
 }
-const CodeBlock: React.FC<CodeBlockProps> = ({ language, value }) => {
+
+// not sure if it's a good idea
+const htmlDecode = (input: string) => {
+  var e = document.createElement('div');
+  e.innerHTML = input;
+  return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+};
+
+const CodeBlock: React.FC<CodeBlockProps> = ({ language, value = '' }) => {
   if (!language) language = 'text';
+
   return (
     <SyntaxHighlighter language={language} style={theme}>
-      {value}
+      {htmlDecode(value)}
     </SyntaxHighlighter>
   );
 };
