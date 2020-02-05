@@ -16,7 +16,7 @@ describe('Should Login', () => {
     cy.findByPlaceholderText(/example@gmail\.com/i)
       .focus()
       .type('doesnotexist@gmail.com{enter}helloworld{enter}')
-      .findByText(/Email does not exsist/i)
+      .findByText(/Email does not exist/i)
   })
   it('Should report error if invalid password', function () {
     cy.findByPlaceholderText(/example@gmail\.com/i)
