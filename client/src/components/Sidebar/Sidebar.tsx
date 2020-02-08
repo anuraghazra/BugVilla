@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React  from 'react';
 import { useSelector } from 'react-redux';
 
 import Avatar from 'components/Avatar/Avatar';
@@ -42,9 +42,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           </IconLink>
           <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
             Closed
-          </IconLink>
-          <IconLink isNav icon="tag" to="/labels">
-            Labels
           </IconLink>
           <IconLink isNav icon="door-open" to="/login" onClick={auth.logout}>
             Logout

@@ -22,19 +22,13 @@ const App: React.FC = () => {
 
         <div>
           <Switch>
-            <Route
-              path="/"
-              exact={true}
-              component={() => {
-                return <Home right={Signup}></Home>;
-              }}
-            />
-            <Route
-              path="/login"
-              component={() => {
-                return <Home right={Login}></Home>;
-              }}
-            />
+            <Route path="/" exact>
+              <Home right={Signup} />
+            </Route>
+            <Route path="/login" exact>
+              <Home right={Login} />
+            </Route>
+
             <AuthRoute path="/" component={Dashboard} />
             <Route component={NotFound} />
           </Switch>
