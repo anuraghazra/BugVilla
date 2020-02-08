@@ -30,3 +30,19 @@ export const getBugRefsFromMarkdown = (markdown: string): number[] => {
     );
   return matchedRefs || [];
 };
+
+
+// function htmlspecialchars(str) {
+// }
+// not sure if it's a good idea
+export const htmlDecode = (input: string): string => {
+  const map: any = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": "\"",
+    "&#39;": "'"
+  };
+  if (typeof input !== 'string') return '';
+  return input.replace(/(&amp;|&lt;|&gt;|&quot;|&#39;)/mg, (m) => map[m]);
+};

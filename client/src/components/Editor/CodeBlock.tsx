@@ -1,25 +1,25 @@
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { githubGist as theme } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
+import md from 'react-syntax-highlighter/dist/esm/languages/hljs/markdown';
+import css from 'react-syntax-highlighter/dist/esm/languages/hljs/css';
+
+SyntaxHighlighter.registerLanguage('javascript', js);
+SyntaxHighlighter.registerLanguage('md', md);
+SyntaxHighlighter.registerLanguage('css', css);
 
 interface CodeBlockProps {
   language?: string;
   value: string;
 }
 
-// not sure if it's a good idea
-const htmlDecode = (input: string) => {
-  var e = document.createElement('div');
-  e.innerHTML = input;
-  return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
-};
-
 const CodeBlock: React.FC<CodeBlockProps> = ({ language, value = '' }) => {
   if (!language) language = 'text';
 
   return (
     <SyntaxHighlighter language={language} style={theme}>
-      {htmlDecode(value)}
+      {value}
     </SyntaxHighlighter>
   );
 };

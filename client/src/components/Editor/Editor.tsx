@@ -15,6 +15,7 @@ import CodeBlock from './CodeBlock';
 import MentionPlugin from './MentionPlugin';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
+import { htmlDecode } from 'utils';
 
 const MarkdownPlugins = {
   code: CodeBlock,
@@ -85,7 +86,7 @@ const Editor: React.FC<EditorProps> = ({
                 placeholder="Write Markdown"
                 className="editor__tabpanel"
                 inputRef={inputRef({ required: 'Body is required' })}
-                value={markdown}
+                value={htmlDecode(markdown)}
                 onChange={handleMarkdown}
               >
                 <Mention
@@ -107,8 +108,9 @@ const Editor: React.FC<EditorProps> = ({
         </TabPanel>
         <TabPanel>
           <ReactMarkdown
+            escapeHtml={true}
             className="editor__tabpanel markdown-preview"
-            source={markdown}
+            source={htmlDecode(markdown)}
             renderers={MarkdownPlugins}
           />
         </TabPanel>

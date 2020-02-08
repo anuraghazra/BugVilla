@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getTimeDiff, getBugRefsFromMarkdown } from 'utils';
+import { getTimeDiff, getBugRefsFromMarkdown, htmlDecode } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
@@ -58,7 +58,7 @@ const Comment: React.FC<CommentProps> = ({
     validationSchema: CommentSchema
   });
 
-  const markdown = watch('body', body) as string;
+  const markdown = watch('body', body);
   const handleMarkdown = (e: any) => {
     setValue('body', e.target.value);
   };
@@ -156,7 +156,7 @@ const Comment: React.FC<CommentProps> = ({
           <ReactMarkdown
             renderers={MarkdownPlugins}
             className="markdown-preview"
-            source={body}
+            source={htmlDecode(body)}
           />
         </>
       )}
