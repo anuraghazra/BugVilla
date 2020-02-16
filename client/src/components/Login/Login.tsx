@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
@@ -10,9 +12,13 @@ import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
-import { loginUser } from 'store/ducks/auth';
+import { loginUser, checkAuth } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
+import googleLogo from 'assets/svg/google.svg';
+import http from 'utils/httpInstance';
+
+// import { GoogleLogin } from 'react-google-login';
 
 const LoginSchema = yup.object().shape({
   email: yup
@@ -28,6 +34,21 @@ const LoginSchema = yup.object().shape({
     .required()
 });
 
+const GoogleButton = styled(Button)`
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: ${p => p.theme.colors.text.black};
+  display: flex;
+  align-items: center;
+  margin: 10px auto 25px auto;
+  /* padding: 20px 30px; */
+
+  img {
+    margin-right: 10px;
+    width: 20px;
+  }
+`;
+
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const [isLoading, loginError] = useSelector(({ auth }: StoreState) => [
@@ -40,6 +61,21 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: { name: string; email: string }) => {
     dispatch(loginUser(data));
+  };
+
+  const googleOauth = () => {
+    let url = process.env.NODE_ENV === 'development' ? 'localhost:5000' : window.location.origin
+    window.open(
+      `http://${url}/api/user/auth/google`,
+      '__blank',
+      'width=500&height=800'
+    );
+
+    window.addEventListener('message', event => {
+      if (event.data === 'OAuth Success') {
+        dispatch(checkAuth());
+      }
+    });
   };
 
   return (
@@ -80,6 +116,9 @@ const Login: React.FC = () => {
           </Button>
         </form>
 
+        <GoogleButton onClick={googleOauth}>
+          <img src={googleLogo} /> Continue with Google
+        </GoogleButton>
         <IconLink className="color--gray" to="/">
           Don't have an account?
         </IconLink>

@@ -149,10 +149,11 @@ exports.toggleBugOpenClose = ({ state }) => {
           },
           isOpen: state,
         },
-        { new: true }
+        { new: true, runValidators: true }
       );
       if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
+      console.log(req.user)
       res.ok({ data: bug.activities });
     } catch (err) {
       res.internalError({

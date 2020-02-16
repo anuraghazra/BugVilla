@@ -2,14 +2,15 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import auth from './authHelper';
 
 const instance: AxiosInstance = axios.create({
-  baseURL: '/'
+  baseURL: '/',
+  withCredentials:true
 });
 
 const requestHandler = (config: AxiosRequestConfig) => {
   // Modify config here
-  if (auth.getToken()) {
-    config.headers['Authorization'] = `Bearer ${auth.getToken()}`;
-  }
+  // if (auth.getToken()) {
+  //   // config.headers['Authorization'] = `Bearer ${auth.getToken()}`;
+  // }
 
   config.timeout = 30000;
   return config;

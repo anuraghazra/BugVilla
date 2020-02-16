@@ -1,19 +1,31 @@
-import React  from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Avatar from 'components/Avatar/Avatar';
 import BugVillaLogo from 'components/common/Logo';
 import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
 import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
-import auth from 'utils/authHelper';
+import http from 'utils/httpInstance';
 import { StoreState } from 'store';
+import { logUserOut } from 'store/ducks/auth';
+import { useHistory } from 'react-router-dom';
 
 interface SidebarProps {
   isOpen?: boolean;
 }
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const user = useSelector((state: StoreState) => state.auth.user);
+
+  const logout = () => {
+    http.get('/api/user/logout').then(data => {
+      console.log('logged out');
+      history.push('/');
+      dispatch(logUserOut());
+    });
+  };
 
   return (
     <SidebarWrapper isOpen={isOpen}>
@@ -43,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
             Closed
           </IconLink>
-          <IconLink isNav icon="door-open" to="/login" onClick={auth.logout}>
+          <IconLink isNav icon="door-open" to="#" onClick={logout}>
             Logout
           </IconLink>
         </Flex>

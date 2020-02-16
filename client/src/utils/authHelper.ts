@@ -1,4 +1,6 @@
 import jwt from "jwt-decode";
+import history from 'utils/history';
+import http from 'utils/httpInstance';
 
 class Auth {
   token: null | string;
@@ -43,7 +45,7 @@ class Auth {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    
   }
 
   // getProfile() {

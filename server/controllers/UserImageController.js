@@ -1,6 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
 const mongoose = require('mongoose');
 const sharp = require('sharp');
+const request = require('request')
 const { User } = require('../models/userModel');
 const { MemCache } = require('../middleware/cache');
 
@@ -81,57 +82,72 @@ exports.getAvatarImageByUsername = async (req, res) => {
 
 /**
  * @route GET /api/user/:username/avatar/raw
- * @description upload profile picture of user
+ * @description get raw avatar image
  * @type RequestHandler
  */
 exports.getRawAvatarImageByUsername = async (req, res) => {
   try {
     let cacheUrl = req.originalUrl || req.url;
     console.log(MemCache.cache.keys())
-    MemCache.get(cacheUrl, async (cachedData) => {
-      if (cachedData === null) {
-        console.log('cache missed');
 
-        // get image if cache is missed
-        let avatars = await gfs.find({ _id: req.foundUser.avatar })
-        avatars.toArray((err, files) => {
-          if (!files || files.length === 0) {
-            return res.notFound({ error: "Image not found" });
-          }
-
-          const file = files[0];
-          const fileType = file.contentType;
-          if (fileType === 'image/jpeg' || fileType === 'image/png') {
-            res.header('Content-Type', fileType);
-            res.header('Content-Length', file.length);
-            // resize img
-            let size = +Math.abs(req.query.size) || 200;
-            if (size > 500) size = 500;
-
-            const chunks = [];
-            const stream = gfs.openDownloadStreamByName(file.filename);
-            stream.on('data', chunk => chunks.push(chunk));
-            stream.on('end', () => {
-              const buffer = Buffer.concat(chunks);
-              sharp(buffer)
-                .resize(size, size)
-                .jpeg({ quality: 100 })
-                .toBuffer((err, resizedBuffer) => {
-                  if (err) res.send({ error: 'Cannot resize img' })
-                  res.send(resizedBuffer);
-                  MemCache.set(cacheUrl, resizedBuffer);
-                });
-            })
-          } else {
-            return res.unsupportedMedia({ error: 'media type not supported' })
-          }
-        })
-      } else {
-        // send cached data
+    console.log(req.foundUser)
+    if (!req.foundUser.avatar) {
+      request({ url: req.foundUser.avatarUrl, encoding: null }, (err, resp, buffer) => {
+        // Use the buffer
+        // buffer contains the image data
+        // typeof buffer === 'object'
+        // res.header('Content-Type', 'image/jpeg');
+        // res.header('Content-Length', file.length);
         res.header('Content-Type', 'image/jpeg');
-        res.send(cachedData);
-      }
-    })
+        return res.send(buffer);
+      });
+    } else {
+      MemCache.get(cacheUrl, async (cachedData) => {
+        if (cachedData === null) {
+          console.log('cache missed');
+
+          // get image if cache is missed
+          let avatars = await gfs.find({ _id: req.foundUser.avatar })
+          avatars.toArray((err, files) => {
+            if (!files || files.length === 0) {
+              return res.notFound({ error: "Image not found" });
+            }
+
+            const file = files[0];
+            const fileType = file.contentType;
+            if (fileType === 'image/jpeg' || fileType === 'image/png') {
+              res.header('Content-Type', fileType);
+              res.header('Content-Length', file.length);
+              // resize img
+              let size = +Math.abs(req.query.size) || 200;
+              if (size > 500) size = 500;
+
+              const chunks = [];
+              const stream = gfs.openDownloadStreamByName(file.filename);
+              stream.on('data', chunk => chunks.push(chunk));
+              stream.on('end', () => {
+                const buffer = Buffer.concat(chunks);
+                sharp(buffer)
+                  .resize(size, size)
+                  .jpeg({ quality: 100 })
+                  .toBuffer((err, resizedBuffer) => {
+                    if (err) res.send({ error: 'Cannot resize img' })
+                    res.send(resizedBuffer);
+                    MemCache.set(cacheUrl, resizedBuffer);
+                  });
+              })
+            } else {
+              return res.unsupportedMedia({ error: 'media type not supported' })
+            }
+          })
+        } else {
+          // send cached data
+          res.header('Content-Type', 'image/jpeg');
+          res.send(cachedData);
+        }
+      })
+    }
+
 
   } catch (err) {
     console.log(err);

@@ -1,22 +1,27 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
+import { useHistory } from 'react-router-dom';
 
 import Flex from 'components/common/Flex';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 
 import HomeWrapper from './Home.style';
 import IconLink from 'components/common/IconLink';
-import history from 'utils/history';
-import auth from 'utils/authHelper';
 
 interface HomeProps {
   right: any;
 }
 const Home: React.FC<HomeProps> = ({ right: Right }) => {
+  const history = useHistory();
+  const isAuthenticated = useSelector(
+    (state: StoreState) => state.auth.isAuthenticated
+  );
   useEffect(() => {
-    if (auth.loggedIn()) {
+    if (isAuthenticated) {
       history.push('/dashboard/bugs');
     }
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <HomeWrapper>

@@ -15,7 +15,11 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const httpResponder = require('./middleware/httpResponder');
 const errorHandler = require('./middleware/errorHandler');
+const passport = require('passport');
+const sgMail = require('@sendgrid/mail');
+const cookieParser = require('cookie-parser');
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // connect to database
 mongoose.connect(
@@ -33,8 +37,11 @@ app.set("env", process.env.NODE_ENV);
 // middlewares
 app.use(express.static('client/build'));
 app.use(helmet()) // security headers
-app.use(cors());
+app.use(cors({
+  credentials: true
+}));
 app.use(httpResponder);
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '10kb' }));
 app.use(mongoSanitize()); // sanitization against NoSQL Injection Attacks
@@ -47,47 +54,23 @@ app.use('/api/', rateLimit({
 }));
 app.use(morgan('dev'));
 
+// Passport middleware
+require('./middleware/passport-auth');
+app.use(passport.initialize());
 
 // routes
 app.use('/api/user', require('./routes/userRoute'));
 app.use('/api/user', require('./routes/imagesRoute'));
-app.use('/api/bugs', require('./routes/bugsRoute'));
-app.use('/api/bugs', require('./routes/commentsRoute'));
-
-// let routes = new Set();
-// function print(path, layer) {
-//   if (layer.route) {
-//     layer.route.stack.forEach(print.bind(null, path.concat(split(layer.route.path))))
-//   } else if (layer.name === 'router' && layer.handle.stack) {
-//     layer.handle.stack.forEach(print.bind(null, path.concat(split(layer.regexp))))
-//   } else if (layer.method) {
-//     routes.add(
-//       layer.method.toUpperCase() + ' - ' + path.concat(split(layer.regexp)).filter(Boolean).join('/')
-//     )
-//   }
-// }
-
-// function split(thing) {
-//   if (typeof thing === 'string') {
-//     return thing.split('/')
-//   } else if (thing.fast_slash) {
-//     return ''
-//   } else {
-//     var match = thing.toString()
-//       .replace('\\/?', '')
-//       .replace('(?=\\/|$)', '$')
-//       .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)
-//     return match
-//       ? match[1].replace(/\\(.)/g, '$1').split('/')
-//       : '<complex:' + thing.toString() + '>'
-//   }
-// }
-
-// app._router.stack.forEach(print.bind(null, []))
-
-// console.log(routes)
-
-
+// failWithError: https://github.com/jaredhanson/passport/issues/458
+app.use('/api/bugs',
+  passport.authenticate('jwt', { session: false, failWithError: true }),
+  require('./routes/bugsRoute'),
+  require('./routes/commentsRoute'),
+  (_err, _req, res, _next) => {
+    return res.notAuthorized({ error: 'Unauthorized' })
+  }
+);
+// app.use('/api/bugs', require('./routes/bugsRoute'));
 
 // finally handle errors
 app.use(errorHandler);

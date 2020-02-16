@@ -6,8 +6,13 @@ import { API } from './single-bug';
 // action
 export const AUTH_LOGOUT = 'auth/LOGOUT';
 export const AUTH_SET_USER = 'auth/SET_USER';
-export const LOGIN_SUCCESS = 'login/SUCCESS';
-export const LOGIN_ERROR = 'login/ERROR';
+
+export const CHECK_AUTH_REQUEST = 'auth/CHECK_AUTH_REQUEST';
+export const CHECK_AUTH_FAILURE = 'auth/CHECK_AUTH_FAILURE';
+export const CHECK_AUTH_SUCCESS = 'auth/CHECK_AUTH_SUCCESS';
+
+export const LOGIN_SUCCESS = 'login/LOGIN_SUCCESS';
+export const LOGIN_ERROR = 'login/LOGIN_FAILURE';
 export const LOGIN_LOADING = 'login/LOADING';
 export const LOGIN_CLEAR_ERROR = 'login/CLEAR_ERROR';
 
@@ -116,6 +121,26 @@ export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
 
 
 // side effects
+export const checkAuth = () => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: '/api/user/check-auth',
+    formData: null,
+    request: CHECK_AUTH_REQUEST,
+    success: (dispatch: Dispatch, data: any) => {
+      console.log('CHECK AUTH: ', data)
+      dispatch(setUser(data));
+      dispatch({ type: CHECK_AUTH_SUCCESS });
+      // history.push('/dashboard/bugs')
+    },
+    error: (dispatch: Dispatch, err: string) => {
+      console.log(err)
+      dispatch({ type: CHECK_AUTH_FAILURE });
+    }
+  }
+})
+
 export const signUserUp = (formData: FormData) => ({
   type: API,
   payload: {
@@ -129,7 +154,7 @@ export const signUserUp = (formData: FormData) => ({
       history.push('/login')
     },
     error: (dispatch: Dispatch, err: string) => {
-      auth.logout();
+      dispatch(logUserOut())
       dispatch(signupClearError())
       dispatch(signupError(err))
     }
@@ -144,17 +169,13 @@ export const loginUser = (formData: { name: string, email: string }) => ({
     formData,
     request: LOGIN_LOADING,
     success: (dispatch: Dispatch, data: any) => {
-      dispatch(loginSuccess({
-        username: data.username,
-        name: data.name,
-        id: data.id
-      }));
+      console.log(data);
+      dispatch(loginSuccess(data));
       dispatch(loginClearError());
-      auth.setToken(data.token)
       history.push('/dashboard/bugs')
     },
     error: (dispatch: Dispatch, err: string) => {
-      auth.logout();
+      dispatch(logUserOut())
       dispatch(loginClearError())
       dispatch(loginError(err))
     }

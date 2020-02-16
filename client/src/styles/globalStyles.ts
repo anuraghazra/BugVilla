@@ -55,7 +55,10 @@ const GlobalStyles = createGlobalStyle`
   code, pre {
     line-height: 150%;
     white-space: pre-wrap;
+    width: 100%;
+    overflow-x: scroll !important;
     font-size: 14px;
+    background: white !important;
   }
 
   .svg-inline--fa {

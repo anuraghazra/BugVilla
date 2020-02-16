@@ -8,17 +8,23 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import store from './store';
-import { setUser } from 'store/ducks/auth';
 import { Provider } from 'react-redux';
 
 import auth from 'utils/authHelper';
+import history from 'utils/history';
+import { checkAuth, setUser } from 'store/ducks/auth';
 
 registerIcons();
 
-if (auth.loggedIn()) {
-  store.dispatch(setUser(auth.getUser()));
-  // history.push('/dashboard');
-}
+// if (auth.loggedIn()) {
+//   store.dispatch(setUser(auth.getUser()));
+//  // history.push('/dashboard');
+// }
+store.dispatch(checkAuth());
+
+// if (localStorage.getItem('IsAuthenticated')) {
+  // store.dispatch(setUser({ username: '' }));
+// }
 
 ReactDOM.render(
   <Provider store={store}>

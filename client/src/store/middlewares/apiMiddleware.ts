@@ -37,6 +37,8 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
     if (typeof success === 'function') {
       success(dispatch, data);
     } else {
+      // TODO: normalize this res.data.data causing 
+      // inconsistency because server is sending with wrapped {data: ...}
       dispatch({ type: success, payload: data });
     }
   } catch (err) {

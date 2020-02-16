@@ -64,6 +64,10 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   &:disabled {
     opacity: 0.8;
   }
+
+  @media screen and (${p => p.theme.media.mobile}) {
+    padding: 15px 40px;
+  }
 `;
 
 const Button: React.FC<ButtonProps> = ({

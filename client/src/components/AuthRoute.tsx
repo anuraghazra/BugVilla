@@ -15,12 +15,18 @@ const AuthRoute: React.FC<AuthRouteProps> = ({
   const isAuthenticated = useSelector(
     (state: StoreState) => state.auth.isAuthenticated
   );
+  // https://stackoverflow.com/a/56175010/10629172
+  const checkingAuthStatus = useSelector(
+    (state: StoreState) => state.loading['auth/CHECK_AUTH']
+  );
 
   return (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? (
+        checkingAuthStatus ? (
+          <></>
+        ) : isAuthenticated ? (
           <Component {...props} />
         ) : (
           <Redirect
