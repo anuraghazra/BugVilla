@@ -64,9 +64,12 @@ const Login: React.FC = () => {
   };
 
   const googleOauth = () => {
-    let url = process.env.NODE_ENV === 'development' ? 'localhost:5000' : window.location.origin
+    let url =
+      process.env.NODE_ENV === 'development'
+        ? 'localhost:5000'
+        : window.location.host;
     window.open(
-      `http://${url}/api/user/auth/google`,
+      `${window.location.protocol}//${url}/api/user/auth/google`,
       '__blank',
       'width=500&height=800'
     );
