@@ -14,17 +14,21 @@ module.exports = function generateUserToken(req, res) {
     googleId: user.googleId
   }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
 
-  console.log('OAUTH')
   res.status(200)
     .cookie('jwt', token)
+    // .redirect('http://localhost:3000')
     .send(`
-      <html>
-        <body>
-        <script>
+    <html>
+      <body>
+      <script>
         window.onload = window.close();
-        window.opener.postMessage('OAuth Success', "http://localhost:3000");
-        </script>
-        </body>
-      </html>
-    `)
+        let originUrl = window.location.origin;
+        if (window.location.hostname === 'localhost') {
+          originUrl = 'http://localhost:3000'
+        }
+        window.opener.postMessage('OAuth Success', originUrl);
+      </script>
+      </body>
+    </html>
+  `)
 }

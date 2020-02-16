@@ -68,12 +68,15 @@ const Login: React.FC = () => {
       process.env.NODE_ENV === 'development'
         ? 'localhost:5000'
         : window.location.host;
-    window.open(
+    
+        // window.location.href = `${window.location.protocol}//${url}/api/user/auth/google`;
+
+    let consentScreen: any = window.open(
       `${window.location.protocol}//${url}/api/user/auth/google`,
       '__blank',
       'width=500&height=800'
     );
-
+    // consentScreen.onclose = function () { console.log('closed') }
     window.addEventListener('message', event => {
       if (event.data === 'OAuth Success') {
         dispatch(checkAuth());
