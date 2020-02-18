@@ -208,13 +208,28 @@ export const editLabels = (
 
 export const addReferences = (
   bugId: number | string,
-  references: number[]
+  references: string[]
 ): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
     url: `/api/bugs/${bugId}/references`,
     formData: { references },
+    request: () => { },
+    success: () => { },
+    error: () => { },
+  }
+});
+
+export const mentionPeople = (
+  bugId: number | string,
+  mentions: string[]
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: `/api/notifications/mentions/${bugId}`,
+    formData: { mentions },
     request: () => { },
     success: () => { },
     error: () => { },

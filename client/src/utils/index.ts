@@ -19,16 +19,20 @@ export const getTimeDiff = (dt1: any): string | number => {
   return hours + ' hours ago';
 }
 
-export const getBugRefsFromMarkdown = (markdown: string): number[] => {
-  const bugRegx: RegExp = /#(\d)/gim;
+export const getQuantifiersFromMarkdown = (markdown: string, quantifier: string = '#'): string[] => {
+  let regex: RegExp = /#(\d+)/gim;
 
-  let matchedRefs = markdown.match(bugRegx)
-    ?.map((ref: string) => +ref.replace('#', ''))
+  if (quantifier === '@') {
+    regex = /@(.*?)(\s|$|\.)/gim;
+  }
+
+  let matched = markdown.match(regex)
+    ?.map((ref: string): any => ref.replace(quantifier, '').trim())
     ?.filter(
       (value: number, index: number, arr: number[]) =>
         arr.indexOf(value) === index
     );
-  return matchedRefs || [];
+  return matched || [];
 };
 
 export const htmlDecode = (input: string): string => {

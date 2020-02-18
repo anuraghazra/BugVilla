@@ -23,8 +23,9 @@ const HomeWrapper = styled.section`
       z-index: 1;
     }
 
-    @media screen and (${p => p.theme.media.mobile}) {
+    @media screen and (${p => p.theme.media.tablet}) {
       min-height: 45vh;
+      width: 100%;
       .home__text {
         margin-left: 0px;
       }

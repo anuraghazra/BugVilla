@@ -11,6 +11,7 @@ import AddBug from 'components/AddBug/AddBug';
 import SingleBug from 'pages/SingleBug/SingleBug';
 import Profile from 'pages/Profile/Profile';
 import Profiles from 'pages/Profiles/Profiles';
+import Notifications from 'pages/Notifications/Notifications';
 import NotFound from 'components/NotFound';
 
 const Dashboard: React.FC = () => {
@@ -43,6 +44,7 @@ const Dashboard: React.FC = () => {
           />
           <AuthRoute exact path="/profiles" component={Profiles} />
           <AuthRoute exact path="/profiles/:username" component={Profile} />
+          <AuthRoute exact path="/dashboard/notifications" component={Notifications} />
           <Route path="/" component={NotFound} />
         </Switch>
       </DashboardBody>

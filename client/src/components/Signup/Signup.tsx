@@ -65,15 +65,6 @@ const Signup: React.FC = () => {
           </StyledH3Input>
 
           <Input
-            name="username"
-            type="text"
-            icon="user"
-            placeholder="user-name"
-            errors={errors}
-            inputRef={register({ required: 'Username is required' })}
-          />
-
-          <Input
             name="email"
             type="email"
             icon="envelope"

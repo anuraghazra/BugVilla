@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getTimeDiff, getBugRefsFromMarkdown, htmlDecode } from 'utils';
+import { getTimeDiff, getQuantifiersFromMarkdown, htmlDecode } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
@@ -18,10 +18,16 @@ import Toast from 'components/common/Toast';
 import Avatar from 'components/Avatar/Avatar';
 import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
+import MentionPlugin from 'components/Editor/MentionPlugin';
 import StyledEditor from 'components/Editor/Editor.style';
 import StyledComment from './Comment.style';
-import { editComment, updateBug, addReferences } from 'store/ducks/single-bug';
-import MentionPlugin from 'components/Editor/MentionPlugin';
+
+import {
+  editComment,
+  updateBug,
+  addReferences,
+  mentionPeople
+} from 'store/ducks/single-bug';
 import { StoreState } from 'store';
 
 const MarkdownPlugins = {
@@ -80,18 +86,21 @@ const Comment: React.FC<CommentProps> = ({
 
   const onSubmit = (formData: any) => {
     if (commentId === '') {
-      // it's no the comment!
+      // update the bug's body
       dispatch(updateBug(bugId, formData)).then(() => {
         setIsEditing(!isEditing);
       });
     } else {
+      // update the comment
       dispatch(editComment(bugId, commentId, formData)).then(() => {
         setIsEditing(!isEditing);
       });
     }
 
-    const references = getBugRefsFromMarkdown(markdown);
+    const references = getQuantifiersFromMarkdown(markdown, '#');
+    const mentions = getQuantifiersFromMarkdown(markdown, '@');
     references.length && dispatch(addReferences(bugId, references));
+    mentions.length && dispatch(mentionPeople(bugId, mentions));
   };
 
   const isAuthorOfComment = userId === author.id;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-const StyledLabel = styled.div`
+export const StyledLabel = styled.div`
   font-size: 14px;
   padding: 5px 10px;
   border-radius: 50px;

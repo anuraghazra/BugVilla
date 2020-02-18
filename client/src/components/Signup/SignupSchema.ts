@@ -1,10 +1,6 @@
 import * as yup from 'yup';
 
 const SignupSchema = yup.object().shape({
-  username: yup
-    .string()
-    .matches(/^[a-zA-Z0-9-]+$/gi, 'Username is invalid')
-    .required(),
   name: yup
     .string()
     .min(6)

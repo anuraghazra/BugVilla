@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { getBugRefsFromMarkdown } from 'utils';
+import { getQuantifiersFromMarkdown } from 'utils';
 import Button, { ButtonGroup } from 'components/common/Button';
 import Toast from 'components/common/Toast';
 
@@ -30,7 +30,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     handleSubmit,
     errors: formErrors
   }: any = useForm({ validationSchema: addCommentSchema });
-  
+
   const markdown = watch('body');
   const handleMarkdown = (e: any) => {
     setValue('body', e.target.value);
@@ -38,7 +38,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
 
   const onSubmit = (formData: { body: string }) => {
     dispatch(addComment(bugId, formData)).then(() => {
-      const references = getBugRefsFromMarkdown(markdown);
+      const references = getQuantifiersFromMarkdown(markdown, '#');
       references.length && dispatch(addReferences(bugId, references));
       setValue('body', '');
     });

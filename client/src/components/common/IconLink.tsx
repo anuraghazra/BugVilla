@@ -3,7 +3,7 @@ import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const NavCircleIconLink = css`
+export const CircleIconLink = css`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -44,7 +44,7 @@ const Link = styled(NavLink)<LinkProps>`
     }
   }
 
-  ${p => p.isNav && NavCircleIconLink}
+  ${p => p.isNav && CircleIconLink}
 `;
 
 interface IconLinkProps {
