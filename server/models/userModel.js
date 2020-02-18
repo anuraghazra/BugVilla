@@ -20,7 +20,7 @@ const UserInfoSchema = new mongoose.Schema({
 });
 
 UserInfoSchema.set('toJSON', {
-  transform: function(doc, ret, options) {
+  transform: function (doc, ret, options) {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
@@ -75,7 +75,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.set('toJSON', {
-  transform: function(doc, ret, options) {
+  transform: function (doc, ret, options) {
     ret.id = ret._id;
     delete ret.password;
     delete ret._id;
@@ -83,7 +83,7 @@ UserSchema.set('toJSON', {
   }
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   if (!this.provider.includes('local')) next();
   // don't rehash the password everytime
   if (this.isModified('password') || this.isNew) {
@@ -101,7 +101,7 @@ UserSchema.pre('save', function(next) {
   }
 });
 
-UserSchema.methods.isValidPassword = async function(password) {
+UserSchema.methods.isValidPassword = async function (password) {
   try {
     // Check/Compares password
     return await bcrypt.compare(password, this.password);

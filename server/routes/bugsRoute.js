@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const verify = require('../middleware/verify')
 const rateLimit = require('express-rate-limit');
 const BugsController = require('../controllers/BugsController')
 

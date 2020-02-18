@@ -1,7 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
 const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
-
+const { Notification } = require('../models/notificationModel')
 
 /**
  * @route GET /api/bugs/
@@ -84,6 +84,15 @@ exports.createBug = async (req, res) => {
     let bug = new Bug({ ...value, author: authorDetails });
     const newBug = await bug.save();
 
+    // send notifications
+    let notification = new Notification({
+      type: 'new_bug',
+      byUser: req.user.id,
+      onBug: newBug._id,
+      notificationTo: [],
+    });
+    await notification.save();
+
     res.created({ data: newBug });
   } catch (err) {
     res.internalError({
@@ -153,7 +162,16 @@ exports.toggleBugOpenClose = ({ state }) => {
       );
       if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-      console.log(req.user)
+      // send notifications
+      let notification = new Notification({
+        type: 'bug_status',
+        byUser: req.user.id,
+        onBug: bug._id,
+        bug_status: state ? 'opened' : 'closed',
+        notificationTo: [],
+      });
+      await notification.save();
+
       res.ok({ data: bug.activities });
     } catch (err) {
       res.internalError({
@@ -223,6 +241,23 @@ exports.addReferences = async (req, res) => {
     )
     if (!updated) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
+    // get the _id for the param.bugId to use it in Notification ref
+    let bug = await Bug.findOne({ bugId: req.params.bugId });
+    // get all `_id`s for `notification.references` 
+    let referencedIds = await Bug.find({
+      bugId: {
+        $in: [...value.references]
+      }
+    }).select('_id');
+    // send notifications
+    let notification = new Notification({
+      type: 'referenced',
+      byUser: req.user.id,
+      fromBug: bug._id,
+      references: referencedIds.map(v => v._id),
+      notificationTo: [],
+    });
+    await notification.save();
 
     res.ok({ data: { modified: updated.nModified } });
   } catch (err) {

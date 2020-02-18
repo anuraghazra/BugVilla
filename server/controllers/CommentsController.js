@@ -1,6 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
 const { Bug } = require('../models/bugModel');
 const { validateComment } = require('../models/commentModel');
+const { Notification } = require('../models/notificationModel');
 
 
 /**
@@ -48,6 +49,16 @@ exports.createComment = async (req, res) => {
     });
 
     let newBug = await bug.save();
+
+    // send notifications
+    let notification = new Notification({
+      type: 'commented',
+      byUser: req.user.id,
+      onBug: newBug._id,
+      notificationTo: [],
+    });
+    await notification.save();
+
     res.ok({ data: newBug.comments });
   } catch (err) {
     res.internalError({

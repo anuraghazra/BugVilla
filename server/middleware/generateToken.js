@@ -19,6 +19,9 @@ module.exports = function generateUserToken(req, res) {
     // .redirect('http://localhost:3000')
     .send(`
     <html>
+      <head>
+        <title>BugVilla</title>
+      </head>
       <body>
       <script>
         window.onload = window.close();

@@ -67,7 +67,8 @@ exports.signup = async (req, res) => {
         verification_link: verificationLink
       }
     };
-    sgMail.send(msg);
+    // sgMail.send(msg);
+    console.log(msg)
 
     res.created({
       data: {
