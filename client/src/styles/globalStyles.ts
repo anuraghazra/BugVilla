@@ -113,6 +113,14 @@ const GlobalStyles = createGlobalStyle`
     bottom: 0;
     /* background-color: rgba(88,111,253,0.2); */
   }
+
+
+  .toast-notification {
+    span {
+      border-radius: 50px !important;
+      padding: 15px !important;
+    }
+  }
 `
 
 export default GlobalStyles

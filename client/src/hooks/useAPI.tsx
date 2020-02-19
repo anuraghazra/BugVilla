@@ -19,8 +19,9 @@ const useAPI = () => {
         callback(res);
       })
       .catch((err: any) => {
-        setError(err.response.data.error);
+        setError(err);
         setLoading(false);
+        return Promise.reject(err);
       });
   }, []);
 

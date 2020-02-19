@@ -13,7 +13,7 @@ import {
 
 import Flex from 'components/common/Flex';
 import Button, { ButtonGroup } from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { ToastText as Toast } from 'components/common/Toast';
 
 import Avatar from 'components/Avatar/Avatar';
 import CodeBlock from 'components/Editor/CodeBlock';
@@ -29,6 +29,7 @@ import {
   mentionPeople
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import { notify } from 'react-notify-toast';
 
 const MarkdownPlugins = {
   code: CodeBlock,
@@ -106,10 +107,9 @@ const Comment: React.FC<CommentProps> = ({
   const isAuthorOfComment = userId === author.id;
   const showCommentEditor = isEditing && isAuthorOfComment;
 
+  editingError && notify.show(<Toast>{editingError}</Toast>, 'error');
   return (
     <StyledComment style={{ padding: showCommentEditor ? 0 : 20 }}>
-      <Toast isVisible={!!editingError} message={editingError} />
-
       {showCommentEditor ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <StyledEditor>

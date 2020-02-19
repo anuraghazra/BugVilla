@@ -11,6 +11,11 @@ import Button, { ButtonGroup } from 'components/common/Button';
 import Avatar from 'components/Avatar/Avatar';
 import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserAvatar } from 'store/ducks/auth';
+import { StoreState } from 'store';
+import { ToastText as Toast } from 'components/common/Toast';
+import { notify } from 'react-notify-toast';
 
 const customStyles = {
   content: {
@@ -50,32 +55,38 @@ const UserInfo: React.FC<UserInfoProps> = ({
   totalComments,
   totalBugs
 }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch<any>();
   const [file, setFile] = useState<File>();
-  const { register, handleSubmit, errors, watch }: any = useForm({});
+  const [modalIsOpen, setIsOpen] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const currentUser = useSelector(
+    (state: StoreState) => state.auth.user.username
+  );
+  const [isUploadPending] = useSelector((state: StoreState) => [
+    state.loading['user/UPLOAD_AVATAR']
+  ]);
+
+  const onSubmit = () => {
     const formData = new FormData();
     file && formData.append('image', file);
-    for (let name in data) {
-      formData.append(name, data[name]);
-    }
+    dispatch(updateUserAvatar(formData))
+      .then(() => {
+        setIsOpen(false);
+        notify.show(<Toast>Profile picture updated</Toast>, 'success');
+      })
+      .catch((err: any) => {
+        setIsOpen(false);
+        setFile(undefined);
+        notify.show(<Toast>{err}</Toast>, 'error');
+      });
   };
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
   return (
     <UserInfoWrapper>
       <Modal
         isOpen={modalIsOpen}
         style={customStyles}
         className="Modal"
-        onRequestClose={closeModal}
         overlayClassName="Overlay"
       >
         <h2>
@@ -87,31 +98,48 @@ const UserInfo: React.FC<UserInfoProps> = ({
         <p>Are you sure you want to change your Profile Picture?</p>
         <br />
         <ButtonGroup float="right">
-          <Button variant="danger" icon="times">
+          <Button
+            variant="danger"
+            icon="times"
+            onClick={() => {
+              setIsOpen(false);
+              setFile(undefined);
+            }}
+          >
             Cancel
           </Button>
-          <Button icon="check">Update Picture</Button>
+          <Button icon="check" isLoading={isUploadPending} onClick={onSubmit}>
+            Update Picture
+          </Button>
         </ButtonGroup>
       </Modal>
+
       <UserMetaInfo>
         <div>
-          <AvatarFileUploader
-            size="150px"
-            name="image"
-            inputRef={register({ required: 'Image is required' })}
-            file={file}
-            defaultImg={
-              <Avatar
-                className="img__preview"
-                size={150}
-                username={user.username}
-              />
-            }
-            handleFile={file => {
-              openModal();
-              setFile(file);
-            }}
-          />
+          {currentUser === user.username ? (
+            <AvatarFileUploader
+              size="150px"
+              name="image"
+              file={file}
+              defaultImg={
+                <Avatar
+                  className="img__preview"
+                  size={150}
+                  username={user.username}
+                />
+              }
+              handleFile={file => {
+                setIsOpen(true);
+                setFile(file);
+              }}
+            />
+          ) : (
+            <Avatar
+              className="img__preview"
+              size={150}
+              username={user.username}
+            />
+          )}
         </div>
         <div>
           <h2 className="text--medium">{user.name}</h2>

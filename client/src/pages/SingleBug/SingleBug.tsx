@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Toast from 'components/common/Toast';
+import { ToastText as Toast } from 'components/common/Toast';
 import Loading from 'components/common/Loading';
 
 import DashboardHeader from 'components/DashboardHeader';
@@ -18,6 +18,7 @@ import CommentEditorForm from './CommentEditorForm';
 
 import { fetchBugWithId } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import { notify } from 'react-notify-toast';
 
 export const addCommentSchema = yup.object().shape({
   body: yup
@@ -47,10 +48,10 @@ const SingleBug: React.FC = () => {
     dispatch(fetchBugWithId(bugId));
   }, [bugId]);
 
+  fetchError && notify.show(<Toast>{fetchError}</Toast>, 'error');
+
   return (
     <SingleBugWrapper>
-      <Toast isVisible={!!fetchError} message={fetchError} />
-
       {isFetching && <Loading />}
       {fetchError && <p>Something went wrong while fetching the data</p>}
       {bug ? (

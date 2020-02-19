@@ -2,6 +2,7 @@ import auth from 'utils/authHelper';
 import history from 'utils/history';
 import { Dispatch } from 'redux';
 import { API } from './single-bug';
+import { ApiAction } from 'store/middlewares/apiMiddleware';
 
 // action
 export const AUTH_LOGOUT = 'auth/LOGOUT';
@@ -10,6 +11,10 @@ export const AUTH_SET_USER = 'auth/SET_USER';
 export const CHECK_AUTH_REQUEST = 'auth/CHECK_AUTH_REQUEST';
 export const CHECK_AUTH_FAILURE = 'auth/CHECK_AUTH_FAILURE';
 export const CHECK_AUTH_SUCCESS = 'auth/CHECK_AUTH_SUCCESS';
+
+export const UPLOAD_AVATAR_REQUEST = 'user/UPLOAD_AVATAR_REQUEST';
+export const UPLOAD_AVATAR_FAILURE = 'user/UPLOAD_AVATAR_FAILURE';
+export const UPLOAD_AVATAR_SUCCESS = 'user/UPLOAD_AVATAR_SUCCESS';
 
 export const LOGIN_SUCCESS = 'login/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'login/LOGIN_FAILURE';
@@ -20,6 +25,7 @@ export const SIGNUP_SUCCESS = 'signup/SUCCESS';
 export const SIGNUP_ERROR = 'signup/ERROR';
 export const SIGNUP_LOADING = 'signup/LOADING';
 export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
+
 
 
 interface UserProps {
@@ -121,7 +127,7 @@ export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
 
 
 // side effects
-export const checkAuth = () => ({
+export const checkAuth = (): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -141,7 +147,7 @@ export const checkAuth = () => ({
   }
 })
 
-export const signUserUp = (formData: FormData) => ({
+export const signUserUp = (formData: FormData): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -161,7 +167,7 @@ export const signUserUp = (formData: FormData) => ({
   }
 })
 
-export const loginUser = (formData: { name: string, email: string }) => ({
+export const loginUser = (formData: { name: string, email: string }): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -179,5 +185,17 @@ export const loginUser = (formData: { name: string, email: string }) => ({
       dispatch(loginClearError())
       dispatch(loginError(err))
     }
+  }
+})
+
+export const updateUserAvatar = (formData: any): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: '/api/user/me/avatar/upload',
+    formData,
+    request: UPLOAD_AVATAR_REQUEST,
+    success: UPLOAD_AVATAR_SUCCESS,
+    error: UPLOAD_AVATAR_FAILURE
   }
 })

@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { StyledH3Input } from 'components/Signup/Signup.style';
 import Input from 'components/common/Form/Input';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';
@@ -13,10 +12,12 @@ import DashboardHeader from 'components/DashboardHeader';
 import StyledEditor from 'components/Editor/Editor.style';
 import AddBugWrapper from './AddBug.style';
 import useAPI from 'hooks/useAPI';
+import { ToastText as Toast } from 'components/common/Toast';
+import { notify } from 'react-notify-toast';
 
 const AddBug: React.FC = () => {
   const history = useHistory();
-  const { loading: isLoading, error: error, callAPI } = useAPI();
+  const { loading: isLoading, error, callAPI } = useAPI();
   const {
     register,
     handleSubmit,
@@ -37,12 +38,13 @@ const AddBug: React.FC = () => {
       reset();
       setValue('body', '');
       history.push('/dashboard/bugs');
+    }).catch(err => {
+      notify.show(<Toast>{err}</Toast>, 'error');
     });
   };
 
   return (
     <AddBugWrapper>
-      <Toast isVisible={!!error} message={error} />
       <DashboardHeader>
         <h1>Submit new bug</h1>
       </DashboardHeader>

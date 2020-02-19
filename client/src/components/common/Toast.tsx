@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled, { createGlobalStyle } from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { notify } from 'react-notify-toast';
+
+createGlobalStyle`
+
+`;
 
 interface StyledToastProps {
   isVisible?: boolean;
@@ -70,6 +75,42 @@ const Toast: React.FC<ToastProps> = ({ isVisible, message }) => {
         icon="times"
       />
     </StyledToast>
+  );
+};
+
+const StyledToastText = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .notification__icon {
+    margin-right: 10px;
+  }
+  .close-icon {
+    margin-left: 20px;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.2);
+      transition: 0.2s;
+    }
+  }
+`;
+export const ToastText: React.FC<{
+  icon?: any;
+  children: React.ReactNode;
+}> = ({ icon = 'exclamation-triangle', children }) => {
+  return (
+    <StyledToastText>
+      <FontAwesomeIcon className="notification__icon" icon={icon} />
+      {children}
+      <FontAwesomeIcon
+        onClick={notify.hide}
+        className="close-icon"
+        icon="times"
+      />
+    </StyledToastText>
   );
 };
 

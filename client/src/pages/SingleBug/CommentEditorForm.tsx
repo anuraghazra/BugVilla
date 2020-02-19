@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { getQuantifiersFromMarkdown } from 'utils';
 import Button, { ButtonGroup } from 'components/common/Button';
-import Toast from 'components/common/Toast';
 
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
@@ -17,6 +16,8 @@ import {
   addReferences
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import { ToastText as Toast } from 'components/common/Toast';
+import { notify } from 'react-notify-toast';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();
@@ -64,10 +65,10 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     error: state.error
   }));
 
+  commentError && notify.show(<Toast>{commentError}</Toast>, 'error');
+  toggleError && notify.show(<Toast>{toggleError}</Toast>, 'error');
   return (
     <>
-      <Toast isVisible={!!commentError} message={commentError} />
-      <Toast isVisible={!!toggleError} message={toggleError} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledEditor>
           <Editor

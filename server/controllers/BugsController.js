@@ -117,6 +117,7 @@ exports.updateBug = async (req, res) => {
     if (error) {
       return res.unprocessable({ error: error.details[0].message })
     }
+    return res.notFound({ error: 'error' })
 
     let bug = await Bug.findOneAndUpdate(
       {

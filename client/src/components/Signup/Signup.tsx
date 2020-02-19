@@ -7,7 +7,7 @@ import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { ToastText as Toast } from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
@@ -16,6 +16,7 @@ import SignupSchema from './SignupSchema';
 
 import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
+import { notify } from 'react-notify-toast';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,11 +38,11 @@ const Signup: React.FC = () => {
     }
     dispatch(signUserUp(formData));
   };
+  
+  signupError && notify.show(<Toast>{signupError}</Toast>, 'error');
 
   return (
     <SignupWrapper>
-      <Toast isVisible={!!signupError} message={signupError} />
-
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -47,6 +47,7 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
     } else {
       dispatch({ type: error, payload: err || 'Something went wrong' });
     }
+    return Promise.reject(err)
   }
 }
 

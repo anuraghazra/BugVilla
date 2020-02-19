@@ -9,7 +9,7 @@ import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { ToastText as Toast } from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
 import { loginUser, checkAuth } from 'store/ducks/auth';
@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
 import googleLogo from 'assets/svg/google.svg';
 import http from 'utils/httpInstance';
+import { notify } from 'react-notify-toast';
 
 // import { GoogleLogin } from 'react-google-login';
 
@@ -68,8 +69,8 @@ const Login: React.FC = () => {
       process.env.NODE_ENV === 'development'
         ? 'localhost:5000'
         : window.location.host;
-    
-        // window.location.href = `${window.location.protocol}//${url}/api/user/auth/google`;
+
+    // window.location.href = `${window.location.protocol}//${url}/api/user/auth/google`;
 
     let consentScreen: any = window.open(
       `${window.location.protocol}//${url}/api/user/auth/google`,
@@ -84,10 +85,9 @@ const Login: React.FC = () => {
     });
   };
 
+  loginError && notify.show(<Toast>{loginError}</Toast>, 'error');
   return (
     <LoginWrapper>
-      <Toast isVisible={!!loginError} message={loginError} />
-
       <Flex align="center" justify="center" direction="column">
         <BugVillaLogo />
         <h2 className="text--bold">Welcome back!</h2>

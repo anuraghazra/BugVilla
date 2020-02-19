@@ -8,9 +8,10 @@ import { editLabels } from 'store/ducks/single-bug';
 import Label from 'components/common/Label';
 import Flex from 'components/common/Flex';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { ToastText as Toast } from 'components/common/Toast';
 import Avatar from 'components/Avatar/Avatar';
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
+import { notify } from 'react-notify-toast';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
@@ -48,11 +49,11 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
 
   let participants: string[] = getParticipants(bug);
 
+  labelEditError && notify.show(<Toast>{labelEditError}</Toast>, 'error');
+
   return (
     <>
       <div>
-        <Toast isVisible={!!labelEditError} message={labelEditError} />
-
         <h4 className="label__header color--gray">
           Labels
           <LabelEditDropdown
