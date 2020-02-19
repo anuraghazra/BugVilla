@@ -11,14 +11,18 @@ interface Props {
   name?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
   file?: PreviewFile;
+  defaultImg?: any;
   handleFile: (file: PreviewFile) => void;
+  size?: string;
 }
 
 const AvatarFileUploader: React.FC<Props> = ({
   name,
   inputRef,
   handleFile,
-  file
+  defaultImg,
+  file,
+  size
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -37,16 +41,16 @@ const AvatarFileUploader: React.FC<Props> = ({
   }, [file]);
 
   return (
-    <AvatarContainer>
+    <AvatarContainer size={size}>
       <div className="dropzone" {...getRootProps({ className: 'dropzone' })}>
         <input type="file" name={name} ref={inputRef} {...getInputProps()} />
-        <p>Upload Image</p>
+        <p>Change Avatar</p>
       </div>
 
       {file ? (
         <img key={file.name} className="img__preview" src={file.preview} />
       ) : (
-        <img className="img__preview" src={dummyImage} />
+        defaultImg
       )}
     </AvatarContainer>
   );

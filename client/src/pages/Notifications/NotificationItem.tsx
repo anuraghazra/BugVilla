@@ -34,6 +34,7 @@ const StyledNotificationItem = styled.div`
   }
 
   @media screen and (${p => p.theme.media.desktop}) {
+    padding: 0px;
     margin: 30px 0;
     small {
       margin: 0;

@@ -18,20 +18,20 @@ const NotificationIcon: React.FC<{ type: string; bugStatus?: string }> = ({
   bugStatus
 }) => {
   const icons: any = {
-    commented: ['comment', 'help-wanted'],
-    mentioned: ['at', 'help-wanted'],
+    commented: ['comment', 'secondary'],
+    mentioned: ['at', 'secondary'],
     // bugStatus special case,
     // change icon and color depending on 'close' or 'open' state
     bug_status: [
       bugStatus === 'opened' ? 'exclamation' : 'ban',
-      bugStatus === 'opened' ? 'feature' : 'bug'
+      bugStatus === 'opened' ? 'success' : 'danger'
     ],
-    referenced: ['retweet', 'feature'],
-    new_bug: ['bug', 'feature']
+    referenced: ['retweet', 'success'],
+    new_bug: ['bug', 'danger']
   };
   return (
     <StyledNotificationIcon
-      className={`${icons[type][1]} ${icons[type][1]}--bg`}
+      variant={icons[type][1]}
     >
       <FontAwesomeIcon className="faIcon" icon={icons[type][0]} />
     </StyledNotificationIcon>

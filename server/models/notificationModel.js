@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 
-// mentioned: byUser, fromBug, [mentions]
-// commented: byUser, onBug
-// bug_status: byUser, onBug, bug_status
-// new_bug: byUser, onBug
-// referenced: byUser, fromBug, [references]
 const NotificationSchema = new mongoose.Schema({
   type: {
     type: String,

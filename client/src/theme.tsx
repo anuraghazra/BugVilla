@@ -1,8 +1,16 @@
 import { DefaultTheme } from 'styled-components';
+import colorVariants from 'components/common/colorVariants';
+import { CSSProp } from 'styled-components';
 
 // and extend them!
 declare module 'styled-components' {
   export interface DefaultTheme {
+    variants: {
+      primary: CSSProp;
+      secondary: CSSProp;
+      danger: CSSProp;
+      success: CSSProp;
+    };
     colors: {
       brand: {
         primary: string;
@@ -82,6 +90,9 @@ const size = {
 };
 
 const theme: DefaultTheme = {
+  variants: {
+    ...colorVariants
+  },
   font: {
     primary: 'Product Sans Regular',
     primaryBold: 'Product Sans Bold',

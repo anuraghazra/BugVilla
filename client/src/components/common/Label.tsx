@@ -1,7 +1,22 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-export const StyledLabel = styled.div`
+const VARIANTS_MAP: any = {
+  'help wanted': 'secondary',
+  enhancement: 'secondary',
+  feature: 'success',
+  bug: 'danger'
+};
+
+interface LabelProps {
+  type: 'bug' | 'feature' | 'help wanted' | 'enhancement' | string | null;
+  children: React.ReactNode;
+  [x: string]: any;
+}
+interface StyledLabelProps {
+  variant: string;
+}
+export const StyledLabel = styled.div<StyledLabelProps>`
   font-size: 14px;
   padding: 5px 10px;
   border-radius: 50px;
@@ -10,38 +25,16 @@ export const StyledLabel = styled.div`
   width: fit-content;
   line-height: 1;
 
-  &.bug {
-    color: ${p => p.theme.colors.common.red};
-    &--bg {
-      background-color: ${p => p.theme.colors.common.redlight};
-    }
-  }
-  &.feature {
-    color: ${p => p.theme.colors.common.green};
-    &--bg {
-      background-color: ${p => p.theme.colors.common.greenlight};
-    }
-  }
-  &.enhancement {
-    color: ${p => p.theme.colors.brand.primary};
-    &--bg {
-      background-color: ${p => p.theme.colors.brand.accent};
-    }
-  }
-  &.help-wanted {
-    color: ${p => p.theme.colors.brand.primary};
-    &--bg {
-      background-color: ${p => p.theme.colors.brand.accent};
-    }
-  }
+  ${p => (p.theme.variants as any)[p.variant]}
 `;
 
 export const StyledBulletLabel = styled(StyledLabel)`
-  font-size: 14px;
   display: flex;
-  padding: 5px 10px;
   border-radius: 5px;
   margin-bottom: 0px;
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
 
   .bullet {
     width: 10px;
@@ -49,45 +42,28 @@ export const StyledBulletLabel = styled(StyledLabel)`
     margin-top: 2px;
     margin-right: 8px;
     border-radius: 50px;
-    &.bug {
+    &.danger {
       background-color: ${p => p.theme.colors.common.red};
     }
-    &.feature {
+    &.success {
       background-color: ${p => p.theme.colors.common.green};
     }
-    &.enhancement {
+    &.secondary {
       background-color: ${p => p.theme.colors.brand.primary};
     }
-    &.help-wanted {
-      background-color: ${p => p.theme.colors.brand.primary};
-    }
-  }
-  & {
-    background-color: none !important;
   }
 `;
 
-interface LabelProps {
-  /** 'bug' | 'feature' | 'help wanted' | 'enhancement' */
-  type: string | null;
-  children: React.ReactNode;
-  [x: string]: any;
-}
 const Label: React.FC<LabelProps> = ({ children, type, style }) => {
-  const labelType = type!.replace(/\s/, '-');
   return (
-    <StyledLabel style={style} className={`${labelType} ${labelType}--bg`}>
-      {children}
-    </StyledLabel>
+    <StyledLabel variant={VARIANTS_MAP[type as string]}>{children}</StyledLabel>
   );
 };
 
 export const BulletLabel: React.FC<LabelProps> = ({ type, children }) => {
-  const labelType = type!.replace(/\s/, '-');
-
   return (
-    <StyledBulletLabel className={labelType}>
-      <div className={'bullet ' + labelType}></div>
+    <StyledBulletLabel variant={VARIANTS_MAP[type as string]}>
+      <div className={`bullet ${VARIANTS_MAP[type as string]}`} />
       {children}
     </StyledBulletLabel>
   );

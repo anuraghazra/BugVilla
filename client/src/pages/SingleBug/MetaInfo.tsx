@@ -5,9 +5,9 @@ import { AuthorProps } from './SingleBug';
 import { formatDate } from 'utils';
 
 import Flex from 'components/common/Flex';
-import StatusIcon from 'components/common/StatusIcon';
 import Avatar from 'components/Avatar/Avatar';
 import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
+import CircleIcon from 'components/common/CircleIcon';
 
 interface MetaProps {
   isOpen?: boolean;
@@ -26,7 +26,11 @@ const MetaInfo: React.FC<MetaProps> = ({
 }) => (
   <StyledMetaInfo>
     <Flex align="center" nowrap>
-      <StatusIcon isOpen={isOpen} />
+      <CircleIcon
+        size="30px"
+        variant={isOpen ? 'success' : 'danger'}
+        icon={isOpen ? 'exclamation' : 'ban'}
+      />
       {showAvatar && (
         <Avatar
           style={{ marginLeft: 15 }}

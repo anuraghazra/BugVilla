@@ -55,6 +55,12 @@ const UserSchema = new mongoose.Schema(
       minLength: 6,
       maxLength: 100
     },
+    bio: {
+      type: String,
+      minLength: 6,
+      maxLength: 200,
+      default: '404 Bio Not Found'
+    },
     avatar: {
       type: mongoose.Schema.Types.ObjectId
     },

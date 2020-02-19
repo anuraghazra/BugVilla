@@ -35,4 +35,7 @@ export default css`
   .ml-15 {
     margin-left: 15px;
   }
+  .mr-10 {
+    margin-right: 10px;
+  }
 `

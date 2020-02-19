@@ -1,13 +1,12 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { 
-  faGoogle,
-} from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRight,
   faLink,
   faPlus,
   faAt,
   faBug,
+  faCheck,
   faComment,
   faEnvelope,
   faLock,
@@ -35,6 +34,7 @@ export default function registerIcons() {
     faPlus,
     faAt,
     faBug,
+    faCheck,
     faComment,
     faEnvelope,
     faLock,
@@ -53,6 +53,6 @@ export default function registerIcons() {
     faEllipsisV,
     faExclamation,
     faExclamationTriangle,
-    faGoogle,
+    faGoogle
   );
 }

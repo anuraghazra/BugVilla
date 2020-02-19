@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 import Flex from 'components/common/Flex';
-import StatusIcon from 'components/common/StatusIcon';
 
 import { AuthorProps } from './SingleBug';
 import Avatar from 'components/Avatar/Avatar';
 import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
+import CircleIcon from 'components/common/CircleIcon';
 
 interface ReferenceProps {
   by: AuthorProps;
@@ -24,7 +24,8 @@ const Reference: React.FC<ReferenceProps> = ({ by, from, date }) => {
     <StyledReference>
       <StyledMetaInfo>
         <Flex align="center" nowrap>
-          <StatusIcon referred />
+          <CircleIcon size="30px" icon="retweet" />
+
           <Avatar
             style={{ marginLeft: 15 }}
             width="30px"

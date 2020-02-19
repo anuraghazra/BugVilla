@@ -91,6 +91,28 @@ const GlobalStyles = createGlobalStyle`
       }
     }
   }
+
+
+  .Modal {
+    position: absolute;
+    border-radius: 5px;
+    padding: 30px 40px;
+    border: ${p => p.theme.border};
+    background-color: ${p => p.theme.colors.common.white};
+    box-shadow: 0 8px 25px 0px rgba(0,0,0,0.1);
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(88,111,253,0.2); */
+  }
 `
 
 export default GlobalStyles

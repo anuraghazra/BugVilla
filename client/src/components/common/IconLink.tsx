@@ -2,27 +2,16 @@ import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CircleIcon from './CircleIcon';
 
-export const CircleIconLink = css`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: row-reverse;
-
-  .faIcon {
-    margin: 0;
+export const isNavStyles = css`
+  .icon {
     margin-right: 10px;
-    background-color: ${p => p.theme.colors.brand.accent};
-    color: ${p => p.theme.colors.brand.primary};
-    border-radius: 100px;
-    width: 28px;
-    height: 28px;
-    padding: 7px;
+    transition: 0.2s;
   }
   &:hover {
     color: ${p => p.theme.colors.brand.primary};
-    .faIcon {
-      transform: translateX(0);
+    .icon {
       background-color: ${p => p.theme.colors.brand.primary};
       color: ${p => p.theme.colors.brand.accent};
     }
@@ -33,18 +22,23 @@ interface LinkProps extends NavLinkProps {
   isNav?: boolean;
 }
 const Link = styled(NavLink)<LinkProps>`
-  svg {
-    transition: 0.3s;
-  }
+  display: flex;
+  align-items: center;
+  ${p =>
+    p.isNav
+      ? isNavStyles
+      : css`
+          svg {
+            transition: 0.3s;
+          }
 
-  &:hover {
-    svg {
-      transform: translateX(5px);
-      transition: 0.3s;
-    }
-  }
-
-  ${p => p.isNav && CircleIconLink}
+          &:hover {
+            svg {
+              transform: translateX(5px);
+              transition: 0.3s;
+            }
+          }
+        `}
 `;
 
 interface IconLinkProps {
@@ -57,7 +51,7 @@ interface IconLinkProps {
 
 const defaultProps: IconLinkProps = {
   to: '/',
-  children: 'null',
+  children: null,
   icon: 'arrow-right'
 };
 
@@ -70,8 +64,17 @@ const IconLink: React.FC<IconLinkProps> = ({
 }) => {
   return (
     <Link isNav={isNav} {...props} to={to}>
-      {children}
-      <FontAwesomeIcon className="faIcon" icon={icon} />
+      {isNav ? (
+        <>
+          <CircleIcon className="icon" size="28px" icon={icon} />
+          {children}
+        </>
+      ) : (
+        <>
+          {children}
+          <FontAwesomeIcon className="faIcon" icon={icon} />
+        </>
+      )}
     </Link>
   );
 };

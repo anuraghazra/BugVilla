@@ -3,10 +3,9 @@ import styled, { css } from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface StyledButtonProps {
-  width?: string;
-  success?: boolean;
-  danger?: boolean;
+  variant?: 'primary' | 'secondary' | 'danger' | 'success';
   size?: 'sm' | 'md';
+  width?: string;
 }
 
 interface ButtonProps extends StyledButtonProps {
@@ -16,36 +15,21 @@ interface ButtonProps extends StyledButtonProps {
   [x: string]: any;
 }
 
-export const ButtonGroup = styled.div`
-  > button {
-    margin-right: 10px;
-  }
-`;
-
 // prettier-ignore
 const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTMLDivElement>>`
-  background-color: ${p => p.theme.colors.brand.primary};
-  color: ${p => p.theme.colors.common.white};
-  ${p => p.success && css`
-    background-color: ${p => p.theme.colors.common.greenlight};
-    color: ${p => p.theme.colors.common.green};
-  `}
-  ${p => p.danger && css`
-    background-color: ${p => p.theme.colors.common.redlight};
-    color: ${p => p.theme.colors.common.red};
-  `}
-
+  ${p => (p.theme.variants as any)[p.variant as string]}
   
   width: ${p => p.width};
   height: fit-content;
+  margin: 10px 0;
+  padding: 10px 15px;
   border: none;
   border-radius: 50px;
-  padding: 10px 15px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: 0.2s;
+
   line-height: 1;
   font-size: 14px;
+  transition: 0.2s;
+  cursor: pointer;
 
   ${p => p.size === 'sm' && css`
     padding: 10px 15px;
@@ -71,14 +55,22 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
 `;
 
 const Button: React.FC<ButtonProps> = ({
+  variant = 'primary',
   size,
   width,
   icon,
   children,
+  type,
   isLoading,
   ...props
 }) => (
-  <StyledButton {...props} size={size} disabled={isLoading} width={width}>
+  <StyledButton
+    {...props}
+    variant={variant}
+    size={size}
+    disabled={isLoading}
+    width={width}
+  >
     {icon && (
       <FontAwesomeIcon
         data-testid="icon"
@@ -89,5 +81,13 @@ const Button: React.FC<ButtonProps> = ({
     {children}
   </StyledButton>
 );
+
+export const ButtonGroup = styled.div<{ float?: string }>`
+  > button {
+    margin-right: 10px;
+  }
+
+  float: ${p => p.float || 'initial'};
+`;
 
 export default Button;

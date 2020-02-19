@@ -1,9 +1,9 @@
 import styled from 'styled-components/macro';
 
-const AvatarContainer = styled.section`
+const AvatarContainer = styled.section<{ size?: string; }>`
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: ${p => p.size || '130px'};
+  height: ${p => p.size || '130px'};
   border: ${p => p.theme.border};
   border-radius: 100%;
   overflow: hidden;

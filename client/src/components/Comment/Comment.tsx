@@ -119,8 +119,13 @@ const Comment: React.FC<CommentProps> = ({
               errors={formErrors}
               inputRef={register}
             />
-            <ButtonGroup style={{ float: 'right' }}>
-              <Button danger icon="times" size="sm" onClick={handleEditorState}>
+            <ButtonGroup float="right">
+              <Button
+                variant="danger"
+                icon="times"
+                size="sm"
+                onClick={handleEditorState}
+              >
                 Cancel
               </Button>
               <Button

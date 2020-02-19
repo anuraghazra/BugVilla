@@ -10,7 +10,6 @@ import Toast from 'components/common/Toast';
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
 import CloseReopenButton from './CloseReopenButton';
-
 import { addCommentSchema } from './SingleBug';
 import {
   addComment,
@@ -81,7 +80,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
             <CloseReopenButton
               isOpen={bugIsOpen}
               isLoading={isToggleLoading}
-              handleRequst={sendToggleRequest}
+              onRequestToggle={sendToggleRequest}
             />
             <Button isLoading={isCommentLoading} type="submit" icon="plus">
               Comment
