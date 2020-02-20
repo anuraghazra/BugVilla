@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import useFetch from 'hooks/useFetch';
 import Flex from 'components/common/Flex';
 import Loading from 'components/common/Loading';
+import Avatar from 'components/common/Avatar';
 
-import Avatar from 'components/Avatar/Avatar';
 import DashboardHeader from 'components/DashboardHeader';
 
 const ProfilesWrapper = styled.section`
@@ -14,6 +14,10 @@ const ProfilesWrapper = styled.section`
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-row-gap: 50px;
     margin-top: ${p => p.theme.spacings.top * 2}px;
+
+    h3 {
+      word-break: break-all;
+    }
   }
 `;
 

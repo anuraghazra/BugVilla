@@ -8,7 +8,7 @@ import 'react-tabs/style/react-tabs.css';
 
 import useFetch from 'hooks/useFetch';
 import Flex from 'components/common/Flex';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'components/common/Avatar';
 import { InputWrapper } from 'components/common/Form/Input';
 
 import CodeBlock from './CodeBlock';

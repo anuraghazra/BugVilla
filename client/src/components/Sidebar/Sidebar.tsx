@@ -1,15 +1,16 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Avatar from 'components/Avatar/Avatar';
+import http from 'utils/httpInstance';
+import Avatar from 'components/common/Avatar';
 import BugVillaLogo from 'components/common/Logo';
 import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
+
 import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
-import http from 'utils/httpInstance';
 import { StoreState } from 'store';
 import { logUserOut } from 'store/ducks/auth';
-import { useHistory } from 'react-router-dom';
 
 interface SidebarProps {
   isOpen?: boolean;

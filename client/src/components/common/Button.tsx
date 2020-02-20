@@ -32,7 +32,7 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   cursor: pointer;
 
   ${p => p.size === 'sm' && css`
-    padding: 10px 15px;
+    padding: 8px 10px;
     font-size: 12px;
   `}
   ${p => p.size === 'md' && css`

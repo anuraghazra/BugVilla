@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
@@ -9,17 +8,14 @@ import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import { ToastText as Toast } from 'components/common/Toast';
+import Toast from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
 import { loginUser, checkAuth } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
 import googleLogo from 'assets/svg/google.svg';
-import http from 'utils/httpInstance';
 import { notify } from 'react-notify-toast';
-
-// import { GoogleLogin } from 'react-google-login';
 
 const LoginSchema = yup.object().shape({
   email: yup
@@ -51,7 +47,7 @@ const GoogleButton = styled(Button)`
 `;
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const [isLoading, loginError] = useSelector(({ auth }: StoreState) => [
     auth.isLoginPending,
     auth.loginError
@@ -70,17 +66,20 @@ const Login: React.FC = () => {
         ? 'localhost:5000'
         : window.location.host;
 
-    // window.location.href = `${window.location.protocol}//${url}/api/user/auth/google`;
-
-    let consentScreen: any = window.open(
+    window.open(
       `${window.location.protocol}//${url}/api/user/auth/google`,
       '__blank',
       'width=500&height=800'
     );
-    // consentScreen.onclose = function () { console.log('closed') }
     window.addEventListener('message', event => {
-      if (event.data === 'OAuth Success') {
-        dispatch(checkAuth());
+      if (event.data === 'success') {
+        dispatch(checkAuth())
+          .then(() => {
+            notify.show(<Toast>Login success</Toast>, 'success');
+          })
+          .catch((err: string) => {
+            notify.show(<Toast>{err}</Toast>, 'error');
+          });
       }
     });
   };

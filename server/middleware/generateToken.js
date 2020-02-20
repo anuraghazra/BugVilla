@@ -15,7 +15,7 @@ module.exports = function generateUserToken(req, res) {
   }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
 
   res.status(200)
-    .cookie('jwt', token)
+    .cookie('jwt', token, { maxAge: 2 * 3600000, httpOnly: true })
     // .redirect('http://localhost:3000')
     .send(`
     <html>
@@ -29,7 +29,7 @@ module.exports = function generateUserToken(req, res) {
         if (window.location.hostname === 'localhost') {
           originUrl = 'http://localhost:3000'
         }
-        window.opener.postMessage('OAuth Success', originUrl);
+        window.opener.postMessage('success', originUrl);
       </script>
       </body>
     </html>

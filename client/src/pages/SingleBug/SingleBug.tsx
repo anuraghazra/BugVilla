@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ToastText as Toast } from 'components/common/Toast';
+import Toast from 'components/common/Toast';
 import Loading from 'components/common/Loading';
 
 import DashboardHeader from 'components/DashboardHeader';

@@ -7,7 +7,7 @@ import Flex from 'components/common/Flex';
 import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import { ToastText as Toast } from 'components/common/Toast';
+import Toast from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';

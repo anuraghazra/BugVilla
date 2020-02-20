@@ -29,13 +29,13 @@ const InputLabel = styled.label<InputLabelProps>`
   }
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   width: 100%;
   border: none;
   outline: none;
   background: none;
   margin-left: 10px;
-
+  padding: 10px;
   &:focus + span {
     color: ${p => p.theme.colors.brand.primary} !important;
     border-radius: 50px;
@@ -45,6 +45,12 @@ const StyledInput = styled.input`
   &::placeholder {
     color: ${p => p.theme.colors.text.gray};
   }
+`;
+
+export const Textarea = styled(StyledInput).attrs(p => ({ as: 'textarea' }))`
+  padding: 10px;
+  margin: 0;
+  outline: 2px solid ${p => p.theme.colors.brand.accent};
 `;
 
 export const InputWrapper = styled.div`

@@ -7,10 +7,6 @@ export const UserInfoWrapper = styled.div`
   @media screen and (${p => p.theme.media.desktop}) {
     grid-template-columns: 1fr;
   }
-
-  .text--standout {
-    
-  }
 `;
 
 export const UserMetaInfo = styled.div`

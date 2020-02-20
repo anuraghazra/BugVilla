@@ -12,7 +12,7 @@ import DashboardHeader from 'components/DashboardHeader';
 import StyledEditor from 'components/Editor/Editor.style';
 import AddBugWrapper from './AddBug.style';
 import useAPI from 'hooks/useAPI';
-import { ToastText as Toast } from 'components/common/Toast';
+import Toast from 'components/common/Toast';
 import { notify } from 'react-notify-toast';
 
 const AddBug: React.FC = () => {

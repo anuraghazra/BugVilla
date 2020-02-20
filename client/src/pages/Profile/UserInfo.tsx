@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
-import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { notify } from 'react-notify-toast';
 
 import { getTimeDiff } from 'utils';
-import Flex from 'components/common/Flex';
-import CircleIcon from 'components/common/CircleIcon';
+import Avatar from 'components/common/Avatar';
 import Button, { ButtonGroup } from 'components/common/Button';
+import CircleIcon from 'components/common/CircleIcon';
+import Flex from 'components/common/Flex';
+import Toast from 'components/common/Toast';
+import { Textarea } from 'components/common/Form/Input';
 
-import Avatar from 'components/Avatar/Avatar';
+import { StoreState } from 'store';
+import { updateUserAvatar, updateUserBio } from 'store/ducks/auth';
 import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserAvatar } from 'store/ducks/auth';
-import { StoreState } from 'store';
-import { ToastText as Toast } from 'components/common/Toast';
-import { notify } from 'react-notify-toast';
 
 const customStyles = {
   content: {
@@ -29,20 +29,80 @@ const customStyles = {
 };
 Modal.setAppElement('#root');
 
-const StandOutText = styled.span`
-  font-size: 1.5em;
-  color: ${p => p.theme.colors.brand.primary};
-  font-family: ${p => p.theme.font.primaryMedium};
+const StandOut = styled.p<{ prefix: any }>`
+  &:before {
+    content: '${p => p.prefix} ';
+    font-size: 1.5em;
+    color: ${p => p.theme.colors.brand.primary};
+    font-family: ${p => p.theme.font.primaryMedium};
+  }
 `;
-const StandOut: React.FC<{ value: any; children: React.ReactNode }> = ({
-  value,
-  children
-}) => (
-  <p>
-    <StandOutText className="text--standout">{value + ' '}</StandOutText>
-    {children}
-  </p>
-);
+
+
+const Bio: React.FC<{ user: any; currentUser: any }> = ({
+  user,
+  currentUser
+}) => {
+  const dispatch = useDispatch<any>();
+  const isBioLoading = useSelector(
+    (state: StoreState) => state.loading['user/UPDATE_BIO']
+  );
+  const [isBioEditing, setBioEditing] = useState(false);
+  const toggleBioEdit = () => {
+    setBioEditing(!isBioEditing);
+  };
+
+  const updateBio = (e: any) => {
+    setBioEditing(false);
+    dispatch(updateUserBio({ bio: e.target.value }))
+      .then(() => {
+        notify.show(<Toast>Bio updated</Toast>, 'success');
+      })
+      .catch((err: string) => {
+        notify.show(<Toast>{err}</Toast>, 'error');
+      });
+  };
+
+  const isCurrentUser = currentUser.username === user.username;
+  return (
+    <div>
+      <h2 className="text--medium">{user.name}</h2>
+      <span className="color--gray">@{user.username}</span>
+      <p>
+        {isBioEditing ? (
+          <Textarea
+            as="textarea"
+            onBlur={updateBio}
+            style={{ resize: 'none' }}
+            autoFocus={isBioEditing}
+            rows={3}
+          >
+            {isCurrentUser ? currentUser.bio : user.bio}
+          </Textarea>
+        ) : isCurrentUser ? (
+          currentUser.bio
+        ) : (
+          user.bio
+        )}
+      </p>
+      {isCurrentUser && (
+        <ButtonGroup>
+          <Button
+            isLoading={isBioLoading}
+            style={{ margin: 0 }}
+            onClick={toggleBioEdit}
+            icon="edit"
+            size="sm"
+            variant="secondary"
+          >
+            Edit bio
+          </Button>
+        </ButtonGroup>
+      )}
+    </div>
+  );
+};
+
 
 interface UserInfoProps {
   user: any;
@@ -59,9 +119,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
   const [file, setFile] = useState<File>();
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  const currentUser = useSelector(
-    (state: StoreState) => state.auth.user.username
-  );
+  const currentUser = useSelector((state: StoreState) => state.auth.user);
   const [isUploadPending] = useSelector((state: StoreState) => [
     state.loading['user/UPLOAD_AVATAR']
   ]);
@@ -80,6 +138,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
         notify.show(<Toast>{err}</Toast>, 'error');
       });
   };
+
+  const isCurrentUser = currentUser.username === user.username;
 
   return (
     <UserInfoWrapper>
@@ -115,8 +175,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
       </Modal>
 
       <UserMetaInfo>
-        <div>
-          {currentUser === user.username ? (
+        <Flex align="center" direction="column">
+          {isCurrentUser ? (
             <AvatarFileUploader
               size="150px"
               name="image"
@@ -140,17 +200,13 @@ const UserInfo: React.FC<UserInfoProps> = ({
               username={user.username}
             />
           )}
-        </div>
-        <div>
-          <h2 className="text--medium">{user.name}</h2>
-          <span className="color--gray">@{user.username}</span>
-          <p>{user.bio}</p>
-        </div>
+        </Flex>
+        <Bio currentUser={currentUser} user={user} />
       </UserMetaInfo>
       <div>
-        <StandOut value={totalComments || 0}>Comments</StandOut>
-        <StandOut value={totalBugs || 0}>Bugs issued</StandOut>
-        <StandOut value={'Joined'}>{getTimeDiff(user.date_joined)}</StandOut>
+        <StandOut prefix={totalComments || 0}>Comments</StandOut>
+        <StandOut prefix={totalBugs || 0}>Bugs issued</StandOut>
+        <StandOut prefix={'Joined'}>{getTimeDiff(user.date_joined)}</StandOut>
       </div>
     </UserInfoWrapper>
   );

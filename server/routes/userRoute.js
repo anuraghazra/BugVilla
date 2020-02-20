@@ -18,6 +18,7 @@ router.get('/auth/google/callback', passportGoogle, generateUserToken);
 
 router.get('/', passportJWT, UserController.getAllUsers);
 router.get('/me', passportJWT, UserController.getCurrent);
+router.patch('/me/bio', passportJWT, UserController.updateBio);
 router.post('/check-auth', passportJWT, UserController.checkAuth);
 router.post('/signup', avatarUpload, UserController.signup);
 router.post("/login", UserController.login);

@@ -1,4 +1,5 @@
 /// <reference path="./mytypes.d.ts" />
+const Joi = require('@hapi/joi');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -67,8 +68,7 @@ exports.signup = async (req, res) => {
         verification_link: verificationLink
       }
     };
-    // sgMail.send(msg);
-    console.log(msg)
+    sgMail.send(msg);
 
     res.created({
       data: {
@@ -129,7 +129,7 @@ exports.login = async (req, res) => {
     }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
 
     res.status(200)
-      .cookie('jwt', token)
+      .cookie('jwt', token, { maxAge: 2 * 3600000, httpOnly: true })
       .send({
         data: {
           isVerified: user.isVerified,
@@ -156,6 +156,32 @@ exports.logout = (req, res) => {
   req.logout();
   // res.send(req.user)
   res.status(200).clearCookie('jwt').send({ message: 'logged out' })
+}
+
+/**
+ * @route PATCH /user/me/bio
+ * @type RequestHandler
+ */
+exports.updateBio = async (req, res) => {
+  const { error, value } = Joi.object({
+    bio: Joi.string().max(100).required()
+  }).validate(req.body);
+
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  let user = await User.findOneAndUpdate({
+    _id: req.user.id
+  }, {
+    bio: value.bio
+  }, { new: true });
+
+  console.log(user);
+
+  if (!user) return res.notFound({ error: 'User not found' });
+
+  res.ok({ data: user.bio })
 }
 
 

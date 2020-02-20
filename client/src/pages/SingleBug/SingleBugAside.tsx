@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
+import { notify } from 'react-notify-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StoreState } from 'store';
 import { editLabels } from 'store/ducks/single-bug';
 
-import Label from 'components/common/Label';
-import Flex from 'components/common/Flex';
+import Avatar from 'components/common/Avatar';
 import Button from 'components/common/Button';
-import { ToastText as Toast } from 'components/common/Toast';
-import Avatar from 'components/Avatar/Avatar';
+import Flex from 'components/common/Flex';
+import Label from 'components/common/Label';
+import Toast from 'components/common/Toast';
+
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
-import { notify } from 'react-notify-toast';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {

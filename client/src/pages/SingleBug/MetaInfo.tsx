@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { AuthorProps } from './SingleBug';
 import { formatDate } from 'utils';
-
 import Flex from 'components/common/Flex';
-import Avatar from 'components/Avatar/Avatar';
-import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
+import Avatar from 'components/common/Avatar';
 import CircleIcon from 'components/common/CircleIcon';
+
+import { AuthorProps } from './SingleBug';
+import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
 
 interface MetaProps {
   isOpen?: boolean;

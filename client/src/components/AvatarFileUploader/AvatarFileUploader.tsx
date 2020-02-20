@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { notify } from 'react-notify-toast';
 import { useDropzone } from 'react-dropzone';
 
-import dummyImage from 'assets/images/avatar_dummy.png';
+import Toast from 'components/common/Toast';
 import AvatarContainer from './AvatarFileUploader.style';
+
 
 interface PreviewFile extends File {
   preview?: any;
@@ -29,8 +31,12 @@ const AvatarFileUploader: React.FC<Props> = ({
     multiple: false,
     maxSize: 1 * 1024 * 1024,
     onDrop: (acceptedFiles: PreviewFile[]): void => {
-      acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
-      handleFile(acceptedFiles[0]);
+      try {
+        acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
+        handleFile(acceptedFiles[0]);
+      } catch (err) {
+        notify.show(<Toast>Something went crazy!</Toast>, 'error');
+      }
     }
   });
 

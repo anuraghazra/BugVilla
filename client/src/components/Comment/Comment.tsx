@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { notify } from 'react-notify-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -11,11 +12,11 @@ import {
   addCommentSchema as CommentSchema
 } from 'pages/SingleBug/SingleBug';
 
-import Flex from 'components/common/Flex';
+import Avatar from 'components/common/Avatar';
 import Button, { ButtonGroup } from 'components/common/Button';
-import { ToastText as Toast } from 'components/common/Toast';
+import Flex from 'components/common/Flex';
+import Toast from 'components/common/Toast';
 
-import Avatar from 'components/Avatar/Avatar';
 import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
 import MentionPlugin from 'components/Editor/MentionPlugin';
@@ -29,7 +30,6 @@ import {
   mentionPeople
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import { notify } from 'react-notify-toast';
 
 const MarkdownPlugins = {
   code: CodeBlock,

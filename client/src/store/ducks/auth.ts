@@ -1,4 +1,3 @@
-import auth from 'utils/authHelper';
 import history from 'utils/history';
 import { Dispatch } from 'redux';
 import { API } from './single-bug';
@@ -16,6 +15,10 @@ export const UPLOAD_AVATAR_REQUEST = 'user/UPLOAD_AVATAR_REQUEST';
 export const UPLOAD_AVATAR_FAILURE = 'user/UPLOAD_AVATAR_FAILURE';
 export const UPLOAD_AVATAR_SUCCESS = 'user/UPLOAD_AVATAR_SUCCESS';
 
+export const UPDATE_BIO_REQUEST = 'user/UPDATE_BIO_REQUEST';
+export const UPDATE_BIO_FAILURE = 'user/UPDATE_BIO_FAILURE';
+export const UPDATE_BIO_SUCCESS = 'user/UPDATE_BIO_SUCCESS';
+
 export const LOGIN_SUCCESS = 'login/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'login/LOGIN_FAILURE';
 export const LOGIN_LOADING = 'login/LOADING';
@@ -31,6 +34,8 @@ export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 interface UserProps {
   username?: string;
   name?: string;
+  bio?: string;
+  avatarUrl?: string;
   id?: number;
 }
 export interface AuthReducerState {
@@ -102,6 +107,8 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
       return { ...state, loginError: null }
     case SIGNUP_CLEAR_ERROR:
       return { ...state, signupError: null }
+    case UPDATE_BIO_SUCCESS:
+      return { ...state, user: { ...state.user, bio: action.payload } }
     default:
       return state;
   }
@@ -197,5 +204,17 @@ export const updateUserAvatar = (formData: any): ApiAction => ({
     request: UPLOAD_AVATAR_REQUEST,
     success: UPLOAD_AVATAR_SUCCESS,
     error: UPLOAD_AVATAR_FAILURE
+  }
+})
+
+export const updateUserBio = (formData: { bio: string }): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: '/api/user/me/bio',
+    formData,
+    request: UPDATE_BIO_REQUEST,
+    success: UPDATE_BIO_SUCCESS,
+    error: UPDATE_BIO_FAILURE
   }
 })

@@ -16,7 +16,7 @@ import {
   addReferences
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import { ToastText as Toast } from 'components/common/Toast';
+import Toast from 'components/common/Toast';
 import { notify } from 'react-notify-toast';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {

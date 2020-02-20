@@ -11,7 +11,8 @@ export interface ApiAction {
     request: string | ((dispatch: Dispatch) => void);
     success: string | ((dispatch: Dispatch, data: any) => void);
     error: string | ((dispatch: Dispatch, err: string) => void);
-  }
+  };
+  [x: string]: any
 }
 
 interface apiProps {

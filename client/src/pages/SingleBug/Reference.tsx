@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 import Flex from 'components/common/Flex';
+import Avatar from 'components/common/Avatar';
+import CircleIcon from 'components/common/CircleIcon';
 
 import { AuthorProps } from './SingleBug';
-import Avatar from 'components/Avatar/Avatar';
 import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
-import CircleIcon from 'components/common/CircleIcon';
 
 interface ReferenceProps {
   by: AuthorProps;
