@@ -10,12 +10,12 @@ import Button, { ButtonGroup } from 'components/common/Button';
 import CircleIcon from 'components/common/CircleIcon';
 import Flex from 'components/common/Flex';
 import Toast from 'components/common/Toast';
-import { Textarea } from 'components/common/Form/Input';
 
 import { StoreState } from 'store';
-import { updateUserAvatar, updateUserBio } from 'store/ducks/auth';
+import { updateUserAvatar } from 'store/ducks/auth';
 import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
 import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
+import Bio from './Bio';
 
 const customStyles = {
   content: {
@@ -37,72 +37,6 @@ const StandOut = styled.p<{ prefix: any }>`
     font-family: ${p => p.theme.font.primaryMedium};
   }
 `;
-
-
-const Bio: React.FC<{ user: any; currentUser: any }> = ({
-  user,
-  currentUser
-}) => {
-  const dispatch = useDispatch<any>();
-  const isBioLoading = useSelector(
-    (state: StoreState) => state.loading['user/UPDATE_BIO']
-  );
-  const [isBioEditing, setBioEditing] = useState(false);
-  const toggleBioEdit = () => {
-    setBioEditing(!isBioEditing);
-  };
-
-  const updateBio = (e: any) => {
-    setBioEditing(false);
-    dispatch(updateUserBio({ bio: e.target.value }))
-      .then(() => {
-        notify.show(<Toast>Bio updated</Toast>, 'success');
-      })
-      .catch((err: string) => {
-        notify.show(<Toast>{err}</Toast>, 'error');
-      });
-  };
-
-  const isCurrentUser = currentUser.username === user.username;
-  return (
-    <div>
-      <h2 className="text--medium">{user.name}</h2>
-      <span className="color--gray">@{user.username}</span>
-      <p>
-        {isBioEditing ? (
-          <Textarea
-            as="textarea"
-            onBlur={updateBio}
-            style={{ resize: 'none' }}
-            autoFocus={isBioEditing}
-            rows={3}
-          >
-            {isCurrentUser ? currentUser.bio : user.bio}
-          </Textarea>
-        ) : isCurrentUser ? (
-          currentUser.bio
-        ) : (
-          user.bio
-        )}
-      </p>
-      {isCurrentUser && (
-        <ButtonGroup>
-          <Button
-            isLoading={isBioLoading}
-            style={{ margin: 0 }}
-            onClick={toggleBioEdit}
-            icon="edit"
-            size="sm"
-            variant="secondary"
-          >
-            Edit bio
-          </Button>
-        </ButtonGroup>
-      )}
-    </div>
-  );
-};
-
 
 interface UserInfoProps {
   user: any;

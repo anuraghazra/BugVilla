@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { CLEAR_ALL_ERRORS } from './errors';
 import { ApiAction } from 'store/middlewares/apiMiddleware';
+import socket from 'utils/socket';
 
 // action
 export const API = 'API';
@@ -132,7 +133,10 @@ export const addComment = (
     url: `/api/bugs/${bugId}/comments`,
     formData: formData,
     request: ADD_COMMENT_REQUEST,
-    success: ADD_COMMENT_SUCCESS,
+    success: (dispatch: Dispatch, data: any) => {
+      dispatch({ type: ADD_COMMENT_SUCCESS, payload: data });
+      socket.emit('send-notification', { message: 'Add comment' })
+    },
     error: ADD_COMMENT_FAILURE
   }
 });
@@ -182,6 +186,7 @@ export const openOrCloseBug = (
         type: TOGGLE_BUG_SUCCESS,
         payload: { data, bug_state: state },
       });
+      socket.emit('send-notification', { message: 'Bug Open/Closed' })
     },
     error: TOGGLE_BUG_FAILURE
   }
@@ -216,7 +221,9 @@ export const addReferences = (
     url: `/api/bugs/${bugId}/references`,
     formData: { references },
     request: () => { },
-    success: () => { },
+    success: () => {
+      socket.emit('send-notification', { message: 'Bugs Referenced' })
+    },
     error: () => { },
   }
 });
@@ -231,7 +238,9 @@ export const mentionPeople = (
     url: `/api/notifications/mentions/${bugId}`,
     formData: { mentions },
     request: () => { },
-    success: () => { },
+    success: () => {
+      socket.emit('send-notification', { message: 'Users Mentioned' })
+    },
     error: () => { },
   }
 });

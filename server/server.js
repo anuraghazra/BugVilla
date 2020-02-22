@@ -101,4 +101,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`));
+// https://stackoverflow.com/questions/18856190/use-socket-io-inside-a-express-routes-file/57737798#57737798
+const server = app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`));
+const io = require('socket.io').listen(server);
+
+io.on('connection', (socket) => {
+  console.log("NEW CLIENT")
+  socket.on('send-notification', () => {
+    console.log("NEW NOTIFICATION")
+    socket.broadcast.emit('received-notification', { message: 'New notifications' })
+  })
+})

@@ -14,6 +14,7 @@ import AddBugWrapper from './AddBug.style';
 import useAPI from 'hooks/useAPI';
 import Toast from 'components/common/Toast';
 import { notify } from 'react-notify-toast';
+import socket from 'utils/socket';
 
 const AddBug: React.FC = () => {
   const history = useHistory();
@@ -38,6 +39,7 @@ const AddBug: React.FC = () => {
       reset();
       setValue('body', '');
       history.push('/dashboard/bugs');
+      socket.emit('send-notification', { message: 'New bug' });
     }).catch(err => {
       notify.show(<Toast>{err}</Toast>, 'error');
     });

@@ -84,7 +84,7 @@ const Button: React.FC<ButtonProps> = ({
 
 export const ButtonGroup = styled.div<{ float?: string }>`
   > button {
-    margin-right: 10px;
+    margin-right: 10px !important;
   }
 
   float: ${p => p.float || 'initial'};

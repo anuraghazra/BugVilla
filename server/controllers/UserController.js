@@ -1,7 +1,6 @@
 /// <reference path="./mytypes.d.ts" />
 const Joi = require('@hapi/joi');
 const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
 
@@ -171,17 +170,23 @@ exports.updateBio = async (req, res) => {
     return res.unprocessable({ error: error.details[0].message })
   }
 
-  let user = await User.findOneAndUpdate({
-    _id: req.user.id
-  }, {
-    bio: value.bio
-  }, { new: true });
+  try {
 
-  console.log(user);
+    let user = await User.findOneAndUpdate({
+      _id: req.user.id
+    }, {
+      bio: value.bio
+    }, { new: true });
 
-  if (!user) return res.notFound({ error: 'User not found' });
+    if (!user) return res.notFound({ error: 'User not found' });
 
-  res.ok({ data: user.bio })
+    res.ok({ data: user.bio })
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong while updating bio'
+    });
+  }
 }
 
 
@@ -190,7 +195,6 @@ exports.updateBio = async (req, res) => {
  * @type RequestHandler
  */
 exports.checkAuth = (req, res) => {
-  console.log(req.user)
   res.ok({ data: req.user })
 }
 
@@ -207,7 +211,6 @@ exports.verifyEmail = async (req, res) => {
 
     // find user with matching token
     let user = await User.findOne({ _id: token._userId });
-    console.log(token._userId)
     if (!user) return res.notFound({ error: 'Unable to find matching user & token for verification' })
     if (user.isVerified) return res.badRequest({ error: 'User is already verified' })
 
@@ -257,7 +260,7 @@ exports.getByUsername = async (req, res) => {
  */
 exports.getAllUsers = async (req, res) => {
   try {
-    let users = await User.find({}).select('-password -email');
+    let users = await User.find({}).select('-password -email').sort({ name: 1 });
     if (!users) return res.notFound({ error: `No users found!` })
 
     res.ok({ data: users });

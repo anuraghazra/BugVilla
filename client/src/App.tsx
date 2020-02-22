@@ -15,6 +15,15 @@ import Dashboard from 'pages/Dashboard/Dashboard';
 import NotFound from 'components/NotFound';
 import Notifications from 'react-notify-toast';
 
+import Toast from 'components/common/Toast';
+import { notify } from 'react-notify-toast';
+import socket from 'utils/socket';
+
+socket.on('received-notification', (data: any) => {
+  console.log(data);
+  notify.show(<Toast>New notifications available</Toast>, 'info');
+});
+
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>

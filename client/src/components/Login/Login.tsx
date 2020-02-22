@@ -112,7 +112,6 @@ const Login: React.FC = () => {
 
           <Button
             isLoading={isLoading}
-            disabled={isLoading}
             type="submit"
             width="50%"
             icon="arrow-right"
