@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Flex from 'components/common/Flex';
-import { getTimeDiff } from 'utils';
+import { timeAgo } from 'utils';
 
 import NotificationIcon from './NotificationIcon';
 import notification_switch from './notification_switch';
@@ -55,7 +55,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notify }) => {
           <span>{notification_switch[notify.type](notify)}</span>
         </Flex>
         <small className="notification__time">
-          &nbsp;{getTimeDiff(notify.createdAt)}
+          &nbsp;{timeAgo(notify.createdAt)}
         </small>
       </Flex>
     </StyledNotificationItem>

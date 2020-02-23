@@ -32,6 +32,7 @@ export const StyledBugCard = styled.div`
   .bug__body--text {
     font-size: 16px;
     color: ${p => p.theme.colors.text.gray};
+    word-break: break-word;
   }
 `;
 

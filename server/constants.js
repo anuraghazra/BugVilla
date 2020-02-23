@@ -17,5 +17,13 @@ module.exports = {
   NO_CONTENT: 204,
   OK: 200,
 
-  PORT: 5000
+  PORT: 5000,
+}
+
+module.exports.notify_types = {
+  COMMENTED: 'COMMENTED',
+  MENTIONED: 'MENTIONED',
+  REFERENCED: 'REFERENCED',
+  BUG_STATUS: 'BUG_STATUS',
+  NEW_BUG: 'NEW_BUG',
 }

@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 const { User } = require('../models/userModel');
 const { Bug } = require('../models/bugModel');
 const { Notification } = require('../models/notificationModel');
-
+const { notify_types } = require('../constants')
 
 /**
  * @route GET /api/notifications
@@ -17,7 +17,7 @@ exports.getNotifications = async (req, res) => {
     .populate('references ', 'title bugId');
 
   let filtered = notifications.filter(notify => {
-    if (notify.type === 'mentioned') {
+    if (notify.type === notify_types.MENTIONED) {
       return notify.notificationTo.includes(req.user.id)
     } else {
       return notify;
@@ -52,7 +52,7 @@ exports.mentionPeople = async (req, res) => {
 
   // send notifications
   let notification = new Notification({
-    type: 'mentioned',
+    type: notify_types.MENTIONED,
     byUser: req.user.id,
     onBug: bug._id,
     mentions: [...value.mentions],

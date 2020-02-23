@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { notify } from 'react-notify-toast';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 import { Input, StyledH3Input } from 'components/common/Form';
 
@@ -38,7 +37,7 @@ const Signup: React.FC = () => {
     dispatch(signUserUp(formData));
   };
 
-  signupError && notify.show(<Toast>{signupError}</Toast>, 'error');
+  signupError && toast.error(signupError);
 
   return (
     <SignupWrapper>

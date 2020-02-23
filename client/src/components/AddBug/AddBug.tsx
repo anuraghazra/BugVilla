@@ -5,7 +5,7 @@ import { notify } from 'react-notify-toast';
 
 import { Input, StyledH3Input } from 'components/common/Form';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import Toast, { toast } from 'components/common/Toast';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';
@@ -40,7 +40,7 @@ const AddBug: React.FC = () => {
       history.push('/dashboard/bugs');
       socket.emit('send-notification', { message: 'New bug' });
     }).catch(err => {
-      notify.show(<Toast>{err}</Toast>, 'error');
+      toast.error(err)
     });
   };
 

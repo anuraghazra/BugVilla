@@ -114,6 +114,22 @@ const GlobalStyles = createGlobalStyle`
     /* background-color: rgba(88,111,253,0.2); */
   }
 
+  .ReactModal__Overlay {
+    opacity: 0;
+    transform: translateY(25px);
+    transform-origin: center;
+    transition: .3s;
+  }
+
+  .ReactModal__Overlay--after-open {
+      opacity: 1;
+      transform: translateY(0px);
+  }
+
+  .ReactModal__Overlay--before-close{
+      opacity: 0;
+      transform: translateY(25px);
+  }
 
   .toast-notification {
     span {

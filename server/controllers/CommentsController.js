@@ -2,6 +2,7 @@
 const { Bug } = require('../models/bugModel');
 const { validateComment } = require('../models/commentModel');
 const { Notification } = require('../models/notificationModel');
+const { notify_types } = require('../constants');
 
 
 /**
@@ -52,7 +53,7 @@ exports.createComment = async (req, res) => {
 
     // send notifications
     let notification = new Notification({
-      type: 'commented',
+      type: notify_types.COMMENTED,
       byUser: req.user.id,
       onBug: newBug._id,
       notificationTo: [],

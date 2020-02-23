@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { notify } from 'react-notify-toast';
 
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 import { Textarea } from 'components/common/Form';
 import Button, { ButtonGroup } from 'components/common/Button';
 
@@ -33,10 +32,10 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
     setBioEditing(false);
     dispatch(updateUserBio({ bio: textareaRef.current.value }))
       .then(() => {
-        notify.show(<Toast>Bio updated</Toast>, 'success');
+        toast.success('Bio updated');
       })
       .catch((err: string) => {
-        notify.show(<Toast>{err}</Toast>, 'error');
+        toast.error(err);
       });
   };
 

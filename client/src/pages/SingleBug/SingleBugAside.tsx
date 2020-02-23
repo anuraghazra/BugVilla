@@ -10,7 +10,7 @@ import Avatar from 'components/common/Avatar';
 import Button from 'components/common/Button';
 import Flex from 'components/common/Flex';
 import Label from 'components/common/Label';
-import Toast from 'components/common/Toast';
+import Toast, { toast } from 'components/common/Toast';
 
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
@@ -50,7 +50,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
 
   let participants: string[] = getParticipants(bug);
 
-  labelEditError && notify.show(<Toast>{labelEditError}</Toast>, 'error');
+  labelEditError && toast.error(labelEditError);
 
   return (
     <>

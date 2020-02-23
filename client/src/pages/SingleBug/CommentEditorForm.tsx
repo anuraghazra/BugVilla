@@ -16,8 +16,7 @@ import {
   addReferences
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import Toast from 'components/common/Toast';
-import { notify } from 'react-notify-toast';
+import { toast } from 'components/common/Toast';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();
@@ -65,8 +64,8 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     error: state.error
   }));
 
-  commentError && notify.show(<Toast>{commentError}</Toast>, 'error');
-  toggleError && notify.show(<Toast>{toggleError}</Toast>, 'error');
+  commentError && toast.error(commentError);
+  toggleError && toast.error(toggleError);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>

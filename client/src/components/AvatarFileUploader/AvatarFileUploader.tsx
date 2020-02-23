@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { notify } from 'react-notify-toast';
 import { useDropzone } from 'react-dropzone';
 
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 import AvatarContainer from './AvatarFileUploader.style';
 
 interface PreviewFile extends File {
@@ -34,7 +33,7 @@ const AvatarFileUploader: React.FC<Props> = ({
         acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
         handleFile(acceptedFiles[0]);
       } catch (err) {
-        notify.show(<Toast>Something went crazy!</Toast>, 'error');
+        toast.error('Something went crazy!');
       }
     }
   });

@@ -8,14 +8,13 @@ import Flex from 'components/common/Flex';
 import { Input } from 'components/common/Form';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
 
 import { loginUser, checkAuth } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
 import googleLogo from 'assets/svg/google.svg';
-import { notify } from 'react-notify-toast';
 
 const LoginSchema = yup.object().shape({
   email: yup
@@ -75,16 +74,16 @@ const Login: React.FC = () => {
       if (event.data === 'success') {
         dispatch(checkAuth())
           .then(() => {
-            notify.show(<Toast>Login success</Toast>, 'success');
+            toast.success('Login success');
           })
           .catch((err: string) => {
-            notify.show(<Toast>{err}</Toast>, 'error');
-          });
+            toast.error(err);
+          })
       }
     });
   };
 
-  loginError && notify.show(<Toast>{loginError}</Toast>, 'error');
+  loginError && toast.error(loginError);
   return (
     <LoginWrapper>
       <Flex align="center" justify="center" direction="column">

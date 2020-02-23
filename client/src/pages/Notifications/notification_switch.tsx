@@ -100,11 +100,11 @@ const Mentioned: React.FC = ({
 };
 
 const notification_switch: any = {
-  commented: Commented,
-  referenced: Referenced,
-  new_bug: NewBug,
-  bug_status: BugStatus,
-  mentioned: Mentioned
+  COMMENTED: Commented,
+  REFERENCED: Referenced,
+  NEW_BUG: NewBug,
+  BUG_STATUS: BugStatus,
+  MENTIONED: Mentioned
 };
 
 export default notification_switch;

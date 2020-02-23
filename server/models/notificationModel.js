@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const NotificationSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['mentioned', 'commented', 'bug_status', 'new_bug', 'referenced']
+    enum: ['MENTIONED', 'COMMENTED', 'BUG_STATUS', 'NEW_BUG', 'REFERENCED']
   },
   byUser: {
     type: mongoose.Schema.Types.ObjectId,

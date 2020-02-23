@@ -23,7 +23,6 @@ const StyledToastText = styled.div`
   }
 `;
 
-
 export const Toast: React.FC<{
   icon?: any;
   children: React.ReactNode;
@@ -39,6 +38,18 @@ export const Toast: React.FC<{
       />
     </StyledToastText>
   );
+};
+
+export const toast = {
+  error: (message: string) => {
+    notify.show(<Toast icon="exclamation-circle">{message}</Toast>, 'error');
+  },
+  success: (message: string) => {
+    notify.show(<Toast icon="check-circle">{message}</Toast>, 'success');
+  },
+  info: (message: string) => {
+    notify.show(<Toast icon="info-circle">{message}</Toast>, 'info');
+  }
 };
 
 export default Toast;

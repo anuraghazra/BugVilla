@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 
+import socket from 'utils/socket';
 import Loading from 'components/common/Loading';
 import useFetch from 'hooks/useFetch';
 
@@ -16,9 +17,18 @@ const NotificationsWrapper = styled.section`
 `;
 
 const Notifications: React.FC = () => {
-  let [notifications, isLoading, error] = useFetch('/api/notifications');
+  let [notifications, isLoading, error, reFetch] = useFetch(
+    '/api/notifications'
+  );
+
+  useEffect(() => {
+    socket.on('received-notification', (data: any) => {
+      reFetch({});
+    });
+  }, []);
 
   notifications = notifications?.data || [];
+  console.log(notifications);
   return (
     <NotificationsWrapper>
       <div>

@@ -10,6 +10,7 @@ const useFetch = (url: string, props: { cache?: boolean } = {}) => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
+  const [shouldRefetch, reFetch] = useState({});
 
   useEffect(() => {
     const getData = async () => {
@@ -35,9 +36,9 @@ const useFetch = (url: string, props: { cache?: boolean } = {}) => {
     } else {
       getData();
     }
-  }, [url]);
+  }, [url, shouldRefetch]);
 
-  return [data, isLoading, error, setData];
+  return [data, isLoading, error, reFetch];
 };
 
 export default useFetch;

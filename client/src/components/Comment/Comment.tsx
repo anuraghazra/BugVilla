@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { notify } from 'react-notify-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getTimeDiff, getQuantifiersFromMarkdown, htmlDecode } from 'utils';
+import { timeAgo, getQuantifiersFromMarkdown, htmlDecode } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
@@ -15,7 +14,7 @@ import {
 import Avatar from 'components/common/Avatar';
 import Button, { ButtonGroup } from 'components/common/Button';
 import Flex from 'components/common/Flex';
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 
 import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
@@ -107,7 +106,7 @@ const Comment: React.FC<CommentProps> = ({
   const isAuthorOfComment = userId === author.id;
   const showCommentEditor = isEditing && isAuthorOfComment;
 
-  editingError && notify.show(<Toast>{editingError}</Toast>, 'error');
+  editingError && toast.error(editingError)
   return (
     <StyledComment style={{ padding: showCommentEditor ? 0 : 20 }}>
       {showCommentEditor ? (
@@ -155,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({
               >
                 {author.name}{' '}
               </Link>
-              commented {getTimeDiff(date)}
+              commented {timeAgo(date)}
             </span>
             {isAuthorOfComment && (
               <span

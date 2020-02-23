@@ -1,10 +1,10 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Router, Route, Switch } from 'react-router-dom';
-import Notifications, { notify } from 'react-notify-toast';
+import Notifications from 'react-notify-toast';
 import AuthRoute from 'components/AuthRoute';
 
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 import socket from 'utils/socket';
 import history from 'utils/history';
 import GlobalStyles from './styles/globalStyles';
@@ -17,10 +17,8 @@ import Home from 'pages/Home/Home';
 import Dashboard from 'pages/Dashboard/Dashboard';
 import NotFound from 'components/NotFound';
 
-
 socket.on('received-notification', (data: any) => {
-  console.log(data);
-  notify.show(<Toast>New notifications available</Toast>, 'info');
+  toast.info('New notifications available');
 });
 
 const App: React.FC = () => {

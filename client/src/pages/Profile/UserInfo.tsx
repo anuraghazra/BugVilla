@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { notify } from 'react-notify-toast';
 
-import { getTimeDiff } from 'utils';
+import { timeAgo } from 'utils';
 import Avatar from 'components/common/Avatar';
 import Button, { ButtonGroup } from 'components/common/Button';
 import CircleIcon from 'components/common/CircleIcon';
 import Flex from 'components/common/Flex';
-import Toast from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 
 import { StoreState } from 'store';
 import { updateUserAvatar } from 'store/ducks/auth';
@@ -64,12 +63,12 @@ const UserInfo: React.FC<UserInfoProps> = ({
     dispatch(updateUserAvatar(formData))
       .then(() => {
         setIsOpen(false);
-        notify.show(<Toast>Profile picture updated</Toast>, 'success');
+        toast.success('Profile picture updated');
       })
       .catch((err: any) => {
         setIsOpen(false);
         setFile(undefined);
-        notify.show(<Toast>{err}</Toast>, 'error');
+        toast.error(err);
       });
   };
 
@@ -78,6 +77,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
   return (
     <UserInfoWrapper>
       <Modal
+        closeTimeoutMS={300}
         isOpen={modalIsOpen}
         style={customStyles}
         className="Modal"
@@ -140,7 +140,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
       <div>
         <StandOut prefix={totalComments || 0}>Comments</StandOut>
         <StandOut prefix={totalBugs || 0}>Bugs issued</StandOut>
-        <StandOut prefix={'Joined'}>{getTimeDiff(user.date_joined)}</StandOut>
+        <StandOut prefix={'Joined'}>{timeAgo(user.date_joined)}</StandOut>
       </div>
     </UserInfoWrapper>
   );
