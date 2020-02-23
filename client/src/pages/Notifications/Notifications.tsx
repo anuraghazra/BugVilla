@@ -16,9 +16,7 @@ const NotificationsWrapper = styled.section`
 `;
 
 const Notifications: React.FC = () => {
-  let { data: notifications, isLoading, error } = useFetch(
-    '/api/notifications'
-  );
+  let [notifications, isLoading, error] = useFetch('/api/notifications');
 
   notifications = notifications?.data || [];
   return (

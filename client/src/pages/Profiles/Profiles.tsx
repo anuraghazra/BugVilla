@@ -22,7 +22,7 @@ const ProfilesWrapper = styled.section`
 `;
 
 const Profiles = () => {
-  const { data: users, isLoading, error } = useFetch(`/api/user`);
+  const [users, isLoading, error] = useFetch(`/api/user`);
 
   if (isLoading) return <Loading />;
   if (error) return <p>Something went wrong while fetching the data</p>;

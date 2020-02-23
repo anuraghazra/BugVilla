@@ -5,7 +5,6 @@ import { useDropzone } from 'react-dropzone';
 import Toast from 'components/common/Toast';
 import AvatarContainer from './AvatarFileUploader.style';
 
-
 interface PreviewFile extends File {
   preview?: any;
 }

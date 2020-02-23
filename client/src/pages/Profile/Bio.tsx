@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import Toast from 'components/common/Toast';
-import { Textarea } from 'components/common/Form/Input';
+import { Textarea } from 'components/common/Form';
 import Button, { ButtonGroup } from 'components/common/Button';
 
 import { StoreState } from 'store';

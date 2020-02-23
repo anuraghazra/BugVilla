@@ -1,11 +1,14 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Router, Route, Switch } from 'react-router-dom';
+import Notifications, { notify } from 'react-notify-toast';
 import AuthRoute from 'components/AuthRoute';
 
+import Toast from 'components/common/Toast';
+import socket from 'utils/socket';
 import history from 'utils/history';
-import theme from './theme';
 import GlobalStyles from './styles/globalStyles';
+import theme from './theme';
 
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
@@ -13,11 +16,7 @@ import Signup from 'components/Signup/Signup';
 import Home from 'pages/Home/Home';
 import Dashboard from 'pages/Dashboard/Dashboard';
 import NotFound from 'components/NotFound';
-import Notifications from 'react-notify-toast';
 
-import Toast from 'components/common/Toast';
-import { notify } from 'react-notify-toast';
-import socket from 'utils/socket';
 
 socket.on('received-notification', (data: any) => {
   console.log(data);

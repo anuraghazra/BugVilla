@@ -1,18 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Bugs from 'pages/Bugs/Bugs';
-import Navbar from 'components/Navbar/Navbar';
-import Sidebar from 'components/Sidebar/Sidebar';
-
 import { DashboardWrapper, DashboardBody } from './Dashboard.style';
+
 import AuthRoute from 'components/AuthRoute';
 import AddBug from 'components/AddBug/AddBug';
-import SingleBug from 'pages/SingleBug/SingleBug';
+import Navbar from 'components/Navbar/Navbar';
+import NotFound from 'components/NotFound';
+import Sidebar from 'components/Sidebar/Sidebar';
+
+import Bugs from 'pages/Bugs/Bugs';
 import Profile from 'pages/Profile/Profile';
 import Profiles from 'pages/Profiles/Profiles';
+import SingleBug from 'pages/SingleBug/SingleBug';
 import Notifications from 'pages/Notifications/Notifications';
-import NotFound from 'components/NotFound';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -44,7 +45,11 @@ const Dashboard: React.FC = () => {
           />
           <AuthRoute exact path="/profiles" component={Profiles} />
           <AuthRoute exact path="/profiles/:username" component={Profile} />
-          <AuthRoute exact path="/dashboard/notifications" component={Notifications} />
+          <AuthRoute
+            exact
+            path="/dashboard/notifications"
+            component={Notifications}
+          />
           <Route path="/" component={NotFound} />
         </Switch>
       </DashboardBody>

@@ -14,7 +14,7 @@ import Toast from 'components/common/Toast';
 import { StoreState } from 'store';
 import { updateUserAvatar } from 'store/ducks/auth';
 import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
-import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
+import AvatarFileUploader from 'components/AvatarFileUploader';
 import Bio from './Bio';
 
 const customStyles = {

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
 import Flex from 'components/common/Flex';
-import Input from 'components/common/Form/Input';
+import { Input } from 'components/common/Form';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';

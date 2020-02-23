@@ -37,7 +37,7 @@ const useFetch = (url: string, props: { cache?: boolean } = {}) => {
     }
   }, [url]);
 
-  return { data, setData, isLoading, error };
+  return [data, isLoading, error, setData];
 };
 
 export default useFetch;

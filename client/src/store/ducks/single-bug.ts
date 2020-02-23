@@ -103,10 +103,6 @@ const errorAction = (action: string, payload: any) => ({
   payload: payload || 'Something went wrong'
 });
 
-// export const updateLabelCheckbox = (data: string[] | unknown) => {
-//   return { type: UPDATE_LABEL_CHECKBOX, payload: data };
-// };
-
 // side effects
 export const fetchBugWithId = (bugId: number | string): ApiAction => ({
   type: API,

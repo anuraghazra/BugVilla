@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-
-import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { notify } from 'react-notify-toast';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Flex from 'components/common/Flex';
-import Input from 'components/common/Form/Input';
 import IconLink from 'components/common/IconLink';
 import Button from 'components/common/Button';
 import Toast from 'components/common/Toast';
 import BugVillaLogo from 'components/common/Logo';
+import { Input, StyledH3Input } from 'components/common/Form';
 
-import AvatarFileUploader from 'components/AvatarFileUploader/AvatarFileUploader';
-import SignupWrapper, { StyledH3Input } from './Signup.style';
+import AvatarFileUploader from 'components/AvatarFileUploader';
 import SignupSchema from './SignupSchema';
 
+import SignupWrapper from './Signup.style';
 import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
-import { notify } from 'react-notify-toast';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ const Signup: React.FC = () => {
     }
     dispatch(signUserUp(formData));
   };
-  
+
   signupError && notify.show(<Toast>{signupError}</Toast>, 'error');
 
   return (

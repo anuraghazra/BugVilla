@@ -26,15 +26,11 @@ const ProfileWrapper = styled.section`
 
 const Profile = () => {
   const { username } = useParams();
-  const { data: userData, isLoading: userLoading, error: userError } = useFetch(
-    `/api/user/${username}`
-  );
-  const { data: bugData, isLoading: bugsLoading, error: bugsError } = useFetch(
+  const [userData, userLoading, userError] = useFetch(`/api/user/${username}`);
+  const [bugData, bugsLoading, bugsError] = useFetch(
     `/api/user/${username}/bugs`
   );
-  const { data: commentsCountData } = useFetch(
-    `/api/user/${username}/comments/count`
-  );
+  const [commentsCountData] = useFetch(`/api/user/${username}/comments/count`);
 
   const isLoading = userLoading && bugsLoading;
   const error = userError && bugsError;

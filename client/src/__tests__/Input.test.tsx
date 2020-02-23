@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithStyledTheme } from 'utils/test-utils';
-import Input from 'components/common/Form/Input';
+import { Input } from 'components/common/Form';
 
 describe('Input', () => {
   it('should renders <Input>', () => {

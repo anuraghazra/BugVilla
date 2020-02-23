@@ -9,7 +9,7 @@ import 'react-tabs/style/react-tabs.css';
 import useFetch from 'hooks/useFetch';
 import Flex from 'components/common/Flex';
 import Avatar from 'components/common/Avatar';
-import { InputWrapper } from 'components/common/Form/Input';
+import { InputWrapper } from 'components/common/Form';
 
 import CodeBlock from './CodeBlock';
 import MentionPlugin from './MentionPlugin';
@@ -30,7 +30,7 @@ interface EditorProps {
 }
 
 const useSuggestion = (url: string, prop: string[]) => {
-  const { data: suggestions } = useFetch(url, { cache: true });
+  const [suggestions] = useFetch(url, { cache: true });
   const [data, setData] = useState([]);
 
   useEffect(() => {

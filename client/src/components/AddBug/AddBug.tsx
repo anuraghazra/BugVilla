@@ -1,10 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { notify } from 'react-notify-toast';
 
-import { StyledH3Input } from 'components/Signup/Signup.style';
-import Input from 'components/common/Form/Input';
+import { Input, StyledH3Input } from 'components/common/Form';
 import Button from 'components/common/Button';
+import Toast from 'components/common/Toast';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';
@@ -12,8 +13,6 @@ import DashboardHeader from 'components/DashboardHeader';
 import StyledEditor from 'components/Editor/Editor.style';
 import AddBugWrapper from './AddBug.style';
 import useAPI from 'hooks/useAPI';
-import Toast from 'components/common/Toast';
-import { notify } from 'react-notify-toast';
 import socket from 'utils/socket';
 
 const AddBug: React.FC = () => {
