@@ -45,16 +45,15 @@ export const getTimeDiff = (dt1: any): string | number => {
   return hours + ' hours ago';
 }
 
+export const MENTION_REGEX = /(?:^|[^a-zA-Z0-9_!@#$%&*])(?:(?:@)(?!\/))([a-zA-Z0-9/_.]{1,40})(?:\b(?!@)|$)/gm;
+export const REFERENCE_REGEX = /\B#(\d{1,10})(?:\b)/gm;
 
 /**
  * @description Returns array of [@mentions] & [#references] from markdown
  */
-export const getQuantifiersFromMarkdown = (markdown: string, quantifier: string = '#'): string[] => {
-  let regex: RegExp = /#(\d+)/gim;
-
-  if (quantifier === '@') {
-    regex = /@(.*?)(\s|$|\.)/gim;
-  }
+export const getRefsOrMentions = (markdown: string, quantifier: string = '#'): string[] => {
+  let regex: RegExp = REFERENCE_REGEX;
+  if (quantifier === '@') regex = MENTION_REGEX;
 
   let matched = markdown.match(regex)
     ?.map((ref: string): any => ref.replace(quantifier, '').trim())
@@ -64,6 +63,20 @@ export const getQuantifiersFromMarkdown = (markdown: string, quantifier: string 
     );
   return matched || [];
 };
+
+/**
+ * @description get mentions and refs from markdown and make them links
+ */
+export const parseRefsAndMentions = (markdown: string): string => {
+  return markdown
+    ?.replace(
+      MENTION_REGEX,
+      ` [@$1](/profiles/$1) `
+    )
+    .replace(REFERENCE_REGEX, ` [#$1](/dashboard/bugs/$1) `);
+};
+
+
 
 /**
  * @description safe decode entities

@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { getQuantifiersFromMarkdown } from 'utils';
+import { getRefsOrMentions } from 'utils';
 import Button, { ButtonGroup } from 'components/common/Button';
 
 import Editor from 'components/Editor/Editor';
@@ -37,7 +37,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
 
   const onSubmit = (formData: { body: string }) => {
     dispatch(addComment(bugId, formData)).then(() => {
-      const references = getQuantifiersFromMarkdown(markdown, '#');
+      const references = getRefsOrMentions(markdown, '#');
       references.length && dispatch(addReferences(bugId, references));
       setValue('body', '');
     });

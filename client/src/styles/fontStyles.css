@@ -2,7 +2,7 @@
   font-family: 'Product Sans Regular';
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/fonts/product-sans/ProductSans-Regular.woff')
+  src: url('../assets/fonts/product-sans/webfont/productsans-regular-webfont.woff')
     format('woff');
 }
 
@@ -10,21 +10,23 @@
   font-family: 'Product Sans Light Regular';
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/fonts/product-sans/ProductSans-Light.woff') format('woff');
+  src: url('../assets/fonts/product-sans/webfont/productsans-light-webfont.woff')
+    format('woff');
 }
 
 @font-face {
   font-family: 'Product Sans Bold';
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/fonts/product-sans/ProductSans-Bold.woff') format('woff');
+  src: url('../assets/fonts/product-sans/webfont/productsans-bold-webfont.woff')
+    format('woff');
 }
 
 @font-face {
   font-family: 'Product Sans Medium Regular';
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/fonts/product-sans/ProductSans-Medium.woff')
+  src: url('../assets/fonts/product-sans/webfont/productsans-medium-webfont.woff')
     format('woff');
 }
 

@@ -5,7 +5,12 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { timeAgo, getQuantifiersFromMarkdown, htmlDecode } from 'utils';
+import {
+  timeAgo,
+  getRefsOrMentions,
+  htmlDecode,
+  parseRefsAndMentions
+} from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
@@ -18,7 +23,6 @@ import { toast } from 'components/common/Toast';
 
 import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
-import MentionPlugin from 'components/Editor/MentionPlugin';
 import StyledEditor from 'components/Editor/Editor.style';
 import StyledComment from './Comment.style';
 
@@ -32,7 +36,6 @@ import { StoreState } from 'store';
 
 const MarkdownPlugins = {
   code: CodeBlock,
-  text: MentionPlugin
 };
 
 interface CommentProps {
@@ -97,8 +100,9 @@ const Comment: React.FC<CommentProps> = ({
       });
     }
 
-    const references = getQuantifiersFromMarkdown(markdown, '#');
-    const mentions = getQuantifiersFromMarkdown(markdown, '@');
+    const references = getRefsOrMentions(markdown, '#');
+    const mentions = getRefsOrMentions(markdown, '@');
+
     references.length && dispatch(addReferences(bugId, references));
     mentions.length && dispatch(mentionPeople(bugId, mentions));
   };
@@ -106,7 +110,7 @@ const Comment: React.FC<CommentProps> = ({
   const isAuthorOfComment = userId === author.id;
   const showCommentEditor = isEditing && isAuthorOfComment;
 
-  editingError && toast.error(editingError)
+  editingError && toast.error(editingError);
   return (
     <StyledComment style={{ padding: showCommentEditor ? 0 : 20 }}>
       {showCommentEditor ? (
@@ -169,7 +173,7 @@ const Comment: React.FC<CommentProps> = ({
           <ReactMarkdown
             renderers={MarkdownPlugins}
             className="markdown-preview"
-            source={htmlDecode(body)}
+            source={htmlDecode(parseRefsAndMentions(body))}
           />
         </>
       )}

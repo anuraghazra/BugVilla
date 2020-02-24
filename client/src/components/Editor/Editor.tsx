@@ -12,14 +12,12 @@ import Avatar from 'components/common/Avatar';
 import { InputWrapper } from 'components/common/Form';
 
 import CodeBlock from './CodeBlock';
-import MentionPlugin from './MentionPlugin';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
-import { htmlDecode } from 'utils';
+import { htmlDecode, parseRefsAndMentions } from 'utils';
 
 const MarkdownPlugins = {
-  code: CodeBlock,
-  text: MentionPlugin
+  code: CodeBlock
 };
 
 interface EditorProps {
@@ -110,7 +108,7 @@ const Editor: React.FC<EditorProps> = ({
           <ReactMarkdown
             escapeHtml={true}
             className="editor__tabpanel markdown-preview"
-            source={htmlDecode(markdown)}
+            source={htmlDecode(parseRefsAndMentions(markdown))}
             renderers={MarkdownPlugins}
           />
         </TabPanel>
