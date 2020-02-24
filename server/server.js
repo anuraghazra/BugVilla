@@ -84,7 +84,7 @@ app.use('/api/bugs',
 
 // finally handle errors
 app.use(errorHandler);
-app.use("/*", function (req, res) {
+app.use("/api/*", function (req, res) {
   res.notImplemented({ error: 'Not Implemented.' });
 });
 
