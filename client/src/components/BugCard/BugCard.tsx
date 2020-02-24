@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Flex from 'components/common/Flex';
 import Label from 'components/common/Label';
 import { StyledBugCard, BugCardIcon, StyledMetaInfo } from './BugCard.style';
+import CircleIcon from 'components/common/CircleIcon';
 
 interface Author {
   name: string;
@@ -49,9 +50,7 @@ const BugCard: React.FC<BugCardProps> = ({
 }) => {
   return (
     <StyledBugCard>
-      <BugCardIcon isOpen={isOpen}>
-        <FontAwesomeIcon size="xs" icon={isOpen ? 'exclamation' : 'ban'} />
-      </BugCardIcon>
+      <BugCardIcon isOpen={isOpen} />
       <BugMetaInfo number={number} date={date} author={author} />
 
       <Link to={`/dashboard/bugs/${number}`}>
@@ -62,15 +61,12 @@ const BugCard: React.FC<BugCardProps> = ({
         <Flex className="bug__label-container">
           {labels.map((label: string, index: number) => (
             <Link key={index} to={`/dashboard/bugs/?label=${label}`}>
-              <Label type={label}>
-                {label}
-              </Label>
+              <Label type={label}>{label}</Label>
             </Link>
           ))}
         </Flex>
       ) : null}
 
-      {/* <ReactMarkdown source={body.slice(0, 150)} className="bug__body--text" /> */}
       <div className="bug__body--text">{body.slice(0, 150)}</div>
     </StyledBugCard>
   );

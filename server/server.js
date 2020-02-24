@@ -33,6 +33,7 @@ mongoose.connect(
 
 // express settings
 app.set("env", process.env.NODE_ENV);
+app.set("json spaces", 2);
 
 // middlewares
 app.use(express.static('client/build'));
@@ -83,7 +84,7 @@ app.use('/api/bugs',
 
 // finally handle errors
 app.use(errorHandler);
-app.use("/api/*", function (req, res) {
+app.use("/*", function (req, res) {
   res.notImplemented({ error: 'Not Implemented.' });
 });
 

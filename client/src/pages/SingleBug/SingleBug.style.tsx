@@ -20,7 +20,11 @@ const SingleBugWrapper = styled.section`
 
   .singlebug__aside {
     margin-bottom: ${p => p.theme.spacings.bottom}px;
-    
+
+    .open_modal_btn {
+      cursor: pointer;
+    }
+
     h4 {
       margin: 20px 0;
       margin-bottom: 10px;
@@ -29,6 +33,10 @@ const SingleBugWrapper = styled.section`
 
     .label__header {
       position: relative;
+      &:hover,
+      &:hover .open_modal_btn {
+        color: ${p => p.theme.colors.brand.primary};
+      }
     }
     .label__dropdown {
       position: absolute;

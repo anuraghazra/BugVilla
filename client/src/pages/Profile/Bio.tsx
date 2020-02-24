@@ -64,7 +64,7 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
           }
           onBlur={() => !isSaveButton && setBioEditing(false)}
         >
-          {isCurrentUser ? currentUser.bio : user.bio}
+          {currentUser.bio}
         </Textarea>
         {!isBioEditing && (isCurrentUser ? currentUser.bio : user.bio)}
       </p>

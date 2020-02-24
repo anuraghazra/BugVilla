@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { notify } from 'react-notify-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -10,7 +9,7 @@ import Avatar from 'components/common/Avatar';
 import Button from 'components/common/Button';
 import Flex from 'components/common/Flex';
 import Label from 'components/common/Label';
-import Toast, { toast } from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
@@ -86,12 +85,11 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         </h4>
 
         <Flex>
-          {bug.labels &&
-            bug.labels.map((label: string, i: number) => (
-              <Label className="mt-5" type={label} key={i}>
-                {label}
-              </Label>
-            ))}
+          {bug?.labels.map((label: string, i: number) => (
+            <Label className="mt-5" type={label} key={i}>
+              {label}
+            </Label>
+          ))}
         </Flex>
       </div>
       <div>

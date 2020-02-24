@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 
 import socket from 'utils/socket';
@@ -7,6 +7,7 @@ import useFetch from 'hooks/useFetch';
 
 import DashboardHeader from 'components/DashboardHeader';
 import NotificationItem from './NotificationItem';
+import Illustration from 'components/common/Illustration';
 
 const NotificationsWrapper = styled.section`
   width: 100%;
@@ -27,22 +28,31 @@ const Notifications: React.FC = () => {
     });
   }, []);
 
-  notifications = notifications?.data || [];
-  console.log(notifications);
+  notifications = notifications?.data;
+
+  const renderNotifications = () => {
+    if (isLoading) return <Loading />;
+    if (error) {
+      return (
+        <Illustration
+          message="Something went wrong while loading the data"
+          type="error"
+        />
+      );
+    }
+    if (notifications?.length === 0) return <Illustration type="empty" />;
+
+    return notifications
+      ?.reverse()
+      .map((notify: any) => <NotificationItem notify={notify} />);
+  };
+
   return (
     <NotificationsWrapper>
-      <div>
-        <DashboardHeader>
-          <h1>Notifications</h1>
-        </DashboardHeader>
-
-        {isLoading && <Loading />}
-        {error && <p>Something went wrong while fetching data</p>}
-
-        {notifications.reverse().map((notify: any) => {
-          return <NotificationItem notify={notify} />;
-        })}
-      </div>
+      <DashboardHeader>
+        <h1>Notifications</h1>
+      </DashboardHeader>
+      {renderNotifications()}
     </NotificationsWrapper>
   );
 };

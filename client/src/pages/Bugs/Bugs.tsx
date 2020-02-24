@@ -14,6 +14,7 @@ import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
 import { fetchBugs } from 'store/ducks/bugs';
 import { StoreState } from 'store';
+import Illustration from 'components/common/Illustration';
 
 const breakpointColumns = {
   default: 3,
@@ -43,6 +44,55 @@ const Bugs: React.FC = () => {
     dispatch(fetchBugs());
   }, [dispatch]);
 
+  const renderBugs = () => {
+    if (error) {
+      return (
+        <Illustration
+          message="Something went wrong while loading the data"
+          type="error"
+        />
+      );
+    }
+
+    if (bugs.length === 0 && !isLoading) return <Illustration type="empty" />;
+
+    // setting is loading in JSX because
+    // early exiting prevents loading & showing data at the same time
+    return (
+      <>
+        {isLoading && <Loading />}
+        <Masonry
+          breakpointCols={breakpointColumns}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {bugs
+            ?.filter((bug: any) => {
+              const labelName = query.get('label');
+              const status = query.get('status');
+              if (!labelName && !status) return true;
+              // check for matching label or isOpen status
+              return bug.labels.includes(labelName) || (status && !bug.isOpen);
+            })
+            .map((bug: any) => {
+              return (
+                <BugCard
+                  key={bug.id}
+                  title={bug.title}
+                  number={bug.bugId}
+                  labels={bug.labels}
+                  body={bug.body}
+                  isOpen={bug.isOpen}
+                  date={formatDate(bug.date_opened)}
+                  author={bug.author}
+                />
+              );
+            })}
+        </Masonry>
+      </>
+    );
+  };
+
   return (
     <BugsWrapper>
       <DashboardHeader>
@@ -70,38 +120,7 @@ const Bugs: React.FC = () => {
         )}
       </DashboardHeader>
 
-      {isLoading && <Loading />}
-      {error && <p>Something went wrong while fetching the data</p>}
-
-      <Masonry
-        breakpointCols={breakpointColumns}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column"
-      >
-        {bugs &&
-          bugs
-            .filter((bug: any) => {
-              let labelName = query.get('label');
-              let status = query.get('status');
-              if (!labelName && !status) return true;
-              // check for mathcing label or isOpen status
-              return bug.labels.includes(labelName) || (status && !bug.isOpen);
-            })
-            .map((bug: any) => {
-              return (
-                <BugCard
-                  key={bug.id}
-                  title={bug.title}
-                  number={bug.bugId}
-                  labels={bug.labels}
-                  body={bug.body}
-                  isOpen={bug.isOpen}
-                  date={formatDate(bug.date_opened)}
-                  author={bug.author}
-                />
-              );
-            })}
-      </Masonry>
+      {renderBugs()}
     </BugsWrapper>
   );
 };

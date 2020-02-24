@@ -16,6 +16,7 @@ import Signup from 'components/Signup/Signup';
 import Home from 'pages/Home/Home';
 import Dashboard from 'pages/Dashboard/Dashboard';
 import NotFound from 'components/NotFound';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 socket.on('received-notification', (data: any) => {
   toast.info('New notifications available');
@@ -46,20 +47,21 @@ const App: React.FC = () => {
           }}
         />
         <GlobalStyles />
+        <ErrorBoundary>
+          <div>
+            <Switch>
+              <Route path="/" exact>
+                <Home right={Signup} />
+              </Route>
+              <Route path="/login" exact>
+                <Home right={Login} />
+              </Route>
 
-        <div>
-          <Switch>
-            <Route path="/" exact>
-              <Home right={Signup} />
-            </Route>
-            <Route path="/login" exact>
-              <Home right={Login} />
-            </Route>
-
-            <AuthRoute path="/" component={Dashboard} />
-            <Route component={NotFound} />
-          </Switch>
-        </div>
+              <AuthRoute path="/" component={Dashboard} />
+              <Route component={NotFound} />
+            </Switch>
+          </div>
+        </ErrorBoundary>
       </Router>
     </ThemeProvider>
   );

@@ -10,6 +10,7 @@ import Loading from 'components/common/Loading';
 import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
 import UserInfo from './UserInfo';
+import Illustration from 'components/common/Illustration';
 
 const breakpointColumns = {
   default: 3,
@@ -32,28 +33,31 @@ const Profile = () => {
   );
   const [commentsCountData] = useFetch(`/api/user/${username}/comments/count`);
 
-  const isLoading = userLoading && bugsLoading;
-  const error = userError && bugsError;
+  const isLoading = userLoading || bugsLoading;
+  const error = userError || bugsError;
   const user = userData?.data;
-  const bugs = bugData?.data;
+  const bugs = bugData?.data || [];
   const commentCount = commentsCountData?.data?.counts;
 
-  if (isLoading) return <Loading />;
-  if (error) return <p>Something went wrong while fetching the data</p>;
-
-  return (
-    <ProfileWrapper>
-      <DashboardHeader>
-        <h1>User</h1>
-      </DashboardHeader>
-      {user && (
-        <UserInfo
-          user={user}
-          totalComments={commentCount}
-          totalBugs={bugs && bugs.length}
+  const renderUserInfo = () => {
+    if (isLoading) return <Loading />;
+    if (error) {
+      return (
+        <Illustration
+          type="error"
+          message="Something went wrong while loading the data"
         />
-      )}
-      {bugs && (
+      );
+    }
+    return (
+      <>
+        {user && (
+          <UserInfo
+            user={user}
+            totalComments={commentCount}
+            totalBugs={bugs?.length}
+          />
+        )}
         <section className="user__bugs">
           <h3>Bugs issued by {username}</h3>
           <br />
@@ -78,13 +82,22 @@ const Profile = () => {
               ))}
             </Masonry>
           ) : (
-            <h3>
-              <span className="color--gray">@{username}</span> did not issued
-              any bugs yet!
-            </h3>
+            <Illustration
+              type="empty"
+              message={`No bugs issued by ${username}`}
+            />
           )}
         </section>
-      )}
+      </>
+    );
+  };
+
+  return (
+    <ProfileWrapper>
+      <DashboardHeader>
+        <h1>User</h1>
+      </DashboardHeader>
+      {renderUserInfo()}
     </ProfileWrapper>
   );
 };

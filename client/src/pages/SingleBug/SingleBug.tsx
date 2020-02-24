@@ -18,6 +18,7 @@ import CommentEditorForm from './CommentEditorForm';
 
 import { fetchBugWithId } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import Illustration from 'components/common/Illustration';
 
 export const addCommentSchema = yup.object().shape({
   body: yup
@@ -52,8 +53,8 @@ const SingleBug: React.FC = () => {
   return (
     <SingleBugWrapper>
       {isFetching && <Loading />}
-      {fetchError && <p>Something went wrong while fetching the data</p>}
-      {bug ? (
+      {fetchError && <Illustration type="error" />}
+      {bug && (
         <>
           <section>
             <DashboardHeader>
@@ -74,42 +75,34 @@ const SingleBug: React.FC = () => {
               author={bug.author}
               date={bug.date_opened}
             />
-            {bug.comments &&
-              bug.comments.map((comment: any) => (
-                <Comment
-                  bugId={bugId}
-                  commentId={comment.id}
-                  key={comment.id}
-                  body={comment.body}
-                  author={comment.author}
-                  date={comment.date}
-                />
-              ))}
-            {bug.activities &&
-              bug.activities.map((activity: any, i: number) => (
-                <Activity
-                  key={i}
-                  author={activity.author}
-                  action={activity.action}
-                  date={activity.date}
-                />
-              ))}
-            {bug.references &&
-              bug.references.map((ref: any, i: number) => (
-                <Reference
-                  key={i}
-                  from={ref.from}
-                  by={ref.by}
-                  date={ref.date}
-                />
-              ))}
+            {bug?.comments.map((comment: any) => (
+              <Comment
+                bugId={bugId}
+                commentId={comment.id}
+                key={comment.id}
+                body={comment.body}
+                author={comment.author}
+                date={comment.date}
+              />
+            ))}
+            {bug?.activities.map((activity: any, i: number) => (
+              <Activity
+                key={i}
+                author={activity.author}
+                action={activity.action}
+                date={activity.date}
+              />
+            ))}
+            {bug?.references.map(({ from, by, date }: any, i: number) => (
+              <Reference key={i} from={from} by={by} date={date} />
+            ))}
             <CommentEditorForm bugIsOpen={bug.isOpen} />
           </section>
           <section className="singlebug__aside">
             <SingleBugAside bugId={bugId} bug={bug} />
           </section>
         </>
-      ) : null}
+      )}
     </SingleBugWrapper>
   );
 };
