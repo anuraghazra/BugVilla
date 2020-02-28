@@ -9,12 +9,13 @@ import * as serviceWorker from './serviceWorker';
 
 import store from './store';
 import { Provider } from 'react-redux';
-import { checkAuth} from 'store/ducks/auth';
-
+import { checkAuth } from 'store/ducks/auth';
+import { Router } from 'react-router-dom';
 
 registerIcons();
 
 store.dispatch(checkAuth());
+
 
 ReactDOM.render(
   <Provider store={store}>

@@ -6,6 +6,7 @@ interface BaseDropdownProps {
   isOpen?: boolean;
   children: any;
   trigger?: (toggle: any) => any;
+  shouldCloseOnClick?: boolean;
   [x: string]: any;
 }
 
@@ -13,39 +14,40 @@ const BaseDropdown: React.FC<BaseDropdownProps> = ({
   isOpen,
   children,
   trigger,
+  shouldCloseOnClick,
   ...props
 }) => {
   const [isDropdownOpen, setDropdownState] = useState(false);
 
   const closeDropdown = (e: any) => {
-    if (e.target.closest('.label__header')) return;
-    if (!e.target.closest('.label__dropdown')) {
-      setDropdownState(false);
-    }
+    if (e.target.closest('.dropdown__content') && !shouldCloseOnClick) return;
+    setDropdownState(false);
   };
-  const toggleDropdown = () => {
+  const toggleDropdown = (e: any) => {
     setDropdownState(!isDropdownOpen);
   };
 
   useEffect(() => {
-    return document.body.addEventListener('click', closeDropdown);
+    document.body.addEventListener('click', closeDropdown);
+    return () => document.body.removeEventListener('click', closeDropdown);
   }, []);
 
   // if type is object then its a ReactElement,
   // add OnClick handler to it automatically
   return (
-    <>
+    <span style={{ position: 'relative' }}>
       {trigger!(toggleDropdown)}
       <StyledDropdown
         data-testid="dropdown-content"
         isOpen={isDropdownOpen}
         {...props}
+        className={props.className + ' dropdown__content'}
       >
         {typeof children === 'object'
           ? React.cloneElement(children, { onClick: closeDropdown })
           : children(toggleDropdown)}
       </StyledDropdown>
-    </>
+    </span>
   );
 };
 

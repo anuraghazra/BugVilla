@@ -87,3 +87,22 @@ export const htmlDecode = (input: string): string => {
   textarea.innerHTML = input;
   return textarea.value;
 }
+
+
+/**
+ * decode html entities | parse refs & mentions
+ * @param markdown string
+ */
+export const renderMarkdown = (markdown: string): string => htmlDecode(parseRefsAndMentions(markdown))
+
+export const copyToClipboard = (str: string) => {
+  let el = document.createElement('textarea');
+  el.value = str;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}

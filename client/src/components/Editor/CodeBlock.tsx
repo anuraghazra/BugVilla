@@ -21,7 +21,6 @@ interface CodeBlockProps {
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ language, value = '' }) => {
   if (!language) language = 'text';
-  console.log({language})
   return (
     <SyntaxHighlighter language={language} style={theme}>
       {value}

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Masonry from 'react-masonry-css';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import useQuery from 'hooks/useQuery';
 
 import { formatDate } from 'utils';
 import Flex from 'components/common/Flex';
@@ -26,10 +27,6 @@ const breakpointColumns = {
 const BugsWrapper = styled.section`
   margin-top: 0;
 `;
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
 
 const Bugs: React.FC = () => {
   let query = useQuery();

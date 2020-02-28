@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { toast } from 'components/common/Toast';
 import Loading from 'components/common/Loading';
+import useQuery from 'hooks/useQuery';
 
 import DashboardHeader from 'components/DashboardHeader';
 import Comment from '../../components/Comment/Comment';
@@ -35,6 +36,7 @@ export interface AuthorProps {
 }
 
 const SingleBug: React.FC = () => {
+  const query = useQuery();
   const dispatch = useDispatch<Dispatch>();
   const { bugId } = useParams<any>();
 
@@ -44,8 +46,14 @@ const SingleBug: React.FC = () => {
     state.error['singlebug/FETCH_BUG']
   ]);
 
+  let query_comment_id = query.get('comment_id');
   useEffect(() => {
-    dispatch(fetchBugWithId(bugId));
+    dispatch(fetchBugWithId(bugId)).then(() => {
+      // scroll to comment
+      if (!query_comment_id) return;
+      let comment: any = document?.getElementById(query_comment_id as string);
+      comment && window.scrollTo(0, comment.offsetTop);
+    });
   }, [bugId]);
 
   fetchError && toast.error(fetchError);
@@ -83,6 +91,7 @@ const SingleBug: React.FC = () => {
                 body={comment.body}
                 author={comment.author}
                 date={comment.date}
+                isSelected={query_comment_id === comment.id}
               />
             ))}
             {bug?.activities.map((activity: any, i: number) => (

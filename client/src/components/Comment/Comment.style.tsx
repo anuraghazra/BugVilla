@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const StyledComment = styled.div`
+const StyledComment = styled.div<{ isSelected?: boolean }>`
   padding: 20px;
   border: 1px solid ${p => p.theme.colors.common.offwhite};
   border-radius: 10px;
@@ -8,6 +8,12 @@ const StyledComment = styled.div`
   margin-bottom: ${p => p.theme.spacings.bottom}px;
   position: relative;
   word-break: break-word;
+
+  ${p =>
+    p.isSelected &&
+    css`
+      border: 1px solid ${p => p.theme.colors.common.green};
+    `}
 
   &:after {
     content: '';
@@ -29,26 +35,9 @@ const StyledComment = styled.div`
 
   .hover__button {
     cursor: pointer;
-    position: relative;
     color: ${p => p.theme.colors.text.gray};
 
-    &::after {
-      content: 'Edit';
-      width: 50px;
-      position: absolute;
-      left: -40px;
-      pointer-events: none;
-      text-align: center;
-      font-size: 12px;
-      opacity: 0;
-      transition: 0.2s;
-    }
-
     &:hover {
-      &::after {
-        opacity: 1;
-        transition: 0.2s;
-      }
       color: ${p => p.theme.colors.brand.primary};
     }
   }

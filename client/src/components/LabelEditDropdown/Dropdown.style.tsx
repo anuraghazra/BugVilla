@@ -1,9 +1,11 @@
 import styled, { css } from 'styled-components';
 
 const StyledDropdown = styled.div<{ isOpen?: boolean }>`
-  width: fit-content;
+  width: max-content;
   padding: 15px;
   border-radius: 5px;
+  position: absolute;
+  right: 0;
 
   background-color: ${p => p.theme.colors.common.white};
   border: ${p => p.theme.border};
@@ -23,8 +25,8 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
 
   .dropdown__items {
     .dropdown__item {
+      min-width: 150px;
       display: block;
-      width: 150px;
       margin: 10px 0;
       cursor: pointer;
       border-radius: 5px;

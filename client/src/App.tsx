@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Router, Route, Switch } from 'react-router-dom';
 import Notifications from 'react-notify-toast';
@@ -23,6 +23,19 @@ socket.on('received-notification', (data: any) => {
 });
 
 const App: React.FC = () => {
+  useEffect(() => {
+    // intercept a:href links in markdown
+    document.addEventListener('click', (e: any) => {
+      if (!e.target.closest('.markdown-preview') || e.target.tagName !== 'A') {
+        return;
+      }
+      const href = e.target.getAttribute('href');
+      if (href.match(/http(s?):\/\//)) return;
+      e.preventDefault();
+      history.push(href);
+    });
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Router history={history}>

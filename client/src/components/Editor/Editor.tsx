@@ -14,7 +14,7 @@ import { InputWrapper } from 'components/common/Form';
 import CodeBlock from './CodeBlock';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
-import { htmlDecode, parseRefsAndMentions } from 'utils';
+import { renderMarkdown, htmlDecode } from 'utils';
 
 const MarkdownPlugins = {
   code: CodeBlock
@@ -32,18 +32,17 @@ const useSuggestion = (url: string, prop: string[]) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (suggestions) {
-      const isBug = prop[1] === 'bugId';
-      const suggestionsArray = suggestions.data.map((suggestions: any) => {
-        let display = suggestions[prop[0]];
-        if (isBug) {
-          // if it's a bug then append the #1 (bugId) to the display
-          display = suggestions[prop[0]] + ' #' + suggestions[prop[1]];
-        }
-        return { display, id: suggestions[prop[1]] };
-      });
-      setData(suggestionsArray);
-    }
+    if (!suggestions) return;
+    const isBug = prop[1] === 'bugId';
+    const suggestionsArray = suggestions.data.map((suggestions: any) => {
+      let display = suggestions[prop[0]];
+      if (isBug) {
+        // if it's a bug then append the #1 (bugId) to the display
+        display = suggestions[prop[0]] + ' #' + suggestions[prop[1]];
+      }
+      return { display, id: suggestions[prop[1]] };
+    });
+    setData(suggestionsArray);
   }, [suggestions]);
 
   return data;
@@ -108,7 +107,7 @@ const Editor: React.FC<EditorProps> = ({
           <ReactMarkdown
             escapeHtml={true}
             className="editor__tabpanel markdown-preview"
-            source={htmlDecode(parseRefsAndMentions(markdown))}
+            source={renderMarkdown(markdown)}
             renderers={MarkdownPlugins}
           />
         </TabPanel>

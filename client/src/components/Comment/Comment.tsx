@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   timeAgo,
   getRefsOrMentions,
-  htmlDecode,
-  parseRefsAndMentions
+  renderMarkdown,
+  copyToClipboard
 } from 'utils';
 import {
   AuthorProps,
@@ -33,9 +33,10 @@ import {
   mentionPeople
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import BaseDropdown from 'components/common/BaseDropdown';
 
 const MarkdownPlugins = {
-  code: CodeBlock,
+  code: CodeBlock
 };
 
 interface CommentProps {
@@ -44,6 +45,7 @@ interface CommentProps {
   body: string;
   bugId: number | string;
   commentId: string;
+  isSelected?: boolean;
 }
 
 const Comment: React.FC<CommentProps> = ({
@@ -51,7 +53,8 @@ const Comment: React.FC<CommentProps> = ({
   date,
   body,
   bugId,
-  commentId
+  commentId,
+  isSelected
 }) => {
   const dispatch = useDispatch<any>();
   const userId = useSelector((state: StoreState) => state.auth.user.id);
@@ -87,6 +90,13 @@ const Comment: React.FC<CommentProps> = ({
     setIsEditing(!isEditing);
   };
 
+  const copyCommentLink = () => {
+    let fullPath = window.location.origin + window.location.pathname;
+    let url = commentId ? `${fullPath}?comment_id=${commentId}` : fullPath;
+    copyToClipboard(url);
+    toast.success('Link copied!');
+  };
+
   const onSubmit = (formData: any) => {
     if (commentId === '') {
       // update the bug's body
@@ -112,7 +122,11 @@ const Comment: React.FC<CommentProps> = ({
 
   editingError && toast.error(editingError);
   return (
-    <StyledComment style={{ padding: showCommentEditor ? 0 : 20 }}>
+    <StyledComment
+      id={commentId}
+      isSelected={isSelected}
+      style={{ padding: showCommentEditor ? 0 : 20 }}
+    >
       {showCommentEditor ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <StyledEditor>
@@ -144,36 +158,59 @@ const Comment: React.FC<CommentProps> = ({
         </form>
       ) : (
         <>
-          <Flex className="comment__header" nowrap align="center">
-            <Avatar
-              width="45px"
-              height="45px"
-              size={45}
-              username={author.username}
-            />
-            <span className="color--gray ml-15">
-              <Link
-                className="text--medium"
-                to={`/profiles/${author.username}`}
-              >
-                {author.name}{' '}
-              </Link>
-              commented {timeAgo(date)}
-            </span>
-            {isAuthorOfComment && (
-              <span
-                onClick={handleEditorState}
-                style={{ marginLeft: 'auto' }}
-                className="hover__button color--gray ml-15"
-              >
-                <FontAwesomeIcon icon="ellipsis-v" />
+          <Flex
+            className="comment__header"
+            nowrap
+            align="center"
+            justify="space-between"
+          >
+            <Flex nowrap align="center">
+              <Avatar
+                width="45px"
+                height="45px"
+                size={45}
+                username={author.username}
+              />
+              <span className="color--gray ml-15">
+                <Link
+                  className="text--medium"
+                  to={`/profiles/${author.username}`}
+                >
+                  {author.name}{' '}
+                </Link>
+                commented {timeAgo(date)}
               </span>
-            )}
+            </Flex>
+            <div>
+              <BaseDropdown
+                isOpen={false}
+                shouldCloseOnClick
+                trigger={toggle => (
+                  <span onClick={toggle} className="hover__button">
+                    <FontAwesomeIcon icon="ellipsis-v" />
+                  </span>
+                )}
+              >
+                <Flex direction="column">
+                  <span onClick={copyCommentLink} className="hover__button">
+                    Copy link
+                  </span>
+                  {isAuthorOfComment && (
+                    <span
+                      onClick={handleEditorState}
+                      className="hover__button mt-5"
+                    >
+                      Edit Comment
+                    </span>
+                  )}
+                </Flex>
+              </BaseDropdown>
+            </div>
           </Flex>
           <ReactMarkdown
             renderers={MarkdownPlugins}
             className="markdown-preview"
-            source={htmlDecode(parseRefsAndMentions(body))}
+            source={renderMarkdown(body)}
           />
         </>
       )}
