@@ -9,3 +9,4 @@ declare module 'react-mentions';
 declare module 'mutation-observer';
 declare module 'react-modal';
 declare module 'react-notify-toast';
+declare module 'react-emoji-render';

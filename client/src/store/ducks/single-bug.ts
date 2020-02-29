@@ -30,6 +30,12 @@ export const UPDATE_BUG_REQUEST = 'singlebug/UPDATE_BUG_REQUEST';
 export const UPDATE_BUG_SUCCESS = 'singlebug/UPDATE_BUG_SUCCESS';
 export const UPDATE_BUG_FAILURE = 'singlebug/UPDATE_BUG_FAILURE';
 
+export const UPDATE_REACTIONS_SUCCESS = 'singlebug/UPDATE_REACTIONS_SUCCESS';
+export const UPDATE_REACTIONS_FAILURE = 'singlebug/UPDATE_REACTIONS_FAILURE';
+
+export const UPDATE_COMMENT_REACTIONS_SUCCESS = 'singlebug/UPDATE_COMMENT_REACTIONS_SUCCESS';
+export const UPDATE_COMMENT_REACTIONS_FAILURE = 'singlebug/UPDATE_COMMENT_REACTIONS_FAILURE';
+
 export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
 export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
 
@@ -86,6 +92,22 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         bug: {
           ...state.bug,
           labels: action.payload
+        }
+      }
+    case UPDATE_REACTIONS_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          reactions: action.payload
+        }
+      }
+    case UPDATE_COMMENT_REACTIONS_SUCCESS:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          comments: action.payload
         }
       }
     case CLEAR_BUG_DATA:
@@ -238,5 +260,38 @@ export const mentionPeople = (
       socket.emit('send-notification', { message: 'Users Mentioned' })
     },
     error: () => { },
+  }
+});
+
+// add or remove reactions from bug (bug.body)
+export const addOrRemoveReacts = (
+  bugId: number | string,
+  emoji: string
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/reactions`,
+    formData: { emoji },
+    request: () => { },
+    success: UPDATE_REACTIONS_SUCCESS,
+    error: UPDATE_REACTIONS_FAILURE,
+  }
+});
+
+// add or remove reactions from comments
+export const addOrRemoveReactsComment = (
+  bugId: number | string,
+  commentId: string,
+  emoji: string
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/comments/${commentId}/reactions`,
+    formData: { emoji },
+    request: () => { },
+    success: UPDATE_COMMENT_REACTIONS_SUCCESS,
+    error: UPDATE_COMMENT_REACTIONS_FAILURE,
   }
 });

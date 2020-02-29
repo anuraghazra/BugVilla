@@ -3,6 +3,7 @@ const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
 const { Notification } = require('../models/notificationModel')
 const { notify_types } = require('../constants')
+const mongoose = require('mongoose')
 
 /**
  * @route GET /api/bugs/
@@ -315,6 +316,73 @@ exports.deleteLabel = async (req, res) => {
   } catch (err) {
     res.internalError({
       error: `Something went wrong while deleting label`,
+    })
+  }
+}
+
+
+/**
+ * @route PATCH /api/bugs/:bugId/reactions
+ * @description PATCH toggle a reaction from specified bugId & reaction name
+ * @type RequestHandler
+ */
+exports.addOrRemoveReaction = async (req, res) => {
+  const { error, value } = Joi.object({
+    emoji: Joi.string().required()
+  }).validate(req.body);
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let bug = await Bug.findOne({ bugId: req.params.bugId })
+
+    // find index of the reactions, if its already exist then we will remove
+    // the reactions else we will add it.
+    const index = bug.reactions.findIndex((reaction) => {
+      const isSameId = reaction.user.toString() === req.user.id.toString();
+      const isSameReaction = reaction.emoji === value.emoji
+      return isSameId && isSameReaction;
+    });
+    if (index > -1) {
+      bug.reactions.splice(index, 1);
+    } else {
+      bug.reactions.push({
+        emoji: value.emoji,
+        user: req.user.id
+      })
+    }
+
+    const newBug = await bug.save();
+    if (!newBug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+    res.ok({ data: newBug.reactions });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while adding new reaction`,
+    })
+  }
+}
+
+/**
+ * @route GET /api/bugs/:bugId/reactions
+ * @description GET get all reactions
+ * @type RequestHandler
+ */
+exports.getReactions = async (req, res) => {
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let bug = await Bug.findOne({ bugId: req.params.bugId })
+      .select('reactions')
+      .populate('reactions.user', 'name username')
+
+    res.ok({ data: bug.reactions });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while adding new reaction`,
     })
   }
 }

@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  timeAgo,
-  getRefsOrMentions,
-  renderMarkdown,
-  copyToClipboard
-} from 'utils';
+import { getRefsOrMentions, renderMarkdown } from 'utils';
 import {
   AuthorProps,
   addCommentSchema as CommentSchema
 } from 'pages/SingleBug/SingleBug';
 
-import Avatar from 'components/common/Avatar';
 import Button, { ButtonGroup } from 'components/common/Button';
-import Flex from 'components/common/Flex';
 import { toast } from 'components/common/Toast';
 
 import CodeBlock from 'components/Editor/CodeBlock';
@@ -33,7 +24,8 @@ import {
   mentionPeople
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import BaseDropdown from 'components/common/BaseDropdown';
+import CommentHeader from './CommentHeader';
+import Reactions from './Reactions';
 
 const MarkdownPlugins = {
   code: CodeBlock
@@ -46,15 +38,16 @@ interface CommentProps {
   bugId: number | string;
   commentId: string;
   isSelected?: boolean;
+  reactions?: any;
 }
-
 const Comment: React.FC<CommentProps> = ({
   author,
   date,
   body,
   bugId,
   commentId,
-  isSelected
+  isSelected,
+  reactions
 }) => {
   const dispatch = useDispatch<any>();
   const userId = useSelector((state: StoreState) => state.auth.user.id);
@@ -88,13 +81,6 @@ const Comment: React.FC<CommentProps> = ({
     e.preventDefault();
     setValue('body', '');
     setIsEditing(!isEditing);
-  };
-
-  const copyCommentLink = () => {
-    let fullPath = window.location.origin + window.location.pathname;
-    let url = commentId ? `${fullPath}?comment_id=${commentId}` : fullPath;
-    copyToClipboard(url);
-    toast.success('Link copied!');
   };
 
   const onSubmit = (formData: any) => {
@@ -158,60 +144,21 @@ const Comment: React.FC<CommentProps> = ({
         </form>
       ) : (
         <>
-          <Flex
-            className="comment__header"
-            nowrap
-            align="center"
-            justify="space-between"
-          >
-            <Flex nowrap align="center">
-              <Avatar
-                width="45px"
-                height="45px"
-                size={45}
-                username={author.username}
-              />
-              <span className="color--gray ml-15">
-                <Link
-                  className="text--medium"
-                  to={`/profiles/${author.username}`}
-                >
-                  {author.name}{' '}
-                </Link>
-                commented {timeAgo(date)}
-              </span>
-            </Flex>
-            <div>
-              <BaseDropdown
-                isOpen={false}
-                shouldCloseOnClick
-                trigger={toggle => (
-                  <span onClick={toggle} className="hover__button">
-                    <FontAwesomeIcon icon="ellipsis-v" />
-                  </span>
-                )}
-              >
-                <Flex direction="column">
-                  <span onClick={copyCommentLink} className="hover__button">
-                    Copy link
-                  </span>
-                  {isAuthorOfComment && (
-                    <span
-                      onClick={handleEditorState}
-                      className="hover__button mt-5"
-                    >
-                      Edit Comment
-                    </span>
-                  )}
-                </Flex>
-              </BaseDropdown>
-            </div>
-          </Flex>
+          <CommentHeader
+            bugId={bugId}
+            date={date}
+            author={author}
+            commentId={commentId}
+            handleEditorState={handleEditorState}
+            isAuthorOfComment={isAuthorOfComment}
+          />
+
           <ReactMarkdown
             renderers={MarkdownPlugins}
             className="markdown-preview"
             source={renderMarkdown(body)}
           />
+          <Reactions reactions={reactions} />
         </>
       )}
     </StyledComment>

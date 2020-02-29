@@ -20,7 +20,7 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
     css`
       opacity: 1;
       pointer-events: all;
-      transform: translateY(0);
+      transform: translateY(5px);
     `}
 
   .dropdown__items {

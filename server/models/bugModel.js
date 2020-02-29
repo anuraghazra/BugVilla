@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 const autoIncrement = require('mongoose-auto-increment');
 const { UserInfoSchema } = require('./userModel');
 const { CommentSchema } = require('./commentModel');
-
+const ReactionSchema = require('./ReactionSchema')
 
 // plugin initialize
 autoIncrement.initialize(mongoose.connection);
@@ -51,7 +51,8 @@ const BugSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     },
-  }]
+  }],
+  reactions: [{ type: ReactionSchema }]
 }, { strict: true })
 
 BugSchema.set('toJSON', {
@@ -104,3 +105,4 @@ module.exports.Bug = Bug;
 module.exports.validateBug = validateBug;
 module.exports.validateLabel = validateLabel;
 module.exports.validateReferences = validateReferences;
+module.exports.ReactionSchema = ReactionSchema;

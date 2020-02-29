@@ -58,6 +58,7 @@ const SingleBug: React.FC = () => {
 
   fetchError && toast.error(fetchError);
 
+  console.log(bug);
   return (
     <SingleBugWrapper>
       {isFetching && <Loading />}
@@ -82,6 +83,7 @@ const SingleBug: React.FC = () => {
               body={bug.body}
               author={bug.author}
               date={bug.date_opened}
+              reactions={bug.reactions}
             />
             {bug?.comments.map((comment: any) => (
               <Comment
@@ -91,6 +93,7 @@ const SingleBug: React.FC = () => {
                 body={comment.body}
                 author={comment.author}
                 date={comment.date}
+                reactions={comment.reactions}
                 isSelected={query_comment_id === comment.id}
               />
             ))}
