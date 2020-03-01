@@ -22,8 +22,8 @@ const Reactions: React.FC<{ reactions: any }> = ({ reactions }) => {
 
   return (
     <Flex align="center" className="comment__reactions">
-      {Object.values(reacts)?.map((react: any) => (
-        <Flex align="center" className="reaction">
+      {Object.values(reacts)?.map((react: any, index: number) => (
+        <Flex key={index} align="center" className="reaction">
           <Twemoji
             className="reaction_emoji"
             svg

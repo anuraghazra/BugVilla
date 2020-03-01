@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -148,6 +148,7 @@ const Comment: React.FC<CommentProps> = ({
             bugId={bugId}
             date={date}
             author={author}
+            reactions={reactions}
             commentId={commentId}
             handleEditorState={handleEditorState}
             isAuthorOfComment={isAuthorOfComment}

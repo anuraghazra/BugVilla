@@ -14,6 +14,7 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
   pointer-events: none;
   transform: translateY(-25px);
   transition: 0.2s;
+  z-index: 1;
 
   ${p =>
     p.isOpen &&

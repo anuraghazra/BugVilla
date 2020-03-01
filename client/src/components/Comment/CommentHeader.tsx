@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Twemoji } from 'react-emoji-render';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Avatar from 'components/common/Avatar';
@@ -10,11 +11,11 @@ import { copyToClipboard, timeAgo } from 'utils';
 
 import BaseDropdown from 'components/common/BaseDropdown';
 import { AuthorProps } from 'pages/SingleBug/SingleBug';
-import { useDispatch } from 'react-redux';
 import {
   addOrRemoveReacts,
   addOrRemoveReactsComment
 } from 'store/ducks/single-bug';
+import { StoreState } from 'store';
 
 const REACTIONS = [
   { emoji: ':+1:' },
@@ -29,6 +30,7 @@ interface CommentProps {
   bugId: number | string;
   author: AuthorProps;
   date: string;
+  reactions: any;
   commentId: string;
   isAuthorOfComment: boolean;
   handleEditorState: (e: any) => void;
@@ -38,10 +40,12 @@ const CommentHeader: React.FC<CommentProps> = ({
   author,
   date,
   commentId,
+  reactions,
   isAuthorOfComment,
   handleEditorState
 }) => {
   const dispatch = useDispatch();
+  const currentUserId = useSelector((state: StoreState) => state.auth.user.id);
 
   const copyCommentLink = () => {
     let fullPath = window.location.origin + window.location.pathname;
@@ -103,14 +107,26 @@ const CommentHeader: React.FC<CommentProps> = ({
             className="comment__reactions"
             style={{ marginTop: 0 }}
           >
-            {REACTIONS?.map((reaction: any) => (
-              <span
-                onClick={() => handleReaction(reaction.emoji)}
-                className="reaction"
-              >
-                <Twemoji svg text={reaction.emoji} className="reaction_emoji" />
-              </span>
-            ))}
+            {REACTIONS?.map((reaction: any) => {
+              let isSelected = reactions.some(
+                (r: any) => r.emoji == reaction.emoji && r.user == currentUserId
+              );
+              return (
+                <span
+                  key={reaction.emoji}
+                  onClick={() => handleReaction(reaction.emoji)}
+                  className={`reaction ${
+                    isSelected ? 'reaction_selected' : ''
+                  }`}
+                >
+                  <Twemoji
+                    svg
+                    text={reaction.emoji}
+                    className="reaction_emoji"
+                  />
+                </span>
+              );
+            })}
           </Flex>
         </BaseDropdown>
 

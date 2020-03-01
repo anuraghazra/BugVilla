@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
+const compression = require('compression')
 const httpResponder = require('./middleware/httpResponder');
 const errorHandler = require('./middleware/errorHandler');
 const passport = require('passport');
@@ -55,6 +56,7 @@ app.use('/api/', rateLimit({
 }));
 app.use(morgan('dev'));
 
+app.use(compression());
 // Passport middleware
 require('./middleware/passport-auth');
 app.use(passport.initialize());

@@ -44,10 +44,11 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
   .comment__reactions {
     margin-top: 20px;
     .reaction {
-      cursor: pointer;
       padding: 5px 8px;
       border: 1px solid ${p => p.theme.colors.common.offwhite};
       border-left: none;
+      cursor: pointer;
+      z-index: 0;
 
       &:hover {
         background-color: ${p => p.theme.colors.brand.accent};
@@ -60,12 +61,18 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
         font-size: 14px;
       }
     }
+    .reaction_selected {
+      background-color: ${p => p.theme.colors.brand.accent};
+    }
     .reaction:first-child {
       border: 1px solid ${p => p.theme.colors.common.offwhite};
       border-radius: 5px 0 0 5px;
     }
     .reaction:last-child {
       border-radius: 0 5px 5px 0;
+    }
+    .reaction:only-child {
+      border-radius: 5px;
     }
   }
 

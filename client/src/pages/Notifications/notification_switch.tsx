@@ -10,22 +10,19 @@ const BugLinkTitle: React.FC<{ bugId: string; title: string }> = ({
   </NavLink>
 );
 
-const Commented: React.FC = ({
-  byUser: { username },
-  onBug: { bugId, title }
-}: any) => {
+const Commented: React.FC = ({ byUser: { username }, onBug }: any) => {
   return (
     <>
       <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
       <span> commented on </span>
-      <BugLinkTitle bugId={bugId} title={title} />
+      <BugLinkTitle bugId={onBug?.bugId} title={onBug?.bugId} />
     </>
   );
 };
 
 const Referenced: React.FC = ({
   byUser: { username },
-  fromBug: { bugId, title },
+  fromBug,
   references
 }: any) => {
   const referenceSlice = references.slice(0, 2);
@@ -44,30 +41,27 @@ const Referenced: React.FC = ({
         {remaining > 0 && <span> & {remaining} more bugs</span>}
         &nbsp; referenced in &nbsp;
       </span>
-      <BugLinkTitle bugId={bugId} title={title} />
+      <BugLinkTitle bugId={fromBug?.bugId} title={fromBug?.title} />
       &nbsp;by <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
     </>
   );
 };
 
-const NewBug: React.FC = ({
-  byUser: { username },
-  onBug: { bugId, title }
-}: any) => (
+const NewBug: React.FC = ({ byUser: { username }, onBug }: any) => (
   <>
     <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
     <span> created a new bug </span>
-    <BugLinkTitle bugId={bugId} title={title} />
+    <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
   </>
 );
 
 const BugStatus: React.FC = ({
   byUser: { username },
-  onBug: { bugId, title },
+  onBug,
   bug_status
 }: any) => (
   <>
-    <BugLinkTitle bugId={bugId} title={title} />
+    <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
     <span> {bug_status} by </span>
     <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
   </>
@@ -75,7 +69,7 @@ const BugStatus: React.FC = ({
 
 const Mentioned: React.FC = ({
   byUser: { username },
-  onBug: { bugId, title },
+  onBug,
   mentions
 }: any) => {
   return (
@@ -93,7 +87,7 @@ const Mentioned: React.FC = ({
         })}
       </span>
       <span>
-        at <BugLinkTitle bugId={bugId} title={title} />
+        at <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
       </span>
     </>
   );
