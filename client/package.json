@@ -52,6 +52,7 @@
     "test:e2e:run": "start-server-and-test start http://localhost:3000 cy:run",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -82,6 +83,7 @@
     "@types/testing-library__react": "^9.1.2",
     "cypress": "^3.8.2",
     "mutation-observer": "^1.0.3",
+    "source-map-explorer": "^2.3.1",
     "start-server-and-test": "^1.10.6",
     "webpack": "^4.41.5"
   }
