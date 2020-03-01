@@ -386,3 +386,81 @@ exports.getReactions = async (req, res) => {
     })
   }
 }
+
+/**
+ * @deprecated
+ * @route GET /api/bugs/:bugId/timeline
+ * @description GET timeline api
+ * @type RequestHandler
+ */
+exports.getTimeline = async (req, res) => {
+  // https://stackoverflow.com/a/41878683/10629172
+  // https://stackoverflow.com/q/25497150/10629172
+  try {
+    let data = await Bug.aggregate([
+      // needs to be a number otherwise it wont check
+      { $match: { bugId: + req.params.bugId } },
+      // concat the arrays
+      { $project: { timeline: { $concatArrays: ["$activities", "$references"] } } },
+      // unwind the timeline array
+      {
+        $unwind: "$timeline",
+      },
+      // sort by date
+      {
+        $sort: { "timeline.date": 1 }
+      },
+      {
+        $project: {
+          // determine if its a reference or an bug_status
+          type: {
+            $cond: { if: { $ifNull: ["$timeline.by", false] }, then: 'referenced', else: 'bug_status' }
+          },
+          action: '$timeline.action',
+          date: '$timeline.date',
+          from: '$timeline.from',
+          author: {
+            $cond: {
+              if: { $ifNull: ["$timeline.by", false] },
+              then: {
+                id: '$timeline.by._id',
+                username: '$timeline.by.username',
+                name: '$timeline.by.name'
+              },
+              else: {
+                id: '$timeline.author._id',
+                username: '$timeline.author.username',
+                name: '$timeline.author.name'
+              }
+            }
+          },
+          // author: {
+          //   id: '$timeline.author._id',
+          //   username: '$timeline.author.username',
+          //   name: '$timeline.author.name'
+          // },
+          'id': '$_id',
+          _id: 0,
+        },
+      },
+      // {
+      //   $group: {
+      //     _id: "$_id",
+      //     author: { $first: 1 },
+      //     action: { $first: 1 },
+      //     date: { $first: 1 },
+      //     by: { $first: 1 },
+      //     from: { $first: 1 },
+      //     timeline: { $push: "$timeline" }
+      //   }
+      // }
+    ]);
+
+    res.ok({ data: data });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while getting timeline data`,
+    })
+  }
+}

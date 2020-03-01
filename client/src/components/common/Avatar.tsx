@@ -10,7 +10,7 @@ interface AvatarProps {
   [x: string]: any;
 }
 
-const StyledAvatar = styled.img<AvatarProps>`
+export const StyledAvatar = styled.img<AvatarProps>`
   width: ${p => p.width || '150px'};
   height: ${p => p.height || '150px'};
   border: ${p => p.theme.border};

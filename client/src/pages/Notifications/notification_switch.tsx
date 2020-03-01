@@ -15,7 +15,7 @@ const Commented: React.FC = ({ byUser: { username }, onBug }: any) => {
     <>
       <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
       <span> commented on </span>
-      <BugLinkTitle bugId={onBug?.bugId} title={onBug?.bugId} />
+      <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
     </>
   );
 };

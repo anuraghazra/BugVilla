@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import genericAvatar from 'assets/images/avatar-generic.jpg';
 
 import Flex from 'components/common/Flex';
 import IconLink from 'components/common/IconLink';
@@ -15,6 +16,7 @@ import SignupSchema from './SignupSchema';
 import SignupWrapper from './Signup.style';
 import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
+import { StyledAvatar } from 'components/common/Avatar';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -45,6 +47,14 @@ const Signup: React.FC = () => {
         <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>
           <AvatarFileUploader
+            defaultImg={
+              <StyledAvatar
+                style={{ width: '100%', height: '100%' }}
+                alt="avatar"
+                size={150}
+                src={genericAvatar}
+              />
+            }
             name="image"
             inputRef={register({ required: 'Image is required' })}
             file={file}

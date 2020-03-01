@@ -56,9 +56,15 @@ const SingleBug: React.FC = () => {
     });
   }, [bugId]);
 
-  fetchError && toast.error(fetchError);
+  // get the concatenated timeline
+  let timeline: any = [];
+  if (bug) {
+    timeline = [...bug.activities, ...bug.references].sort(
+      (a: any, b: any) => (new Date(a.date) as any) - (new Date(b.date) as any)
+    );
+  }
 
-  console.log(bug);
+  fetchError && toast.error(fetchError);
   return (
     <SingleBugWrapper>
       {isFetching && <Loading />}
@@ -97,17 +103,25 @@ const SingleBug: React.FC = () => {
                 isSelected={query_comment_id === comment.id}
               />
             ))}
-            {bug?.activities.map((activity: any, i: number) => (
-              <Activity
-                key={i}
-                author={activity.author}
-                action={activity.action}
-                date={activity.date}
-              />
-            ))}
-            {bug?.references.map(({ from, by, date }: any, i: number) => (
-              <Reference key={i} from={from} by={by} date={date} />
-            ))}
+
+            {timeline?.map((data: any, i: number) => {
+              // if the data.by then its a reference
+              return data.by ? (
+                <Reference
+                  key={i}
+                  from={data.from}
+                  by={data.by}
+                  date={data.date}
+                />
+              ) : (
+                <Activity
+                  key={i}
+                  author={data.author}
+                  action={data.action}
+                  date={data.date}
+                />
+              );
+            })}
             <CommentEditorForm bugIsOpen={bug.isOpen} />
           </section>
           <section className="singlebug__aside">
