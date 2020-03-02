@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const StyledEditor = styled.div`
   padding: 20px;
+  background-color: ${p => p.theme.colors.common.white};
   border: 1px solid ${p => p.theme.colors.common.offwhite};
   border-radius: 10px;
   overflow: auto;
@@ -11,19 +12,19 @@ const StyledEditor = styled.div`
   }
 
   .editor__tabpanel {
-    border-radius: 5px;
     width: 100%;
     min-height: 250px;
-    color: ${p => p.theme.colors.text.black};
+    border-radius: 5px;
     padding: 20px;
+    color: ${p => p.theme.colors.text.black};
 
     textarea {
-      padding: 20px;
-      border: 1px solid ${p => p.theme.colors.common.offwhite};
-      min-height: 250px;
-      resize: vertical;
       width: 100%;
       height: 100%;
+      min-height: 250px;
+      padding: 20px;
+      border: 1px solid ${p => p.theme.colors.common.offwhite};
+      resize: vertical;
       &::placeholder {
         color: ${p => p.theme.colors.text.gray};
       }
@@ -63,7 +64,7 @@ export const StyledMentionList = styled.div`
     transform: translateY(30px);
     border-radius: 5px;
   }
-  
+
   .editor__tabpanel__suggestions__list {
     width: fit-content;
     padding: 15px;

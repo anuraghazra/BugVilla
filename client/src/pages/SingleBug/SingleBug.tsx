@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { toast } from 'components/common/Toast';
 import Loading from 'components/common/Loading';
+import Illustration from 'components/common/Illustration';
+import VerticalLine from 'components/common/VerticalLine';
 import useQuery from 'hooks/useQuery';
 
 import DashboardHeader from 'components/DashboardHeader';
 import Comment from '../../components/Comment/Comment';
-import Activity from './Activity';
-import Reference from './Reference';
+import Timeline from './Timeline';
 import MetaInfo from './MetaInfo';
 import SingleBugWrapper from './SingleBug.style';
 import SingleBugAside from './SingleBugAside';
@@ -19,7 +20,6 @@ import CommentEditorForm from './CommentEditorForm';
 
 import { fetchBugWithId } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import Illustration from 'components/common/Illustration';
 
 export const addCommentSchema = yup.object().shape({
   body: yup
@@ -83,46 +83,42 @@ const SingleBug: React.FC = () => {
                 commentsCount={bug?.comments?.length}
               />
             </DashboardHeader>
-            <Comment
-              bugId={bugId}
-              commentId={''} // assumes it's not a comment
-              body={bug.body}
-              author={bug.author}
-              date={bug.date_opened}
-              reactions={bug.reactions}
-            />
-            {bug?.comments.map((comment: any) => (
+
+            <VerticalLine>
               <Comment
                 bugId={bugId}
-                commentId={comment.id}
-                key={comment.id}
-                body={comment.body}
-                author={comment.author}
-                date={comment.date}
-                reactions={comment.reactions}
-                isSelected={query_comment_id === comment.id}
+                commentId={''} // assumes it's not a comment
+                body={bug.body}
+                author={bug.author}
+                date={bug.date_opened}
+                reactions={bug.reactions}
               />
-            ))}
+              {bug?.comments.map((comment: any) => (
+                <Comment
+                  bugId={bugId}
+                  commentId={comment.id}
+                  key={comment.id}
+                  body={comment.body}
+                  author={comment.author}
+                  date={comment.date}
+                  reactions={comment.reactions}
+                  isSelected={query_comment_id === comment.id}
+                />
+              ))}
+              <section>
+                {timeline?.map((data: any, i: number) => (
+                  <Timeline
+                    key={i}
+                    action={data.action}
+                    author={data.author || data.by}
+                    from={data.from}
+                    date={data.date}
+                  />
+                ))}
+              </section>
 
-            {timeline?.map((data: any, i: number) => {
-              // if the data.by then its a reference
-              return data.by ? (
-                <Reference
-                  key={i}
-                  from={data.from}
-                  by={data.by}
-                  date={data.date}
-                />
-              ) : (
-                <Activity
-                  key={i}
-                  author={data.author}
-                  action={data.action}
-                  date={data.date}
-                />
-              );
-            })}
-            <CommentEditorForm bugIsOpen={bug.isOpen} />
+              <CommentEditorForm bugIsOpen={bug.isOpen} />
+            </VerticalLine>
           </section>
           <section className="singlebug__aside">
             <SingleBugAside bugId={bugId} bug={bug} />

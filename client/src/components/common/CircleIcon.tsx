@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const StyledCircleIcon = styled.div<{ variant?: string; size?: string }>`
   font-size: 14px;
   border-radius: 50px;
-  width: ${p => p.size || '40px'};
-  height: ${p => p.size || '40px'};
+  min-width: ${p => p.size || '40px'};
+  min-height: ${p => p.size || '40px'};
   line-height: 1;
   display: flex;
   align-items: center;
