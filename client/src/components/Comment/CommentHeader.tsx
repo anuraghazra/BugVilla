@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Twemoji } from 'react-emoji-render';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Avatar from 'components/common/Avatar';
-import { toast } from 'components/common/Toast';
 import Flex from 'components/common/Flex';
+import Twemoji from 'components/common/Twemoji';
+import { toast } from 'components/common/Toast';
 import { copyToClipboard, timeAgo } from 'utils';
 
 import BaseDropdown from 'components/common/BaseDropdown';
@@ -120,8 +120,7 @@ const CommentHeader: React.FC<CommentProps> = ({
                   }`}
                 >
                   <Twemoji
-                    svg
-                    text={reaction.emoji}
+                    emoji={reaction.emoji}
                     className="reaction_emoji"
                   />
                 </span>

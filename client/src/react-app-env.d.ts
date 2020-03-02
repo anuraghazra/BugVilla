@@ -8,4 +8,3 @@ declare module 'react-markdown';
 declare module 'mutation-observer';
 declare module 'react-modal';
 declare module 'react-notify-toast';
-declare module 'react-emoji-render';

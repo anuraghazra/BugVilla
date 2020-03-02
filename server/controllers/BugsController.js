@@ -3,7 +3,6 @@ const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
 const { Notification } = require('../models/notificationModel')
 const { notify_types } = require('../constants')
-const mongoose = require('mongoose')
 
 /**
  * @route GET /api/bugs/

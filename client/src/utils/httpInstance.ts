@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
-import auth from './authHelper';
 
 const instance: AxiosInstance = axios.create({
   baseURL: '/',
