@@ -1,44 +1,23 @@
 import { Dispatch } from 'redux';
+import socket from 'utils/socket';
 import { CLEAR_ALL_ERRORS } from './errors';
 import { ApiAction } from 'store/middlewares/apiMiddleware';
-import socket from 'utils/socket';
+import { createAPIAction } from 'store/helpers';
 
 // action
 export const API = 'API';
 export const CLEAR_BUG_DATA = 'singlebug/CLEAR_BUG_DATA';
-export const FETCH_BUG_REQUEST = 'singlebug/FETCH_BUG_REQUEST';
-export const FETCH_BUG_SUCCESS = 'singlebug/FETCH_BUG_SUCCESS';
-export const FETCH_BUG_FAILURE = 'singlebug/FETCH_BUG_FAILURE';
-
-export const ADD_COMMENT_REQUEST = 'singlebug/ADD_COMMENT_REQUEST';
-export const ADD_COMMENT_SUCCESS = 'singlebug/ADD_COMMENT_SUCCESS';
-export const ADD_COMMENT_FAILURE = 'singlebug/ADD_COMMENT_FAILURE';
-
-export const TOGGLE_BUG_REQUEST = 'singlebug/TOGGLE_BUG_REQUEST';
-export const TOGGLE_BUG_SUCCESS = 'singlebug/TOGGLE_BUG_SUCCESS';
-export const TOGGLE_BUG_FAILURE = 'singlebug/TOGGLE_BUG_FAILURE';
-
-export const EDIT_LABELS_REQUEST = 'singlebug/EDIT_LABELS_REQUEST';
-export const EDIT_LABELS_SUCCESS = 'singlebug/EDIT_LABELS_SUCCESS';
-export const EDIT_LABELS_FAILURE = 'singlebug/EDIT_LABELS_FAILURE';
-
-export const EDIT_COMMENT_REQUEST = 'singlebug/EDIT_COMMENT_REQUEST';
-export const EDIT_COMMENT_SUCCESS = 'singlebug/EDIT_COMMENT_SUCCESS';
-export const EDIT_COMMENT_FAILURE = 'singlebug/EDIT_COMMENT_FAILURE';
-
-export const UPDATE_BUG_REQUEST = 'singlebug/UPDATE_BUG_REQUEST';
-export const UPDATE_BUG_SUCCESS = 'singlebug/UPDATE_BUG_SUCCESS';
-export const UPDATE_BUG_FAILURE = 'singlebug/UPDATE_BUG_FAILURE';
-
-export const UPDATE_REACTIONS_SUCCESS = 'singlebug/UPDATE_REACTIONS_SUCCESS';
-export const UPDATE_REACTIONS_FAILURE = 'singlebug/UPDATE_REACTIONS_FAILURE';
-
-export const UPDATE_COMMENT_REACTIONS_SUCCESS = 'singlebug/UPDATE_COMMENT_REACTIONS_SUCCESS';
-export const UPDATE_COMMENT_REACTIONS_FAILURE = 'singlebug/UPDATE_COMMENT_REACTIONS_FAILURE';
-
 export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
 export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
 
+export const FETCH_BUG = createAPIAction('singlebug/FETCH_BUG');
+export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
+export const TOGGLE_BUG = createAPIAction('singlebug/TOGGLE_BUG');
+export const EDIT_LABELS = createAPIAction('singlebug/EDIT_LABELS');
+export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
+export const UPDATE_BUG = createAPIAction('singlebug/UPDATE_BUG');
+export const UPDATE_REACTIONS = createAPIAction('singlebug/UPDATE_REACTIONS');
+export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
 
 export interface SinglebugReducerState {
   bug: any,
@@ -51,9 +30,9 @@ const DEFAULT_STATE: SinglebugReducerState = {
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
-    case FETCH_BUG_SUCCESS:
+    case FETCH_BUG.SUCCESS:
       return { ...state, bug: action.payload }
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT.SUCCESS:
       return {
         ...state,
         bug: {
@@ -61,7 +40,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           comments: action.payload
         }
       }
-    case EDIT_COMMENT_SUCCESS:
+    case EDIT_COMMENT.SUCCESS:
       return {
         ...state,
         bug: {
@@ -69,7 +48,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           comments: action.payload
         }
       }
-    case UPDATE_BUG_SUCCESS:
+    case UPDATE_BUG.SUCCESS:
       return {
         ...state,
         bug: {
@@ -77,7 +56,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           body: action.payload.body
         }
       }
-    case TOGGLE_BUG_SUCCESS:
+    case TOGGLE_BUG.SUCCESS:
       return {
         ...state,
         bug: {
@@ -86,7 +65,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           isOpen: action.payload.bug_state === 'open' ? true : false
         }
       }
-    case EDIT_LABELS_SUCCESS:
+    case EDIT_LABELS.SUCCESS:
       return {
         ...state,
         bug: {
@@ -94,7 +73,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           labels: action.payload
         }
       }
-    case UPDATE_REACTIONS_SUCCESS:
+    case UPDATE_REACTIONS.SUCCESS:
       return {
         ...state,
         bug: {
@@ -102,7 +81,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           reactions: action.payload
         }
       }
-    case UPDATE_COMMENT_REACTIONS_SUCCESS:
+    case UPDATE_COMMENT_REACTIONS.SUCCESS:
       return {
         ...state,
         bug: {
@@ -134,10 +113,10 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
     request: (dispatch: any) => {
       dispatch({ type: CLEAR_ALL_ERRORS });
       dispatch({ type: CLEAR_BUG_DATA });
-      dispatch({ type: FETCH_BUG_REQUEST });
+      dispatch({ type: FETCH_BUG.REQUEST });
     },
-    success: FETCH_BUG_SUCCESS,
-    error: FETCH_BUG_FAILURE
+    success: FETCH_BUG.SUCCESS,
+    error: FETCH_BUG.FAILURE
   }
 });
 
@@ -150,12 +129,12 @@ export const addComment = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/comments`,
     formData: formData,
-    request: ADD_COMMENT_REQUEST,
+    request: ADD_COMMENT.REQUEST,
     success: (dispatch: Dispatch, data: any) => {
-      dispatch({ type: ADD_COMMENT_SUCCESS, payload: data });
+      dispatch({ type: ADD_COMMENT.SUCCESS, payload: data });
       socket.emit('send-notification', { message: 'Add comment' })
     },
-    error: ADD_COMMENT_FAILURE
+    error: ADD_COMMENT.FAILURE
   }
 });
 
@@ -169,9 +148,9 @@ export const editComment = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/comments/${commentId}`,
     formData: formData,
-    request: EDIT_COMMENT_REQUEST,
-    success: EDIT_COMMENT_SUCCESS,
-    error: EDIT_COMMENT_FAILURE
+    request: EDIT_COMMENT.REQUEST,
+    success: EDIT_COMMENT.SUCCESS,
+    error: EDIT_COMMENT.FAILURE
   }
 });
 
@@ -184,9 +163,9 @@ export const updateBug = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}`,
     formData: formData,
-    request: UPDATE_BUG_REQUEST,
-    success: UPDATE_BUG_SUCCESS,
-    error: UPDATE_BUG_FAILURE
+    request: UPDATE_BUG.REQUEST,
+    success: UPDATE_BUG.SUCCESS,
+    error: UPDATE_BUG.FAILURE
   }
 });
 
@@ -198,15 +177,15 @@ export const openOrCloseBug = (
   payload: {
     method: 'PATCH',
     url: `/api/bugs/${bugId}/${state}`,
-    request: TOGGLE_BUG_REQUEST,
+    request: TOGGLE_BUG.REQUEST,
     success: (dispatch: Dispatch, data: any) => {
       dispatch({
-        type: TOGGLE_BUG_SUCCESS,
+        type: TOGGLE_BUG.SUCCESS,
         payload: { data, bug_state: state },
       });
       socket.emit('send-notification', { message: 'Bug Open/Closed' })
     },
-    error: TOGGLE_BUG_FAILURE
+    error: TOGGLE_BUG.FAILURE
   }
 });
 
@@ -219,12 +198,12 @@ export const editLabels = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/labels`,
     formData: { labels: labelData },
-    request: EDIT_LABELS_REQUEST,
+    request: EDIT_LABELS.REQUEST,
     success: (dispatch: Dispatch, data: any) => {
-      dispatch({ type: EDIT_LABELS_SUCCESS, payload: data });
+      dispatch({ type: EDIT_LABELS.SUCCESS, payload: data });
     },
     error: (dispatch: Dispatch, err: string) => {
-      dispatch(errorAction(EDIT_LABELS_FAILURE, err));
+      dispatch(errorAction(EDIT_LABELS.FAILURE, err));
     }
   }
 });
@@ -274,8 +253,8 @@ export const addOrRemoveReacts = (
     url: `/api/bugs/${bugId}/reactions`,
     formData: { emoji },
     request: () => { },
-    success: UPDATE_REACTIONS_SUCCESS,
-    error: UPDATE_REACTIONS_FAILURE,
+    success: UPDATE_REACTIONS.SUCCESS,
+    error: UPDATE_REACTIONS.FAILURE,
   }
 });
 
@@ -291,7 +270,7 @@ export const addOrRemoveReactsComment = (
     url: `/api/bugs/${bugId}/comments/${commentId}/reactions`,
     formData: { emoji },
     request: () => { },
-    success: UPDATE_COMMENT_REACTIONS_SUCCESS,
-    error: UPDATE_COMMENT_REACTIONS_FAILURE,
+    success: UPDATE_COMMENT_REACTIONS.SUCCESS,
+    error: UPDATE_COMMENT_REACTIONS.FAILURE,
   }
 });
