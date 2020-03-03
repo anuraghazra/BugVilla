@@ -1,23 +1,25 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { notify } from 'react-notify-toast';
 
 import { Input, StyledH3Input } from 'components/common/Form';
 import Button from 'components/common/Button';
-import Toast, { toast } from 'components/common/Toast';
+import { toast } from 'components/common/Toast';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';
 import DashboardHeader from 'components/DashboardHeader';
 import StyledEditor from 'components/Editor/Editor.style';
 import AddBugWrapper from './AddBug.style';
-import useAPI from 'hooks/useAPI';
+
 import socket from 'utils/socket';
+import { addBug } from 'store/ducks/bugs';
+import { StoreState } from 'store';
 
 const AddBug: React.FC = () => {
   const history = useHistory();
-  const { loading: isLoading, error, callAPI } = useAPI();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -33,17 +35,21 @@ const AddBug: React.FC = () => {
     setValue('body', e.target.value);
   };
 
+  const [isLoading, error] = useSelector((state: StoreState) => [
+    state.loading['bugs/ADD_BUG'],
+    state.error['bugs/ADD_BUG']
+  ]);
   const onSubmit = async (data: { title: string; body: string }) => {
-    callAPI({ method: 'POST', url: '/api/bugs', data }, () => {
+    dispatch(addBug(data)).then(() => {
       reset();
       setValue('body', '');
       history.push('/dashboard/bugs');
       socket.emit('send-notification', { message: 'New bug' });
-    }).catch(err => {
-      toast.error(err)
+      toast.success('New bug added!');
     });
   };
 
+  error && toast.error(error);
   return (
     <AddBugWrapper>
       <DashboardHeader>

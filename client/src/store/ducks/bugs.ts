@@ -4,6 +4,7 @@ import { createAPIAction } from 'store/helpers';
 // action
 export const API = 'API';
 export const FETCH_BUGS = createAPIAction('bugs/FETCH_BUGS');
+export const ADD_BUG = createAPIAction('bugs/ADD_BUG');
 
 const DEFAULT_STATE = <any[]>[]
 
@@ -29,4 +30,18 @@ export const fetchBugs = (): ApiAction => ({
   onRequest: FETCH_BUGS.REQUEST,
   onSuccess: FETCH_BUGS.SUCCESS,
   onFailure: FETCH_BUGS.FAILURE,
+});
+
+export const addBug = (
+  formData: { title: string; body: string }
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: `/api/bugs/`,
+    formData
+  },
+  onRequest: ADD_BUG.REQUEST,
+  onSuccess: ADD_BUG.SUCCESS,
+  onFailure: ADD_BUG.FAILURE,
 });
