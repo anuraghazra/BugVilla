@@ -47,9 +47,9 @@ const GoogleButton = styled(Button)`
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<any>();
-  const [isLoading, loginError] = useSelector(({ auth }: StoreState) => [
-    auth.isLoginPending,
-    auth.loginError
+  const [isLoading, loginError] = useSelector((state: StoreState) => [
+    state.loading['user/LOGIN'],
+    state.error['user/LOGIN']
   ]);
   const { register, handleSubmit, errors }: any = useForm({
     validationSchema: LoginSchema
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           })
           .catch((err: string) => {
             toast.error(err);
-          })
+          });
       }
     });
   };

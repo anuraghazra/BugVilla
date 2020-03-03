@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Flex from 'components/common/Flex';
 import Label from 'components/common/Label';
 import { StyledBugCard, BugCardIcon, StyledMetaInfo } from './BugCard.style';
-import CircleIcon from 'components/common/CircleIcon';
 
 interface Author {
   name: string;
@@ -72,4 +70,4 @@ const BugCard: React.FC<BugCardProps> = ({
   );
 };
 
-export default BugCard;
+export default React.memo(BugCard);

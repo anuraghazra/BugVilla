@@ -8,10 +8,10 @@ export interface ApiAction {
     method: Method;
     url: string;
     formData?: any;
-    request: string | ((dispatch: Dispatch) => void);
-    success: string | ((dispatch: Dispatch, data: any) => void);
-    error: string | ((dispatch: Dispatch, err: string) => void);
   };
+  onRequest?: string | ((dispatch: Dispatch) => void);
+  onSuccess?: string | ((dispatch: Dispatch, data: any) => void);
+  onFailure?: string | ((dispatch: Dispatch, err: string) => void);
   [x: string]: any
 }
 
@@ -22,11 +22,18 @@ interface apiProps {
 const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: ApiAction) => {
   if (action.type !== 'API') return next(action);
 
-  const { request, success, error, method, url, formData } = action.payload;
-  if (typeof request === 'function') {
-    request(dispatch)
+  const noop = () => { };
+  const {
+    payload: { method, url, formData },
+    onRequest = noop,
+    onSuccess = noop,
+    onFailure = noop
+  } = action;
+
+  if (typeof onRequest === 'function') {
+    onRequest(dispatch)
   } else {
-    dispatch({ type: request });
+    dispatch({ type: onRequest });
   }
   try {
     const res = await http({
@@ -35,18 +42,18 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
       data: formData
     });
     let { data } = res.data;
-    if (typeof success === 'function') {
-      success(dispatch, data);
+    // TODO: normalize this res.data.data causing 
+    // inconsistency because server is sending with wrapped {data: ...}
+    if (typeof onSuccess === 'function') {
+      onSuccess(dispatch, data);
     } else {
-      // TODO: normalize this res.data.data causing 
-      // inconsistency because server is sending with wrapped {data: ...}
-      dispatch({ type: success, payload: data });
+      dispatch({ type: onSuccess, payload: data });
     }
   } catch (err) {
-    if (typeof error === 'function') {
-      error(dispatch, err);
+    if (typeof onFailure === 'function') {
+      onFailure(dispatch, err);
     } else {
-      dispatch({ type: error, payload: err || 'Something went wrong' });
+      dispatch({ type: onFailure, payload: err || 'Something went wrong' });
     }
     return Promise.reject(err)
   }

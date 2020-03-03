@@ -25,9 +25,9 @@ const Signup: React.FC = () => {
     validationSchema: SignupSchema
   });
 
-  const [isLoading, signupError] = useSelector(({ auth }: StoreState) => [
-    auth.isSignupPending,
-    auth.signupError
+  const [isLoading, signupError] = useSelector((state: StoreState) => [
+    state.loading['user/SIGN_UP'],
+    state.error['user/SIGN_UP']
   ]);
 
   const onSubmit = (data: any) => {
