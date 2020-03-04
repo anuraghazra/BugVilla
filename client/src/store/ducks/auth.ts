@@ -10,8 +10,8 @@ export const AUTH_LOGOUT = 'auth/LOGOUT';
 export const AUTH_SET_USER = 'auth/SET_USER';
 
 export const CHECK_AUTH = createAPIAction('auth/CHECK_AUTH');
-export const UPLOAD_AVATAR = createAPIAction('auth/UPLOAD_AVATAR');
-export const UPDATE_BIO = createAPIAction('auth/UPDATE_BIO');
+export const UPLOAD_AVATAR = createAPIAction('user/UPLOAD_AVATAR');
+export const UPDATE_BIO = createAPIAction('user/UPDATE_BIO');
 
 export const LOGIN = createAPIAction('user/LOGIN');
 export const SIGNUP = createAPIAction('user/SIGN_UP');
@@ -25,7 +25,7 @@ interface UserProps {
   name?: string;
   bio?: string;
   avatarUrl?: string;
-  id?: number;
+  id?: string;
 }
 export interface AuthReducerState {
   isAuthenticated: boolean,
@@ -117,7 +117,7 @@ export const loginUser = (formData: { name: string, email: string }): ApiAction 
   },
   onRequest: LOGIN.REQUEST,
   onSuccess: (dispatch: Dispatch, data: any) => {
-    console.log(data);
+    dispatch({ type: LOGIN.SUCCESS, payload: data });
     dispatch({ type: CLEAR_ALL_ERRORS });
     history.push('/dashboard/bugs')
   },

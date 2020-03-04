@@ -34,41 +34,6 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
     }
   }
 
-  .comment__reactions {
-    margin-top: 20px;
-    .reaction {
-      padding: 5px 8px;
-      border: 1px solid ${p => p.theme.colors.common.offwhite};
-      border-left: none;
-      cursor: pointer;
-      z-index: 0;
-
-      &:hover {
-        background-color: ${p => p.theme.colors.brand.accent};
-      }
-      .reaction_emoji {
-        font-size: 16px;
-      }
-      .reaction_count {
-        margin-left: 5px;
-        font-size: 14px;
-      }
-    }
-    .reaction_selected {
-      background-color: ${p => p.theme.colors.brand.accent};
-    }
-    .reaction:first-child {
-      border: 1px solid ${p => p.theme.colors.common.offwhite};
-      border-radius: 5px 0 0 5px;
-    }
-    .reaction:last-child {
-      border-radius: 0 5px 5px 0;
-    }
-    .reaction:only-child {
-      border-radius: 5px;
-    }
-  }
-
   .hover__button {
     cursor: pointer;
     color: ${p => p.theme.colors.text.gray};

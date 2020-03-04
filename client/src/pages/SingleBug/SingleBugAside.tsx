@@ -52,7 +52,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   labelEditError && toast.error(labelEditError);
 
   return (
-    <>
+    <aside className="singlebug__aside--sticky">
       <div>
         <h4 className="label__header color--gray">
           Labels
@@ -107,7 +107,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
           ))}
         </Flex>
       </div>
-    </>
+    </aside>
   );
 };
 

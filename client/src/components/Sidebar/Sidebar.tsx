@@ -31,39 +31,41 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   return (
     <SidebarWrapper isOpen={isOpen}>
       <BugVillaLogo width="100px" />
-      <Flex align="center" justify="flex-start">
-        <Avatar
-          className="dashboard__avatar"
-          width="130px"
-          height="130px"
-          size={130}
-          username={user.username}
-        />
-        <div>
-          <h2 className="text--bold">{user && user.name}</h2>
-          <p className="color--gray">{user && user.username}</p>
-        </div>
-      </Flex>
-
-      <SidebarLinks>
-        <Flex direction="column">
-          <IconLink isNav icon="home" to="/dashboard/bugs">
-            Dashboard
-          </IconLink>
-          <IconLink isNav icon="user" to="/profiles">
-            Profiles
-          </IconLink>
-          <IconLink isNav icon="times" to="/dashboard/notifications">
-            Notifications
-          </IconLink>
-          <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
-            Closed
-          </IconLink>
-          <IconLink isNav icon="door-open" to="#" onClick={logout}>
-            Logout
-          </IconLink>
+      <div className="sidebar--sticky">
+        <Flex align="center" justify="flex-start">
+          <Avatar
+            className="dashboard__avatar"
+            width="130px"
+            height="130px"
+            size={130}
+            username={user.username}
+          />
+          <div>
+            <h2 className="text--bold">{user?.name}</h2>
+            <p className="color--gray">@{user?.username}</p>
+          </div>
         </Flex>
-      </SidebarLinks>
+
+        <SidebarLinks>
+          <Flex direction="column">
+            <IconLink isNav icon="home" to="/dashboard/bugs">
+              Dashboard
+            </IconLink>
+            <IconLink isNav icon="user" to="/profiles">
+              Profiles
+            </IconLink>
+            <IconLink isNav icon="times" to="/dashboard/notifications">
+              Notifications
+            </IconLink>
+            <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
+              Closed
+            </IconLink>
+            <IconLink isNav icon="door-open" to="#" onClick={logout}>
+              Logout
+            </IconLink>
+          </Flex>
+        </SidebarLinks>
+      </div>
     </SidebarWrapper>
   );
 };

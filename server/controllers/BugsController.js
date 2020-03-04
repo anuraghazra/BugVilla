@@ -335,22 +335,32 @@ exports.addOrRemoveReaction = async (req, res) => {
 
   try {
     // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
-    let bug = await Bug.findOne({ bugId: req.params.bugId })
+    let bug = await Bug.findOne({ bugId: req.params.bugId });
 
-    // find index of the reactions, if its already exist then we will remove
-    // the reactions else we will add it.
+    const userId = req.user.id.toString();
+
+    // find the index of matching user & emoji pair
     const index = bug.reactions.findIndex((reaction) => {
-      const isSameId = reaction.user.toString() === req.user.id.toString();
       const isSameReaction = reaction.emoji === value.emoji
-      return isSameId && isSameReaction;
+      const isSameId = reaction.users.includes(userId);
+      return (isSameId && isSameReaction);
     });
+
     if (index > -1) {
-      bug.reactions.splice(index, 1);
+      // findIndex of user to remove it from the users list
+      const indexOfUser = bug.reactions[parseInt(index)].users.indexOf(userId)
+      bug.reactions[parseInt(index)].users.splice(indexOfUser, 1);
+      // if users list is empty then remove the entire reaction
+      if (bug.reactions[parseInt(index)].users.length < 1) {
+        bug.reactions.splice(index, 1);
+      }
     } else {
-      bug.reactions.push({
-        emoji: value.emoji,
-        user: req.user.id
-      })
+      const emojiIndex = bug.reactions.findIndex(r => r.emoji === value.emoji);
+      // if emoji is absent then push it to the reactions list
+      // else push the userId to the users list
+      emojiIndex === -1
+        ? bug.reactions.push({ emoji: value.emoji, users: [req.user.id] })
+        : bug.reactions[parseInt(emojiIndex)].users.push(req.user.id)
     }
 
     const newBug = await bug.save();
@@ -382,6 +392,35 @@ exports.getReactions = async (req, res) => {
     console.log(err)
     res.internalError({
       error: `Something went wrong while adding new reaction`,
+    })
+  }
+}
+
+/**
+ * @unused
+ * @route GET /api/bugs/:bugId/reactions/byuser
+ * @description GET get all reactions and group them by userids
+ * (this function is not in use)
+ * @type RequestHandler
+ */
+exports.getReactionsByUsers = async (req, res) => {
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let data = await Bug.aggregate([
+      { $match: { 'comments.author.username': req.params.username } },
+      { $unwind: '$comments' },
+      { $match: { 'comments.author.username': req.params.username } },
+      { $project: { reactions: '$comments.reactions' } },
+      { $unwind: '$reactions' },
+
+      { $group: { _id: '$reactions.emoji', emojis: { $push: '$reactions.user' } } }
+    ])
+
+    res.ok({ data: data });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong`,
     })
   }
 }

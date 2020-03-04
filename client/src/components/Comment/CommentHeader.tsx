@@ -16,8 +16,9 @@ import {
   addOrRemoveReactsComment
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
+import { ReactionsWrapper, ReactionType } from './Reactions';
 
-const REACTIONS = [
+const REACTIONS: { emoji: string }[] = [
   { emoji: ':+1:' },
   { emoji: ':-1:' },
   { emoji: ':heart:' },
@@ -30,7 +31,7 @@ interface CommentProps {
   bugId: number | string;
   author: AuthorProps;
   date: string;
-  reactions: any;
+  reactions: ReactionType[];
   commentId: string;
   isAuthorOfComment: boolean;
   handleEditorState: (e: any) => void;
@@ -45,7 +46,9 @@ const CommentHeader: React.FC<CommentProps> = ({
   handleEditorState
 }) => {
   const dispatch = useDispatch();
-  const currentUserId = useSelector((state: StoreState) => state.auth.user.id);
+  const currentUserId = useSelector(
+    (state: StoreState): string => state.auth.user.id as string
+  );
 
   const copyCommentLink = () => {
     let fullPath = window.location.origin + window.location.pathname;
@@ -100,16 +103,16 @@ const CommentHeader: React.FC<CommentProps> = ({
             </Flex>
           )}
         >
-          <Flex
+          <ReactionsWrapper
             align="center"
             justify="space-between"
             nowrap
-            className="comment__reactions"
             style={{ marginTop: 0 }}
           >
-            {REACTIONS?.map((reaction: any) => {
+            {REACTIONS?.map(reaction => {
               let isSelected = reactions.some(
-                (r: any) => r.emoji == reaction.emoji && r.user == currentUserId
+                r =>
+                  r.emoji == reaction.emoji && r.users.includes(currentUserId)
               );
               return (
                 <span
@@ -119,14 +122,11 @@ const CommentHeader: React.FC<CommentProps> = ({
                     isSelected ? 'reaction_selected' : ''
                   }`}
                 >
-                  <Twemoji
-                    emoji={reaction.emoji}
-                    className="reaction_emoji"
-                  />
+                  <Twemoji emoji={reaction.emoji} className="reaction_emoji" />
                 </span>
               );
             })}
-          </Flex>
+          </ReactionsWrapper>
         </BaseDropdown>
 
         <BaseDropdown

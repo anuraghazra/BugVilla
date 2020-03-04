@@ -326,7 +326,7 @@ exports.getCommentsByUser = async (req, res) => {
 }
 
 /**
- * @route GET /user/:username/comments/count
+ * @route GET /user/:username/reactions/count
  * @type RequestHandler
  */
 exports.getCommentsCountByUser = async (req, res) => {
@@ -343,6 +343,47 @@ exports.getCommentsCountByUser = async (req, res) => {
 
     if (!data) return res.notFound({ error: "Not Found!" })
     res.ok({ data: data[0] || { count: '0' } });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+
+/**
+ * @route GET /user/:username/reactions/count
+ * @type RequestHandler
+ */
+exports.getCollectedReactionsCount = async (req, res) => {
+  try {
+    // https://docs.mongodb.com/manual/reference/operator/aggregation/count/
+    let data = await Bug.aggregate([
+      { $match: { 'comments.author.username': req.params.username } },
+      { $unwind: '$comments' },
+      { $match: { 'comments.author.username': req.params.username } },
+      { $project: { reactions: '$comments.reactions' } },
+      { $unwind: '$reactions' },
+      { $group: { _id: '$reactions.emoji', reactions: { $push: '$reactions.users' } } },
+      // flatten multidimensional array
+      // https://stackoverflow.com/a/41634661/10629172
+      {
+        $project: {
+          emoji: '$_id',
+          _id: 0,
+          users: {
+            $map: {
+              input: "$reactions",
+              as: "itemList",
+              in: { $arrayElemAt: ["$$itemList", 0] }
+            }
+          }
+        }
+      }
+    ])
+
+    if (!data) return res.notFound({ error: "Not Found!" })
+    res.ok({ data: data });
   } catch (err) {
     console.log(err)
     res.internalError({

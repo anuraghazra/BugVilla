@@ -4,7 +4,11 @@ const SidebarWrapper = styled.aside<{ isOpen?: boolean }>`
   padding: 60px 40px;
   background-color: ${p => p.theme.colors.common.white};
   border-right: ${p => p.theme.border};
-  
+
+  .sidebar--sticky {
+    position: sticky;
+    top: 0;
+  }
   p {
     margin: 0;
   }

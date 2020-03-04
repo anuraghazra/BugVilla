@@ -26,6 +26,7 @@ router.get("/logout", passportJWT, UserController.logout);
 router.get("/verify-email", passportJWT, UserController.verifyEmail);
 router.get('/:username', passportJWT, UserController.getByUsername);
 router.get('/:username/comments', passportJWT, UserController.getCommentsByUser);
+router.get('/:username/reactions/count', passportJWT, UserController.getCollectedReactionsCount);
 router.get('/:username/comments/count', passportJWT, UserController.getCommentsCountByUser);
 router.get('/:username/bugs', passportJWT, UserController.getBugsByUser);
 

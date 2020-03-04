@@ -137,7 +137,7 @@ exports.updateComment = async (req, res) => {
 
 
 /**
- * @route PATCH /api/bugs/:bugId/reactions
+ * @route PATCH /api/bugs/:bugId/comments/:comment_id/reactions
  * @description PATCH toggle a reaction from specified bugId & reaction name
  * @type RequestHandler
  */
@@ -160,25 +160,35 @@ exports.addOrRemoveReaction = async (req, res) => {
       }
     })
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
-
+    const userId = req.user.id.toString();
     // find index of the reactions, if its already exist then we will remove
     // the reactions else we will add it.
     // TODO: fix perf issues
     for (let i = 0; i < bug.comments.length; i++) {
       let comment = bug.comments[parseInt(i)];
       if (comment.id !== req.params.comment_id) continue;
+      // find the index of matching user & emoji pair
       const index = bug.comments[parseInt(i)].reactions.findIndex((reaction) => {
-        const isSameId = reaction.user.toString() === req.user.id.toString();
         const isSameReaction = reaction.emoji === value.emoji
-        return isSameId && isSameReaction;
+        const isSameId = reaction.users.includes(userId);
+        return (isSameId && isSameReaction);
       });
+
       if (index > -1) {
-        bug.comments[parseInt(i)].reactions.splice(index, 1);
+        // findIndex of user to remove it from the users list
+        const indexOfUser = bug.comments[parseInt(i)].reactions[parseInt(index)].users.indexOf(userId)
+        bug.comments[parseInt(i)].reactions[parseInt(index)].users.splice(indexOfUser, 1);
+        // if users list is empty then remove the entire reaction
+        if (bug.comments[parseInt(i)].reactions[parseInt(index)].users.length < 1) {
+          bug.comments[parseInt(i)].reactions.splice(index, 1);
+        }
       } else {
-        bug.comments[parseInt(i)].reactions.push({
-          emoji: value.emoji,
-          user: req.user.id
-        })
+        const emojiIndex = bug.comments[parseInt(i)].reactions.findIndex(r => r.emoji === value.emoji);
+        // if emoji is absent then push it to the reactions list
+        // else push the userId to the users list
+        emojiIndex === -1
+          ? bug.comments[parseInt(i)].reactions.push({ emoji: value.emoji, users: [req.user.id] })
+          : bug.comments[parseInt(i)].reactions[parseInt(emojiIndex)].users.push(req.user.id)
       }
     }
 

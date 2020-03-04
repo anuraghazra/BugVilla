@@ -1,40 +1,61 @@
 import React from 'react';
+import styled from 'styled-components';
 import Flex from 'components/common/Flex';
 import Twemoji from 'components/common/Twemoji';
 
-const Reactions: React.FC<{ reactions: any }> = ({ reactions }) => {
-  let reacts: any = {};
-  reactions
-    // ?.sort((a: any, b: any) => a.emoji.localeCompare(b.emoji))
-    ?.forEach(function(obj: any) {
-      let key = JSON.stringify(obj.emoji);
-      let reactions: any = [obj];
+export const ReactionsWrapper = styled(Flex)`
+  margin-top: 20px;
+  .reaction {
+    padding: 5px 8px;
+    border: 1px solid ${p => p.theme.colors.common.offwhite};
+    border-left: none;
+    cursor: pointer;
+    z-index: 0;
 
-      // fill reactions
-      if (reacts[key]?.reactions) {
-        reactions = [...reacts[key]?.reactions, obj];
-      }
-      reacts[key] = {
-        count: (reacts[key]?.count || 0) + 1,
-        reactions: reactions
-      };
-    });
+    &:hover {
+      background-color: ${p => p.theme.colors.brand.accent};
+    }
+    .reaction_emoji {
+      font-size: 16px;
+    }
+    .reaction_count {
+      margin-left: 5px;
+      font-size: 14px;
+    }
+  }
+  .reaction_selected {
+    background-color: ${p => p.theme.colors.brand.accent};
+  }
+  .reaction:first-child {
+    border: 1px solid ${p => p.theme.colors.common.offwhite};
+    border-radius: 5px 0 0 5px;
+  }
+  .reaction:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+  .reaction:only-child {
+    border-radius: 5px;
+  }
+`;
 
+export interface ReactionType {
+  emoji: string;
+  users: string[];
+}
+const Reactions: React.FC<{ reactions: ReactionType[] }> = ({ reactions }) => {
+  
   return (
-    <Flex align="center" className="comment__reactions">
-      {Object.values(reacts)?.map((react: any, index: number) => (
+    <ReactionsWrapper align="center">
+      {reactions?.map((react, index: number) => (
         <Flex key={index} align="center" className="reaction">
-          <Twemoji
-            className="reaction_emoji"
-            emoji={react.reactions[0].emoji}
-          />
+          <Twemoji className="reaction_emoji" emoji={react.emoji} />
           <span className="color--gray reaction_count">
             {' '}
-            {react.reactions.length}
+            {react.users.length}
           </span>
         </Flex>
       ))}
-    </Flex>
+    </ReactionsWrapper>
   );
 };
 

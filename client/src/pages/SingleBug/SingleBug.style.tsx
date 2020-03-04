@@ -25,6 +25,11 @@ const SingleBugWrapper = styled.section`
       cursor: pointer;
     }
 
+    &--sticky {
+      position: sticky;
+      top: ${p => p.theme.spacings.top}px;
+    }
+
     h4 {
       margin: 20px 0;
       margin-bottom: 10px;

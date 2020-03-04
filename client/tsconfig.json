@@ -16,6 +16,7 @@
     "noEmit": true,
     "jsx": "react",
     "downlevelIteration": true,
+    "noImplicitReturns": true,
   },
   "include": ["src"],
   "exclude": ["node_modules", "build", "public"]

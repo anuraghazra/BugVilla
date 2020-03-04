@@ -15,6 +15,8 @@ import { updateUserAvatar } from 'store/ducks/auth';
 import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
 import AvatarFileUploader from 'components/AvatarFileUploader';
 import Bio from './Bio';
+import Reactions, { ReactionType } from 'components/Comment/Reactions';
+import useFetch from 'hooks/useFetch';
 
 const customStyles = {
   content: {
@@ -43,6 +45,24 @@ interface UserInfoProps {
   totalBugs: string | number;
 }
 
+const calculateReputation = (reactions: ReactionType[]) => {
+  const REPUTATION_MAP: any = {
+    ':+1:': 30,
+    ':-1:': -20,
+    ':smile:': 20,
+    ':heart:': 30,
+    ':confused:': -10,
+    ':tada:': 20
+  };
+
+  let avg = 0;
+  reactions?.forEach((react, index) => {
+    avg += REPUTATION_MAP[react.emoji] * react.users.length;
+  });
+
+  return avg / 5 || 0;
+};
+
 const UserInfo: React.FC<UserInfoProps> = ({
   user,
   totalComments,
@@ -53,6 +73,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const currentUser = useSelector((state: StoreState) => state.auth.user);
+  const [reactions] = useFetch(`/api/user/${user.username}/reactions/count`);
+  
   const [isUploadPending] = useSelector((state: StoreState) => [
     state.loading['user/UPLOAD_AVATAR']
   ]);
@@ -74,6 +96,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
 
   const isCurrentUser = currentUser.username === user.username;
 
+  const reputation: number = calculateReputation(reactions?.data);
   return (
     <UserInfoWrapper>
       <Modal
@@ -138,9 +161,19 @@ const UserInfo: React.FC<UserInfoProps> = ({
         <Bio currentUser={currentUser} user={user} />
       </UserMetaInfo>
       <div>
+        <StandOut prefix={'Reputation'}>{reputation}%</StandOut>
         <StandOut prefix={totalComments || 0}>Comments</StandOut>
         <StandOut prefix={totalBugs || 0}>Bugs issued</StandOut>
         <StandOut prefix={'Joined'}>{timeAgo(user.date_joined)}</StandOut>
+      </div>
+
+      <div>
+        <small className="color--gray">
+          Reactions given to {user.username}
+        </small>
+        <br />
+        <small className="color--gray"></small>
+        {reactions?.data && <Reactions reactions={reactions.data} />}
       </div>
     </UserInfoWrapper>
   );
