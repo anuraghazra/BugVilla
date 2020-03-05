@@ -106,3 +106,10 @@ export const copyToClipboard = (str: string) => {
   document.execCommand('copy');
   document.body.removeChild(el);
 }
+
+export const toggleArrayItem = (arr: any[], value: any) => {
+  let item = JSON.stringify(value);
+  return arr.some(a => item === JSON.stringify(a))
+    ? arr.filter(i => JSON.stringify(i) !== item) // remove item
+    : [...arr, value]; // add item
+};

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Flex from 'components/common/Flex';
 import Twemoji from 'components/common/Twemoji';
+import Tooltip from 'components/common/Tooltip';
 
 export const ReactionsWrapper = styled(Flex)`
   margin-top: 20px;
@@ -38,23 +39,52 @@ export const ReactionsWrapper = styled(Flex)`
   }
 `;
 
+export interface ReactionUser {
+  name: string;
+  username: string;
+  id: string;
+}
 export interface ReactionType {
   emoji: string;
-  users: string[];
+  users: Array<string & ReactionUser>;
 }
-const Reactions: React.FC<{ reactions: ReactionType[] }> = ({ reactions }) => {
-  
+
+interface ReactionsProps {
+  reactions: ReactionType[];
+}
+const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
   return (
     <ReactionsWrapper align="center">
-      {reactions?.map((react, index: number) => (
-        <Flex key={index} align="center" className="reaction">
-          <Twemoji className="reaction_emoji" emoji={react.emoji} />
-          <span className="color--gray reaction_count">
-            {' '}
-            {react.users.length}
-          </span>
-        </Flex>
-      ))}
+      {reactions?.map((react, index: number) => {
+        let names = react.users.map((e: any) => e.username);
+        let sliced = names.slice(0, 2);
+        let msg = `${sliced.join(' ')} `;
+        let remaining = names.length - sliced.length;
+        let reactionJSX = (
+          <Flex align="center" className="reaction">
+            <Twemoji className="reaction_emoji" emoji={react.emoji} />
+            <span className="color--gray reaction_count">
+              {' '}
+              {react.users.length}
+            </span>
+          </Flex>
+        );
+        return react.users[0]?.username ? (
+          <Tooltip
+            key={index}
+            content={
+              <small className="color--gray">
+                {msg} <br /> {remaining > 0 ? `${remaining} others` : ''}{' '}
+                reacted with <Twemoji emoji={react.emoji} />
+              </small>
+            }
+          >
+            {reactionJSX}
+          </Tooltip>
+        ) : (
+          reactionJSX
+        );
+      })}
     </ReactionsWrapper>
   );
 };

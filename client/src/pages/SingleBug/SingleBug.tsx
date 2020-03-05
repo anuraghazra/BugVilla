@@ -93,16 +93,16 @@ const SingleBug: React.FC = () => {
                 date={bug.date_opened}
                 reactions={bug.reactions}
               />
-              {bug?.comments.map((comment: any) => (
+              {bug?.comments.result.map((comment: any) => (
                 <Comment
                   bugId={bugId}
-                  commentId={comment.id}
-                  key={comment.id}
-                  body={comment.body}
-                  author={comment.author}
-                  date={comment.date}
-                  reactions={comment.reactions}
-                  isSelected={query_comment_id === comment.id}
+                  commentId={bug.comments.entities.comments[comment].id}
+                  key={bug.comments.entities.comments[comment].id}
+                  body={bug.comments.entities.comments[comment].body}
+                  author={bug.comments.entities.comments[comment].author}
+                  date={bug.comments.entities.comments[comment].date}
+                  reactions={bug.comments.entities.comments[comment].reactions}
+                  isSelected={query_comment_id === comment}
                 />
               ))}
               <section>

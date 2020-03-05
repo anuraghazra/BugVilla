@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import http from 'utils/httpInstance';
+import { AxiosRequestConfig } from 'axios';
 
 interface memStoreTypes {
   [x: string]: string;
 }
 const memStore: memStoreTypes = {};
 
-const useFetch = (url: string, props: { cache?: boolean } = {}) => {
+const useFetch = (
+  url: string,
+  props: { cache?: boolean } = {},
+  axiosOptions: AxiosRequestConfig = {}
+) => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
@@ -16,10 +21,12 @@ const useFetch = (url: string, props: { cache?: boolean } = {}) => {
     const getData = async () => {
       setIsLoading(true);
       try {
-        let res = await http({
+        let httpConfig: AxiosRequestConfig = {
           method: 'GET',
-          url: url
-        });
+          url: url,
+          ...axiosOptions
+        };
+        let res = await http(httpConfig);
         setIsLoading(false);
         setData(res.data);
         if (props.cache) memStore[url] = res.data;

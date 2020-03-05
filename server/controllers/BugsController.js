@@ -47,8 +47,14 @@ exports.getSuggestions = async (req, res) => {
  */
 exports.getBugByNumber = async (req, res) => {
   try {
-    let bug = await Bug.findOne({ bugId: req.params.bugId });
-    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+    let bug = await Bug.findOne({ bugId: req.params.bugId }).populate(
+      'reactions.users',
+      'name username'
+    ).populate(
+      'comments.reactions.users',
+      'name username'
+    );
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` })
 
     res.ok({ data: bug });
   } catch (err) {
@@ -338,20 +344,20 @@ exports.addOrRemoveReaction = async (req, res) => {
     let bug = await Bug.findOne({ bugId: req.params.bugId });
 
     const userId = req.user.id.toString();
-
     // find the index of matching user & emoji pair
     const index = bug.reactions.findIndex((reaction) => {
       const isSameReaction = reaction.emoji === value.emoji
       const isSameId = reaction.users.includes(userId);
       return (isSameId && isSameReaction);
     });
+    let reactions = bug.reactions[parseInt(index)];
 
     if (index > -1) {
       // findIndex of user to remove it from the users list
-      const indexOfUser = bug.reactions[parseInt(index)].users.indexOf(userId)
-      bug.reactions[parseInt(index)].users.splice(indexOfUser, 1);
+      const indexOfUser = reactions.users.indexOf(userId)
+      reactions.users.splice(indexOfUser, 1);
       // if users list is empty then remove the entire reaction
-      if (bug.reactions[parseInt(index)].users.length < 1) {
+      if (reactions.users.length < 1) {
         bug.reactions.splice(index, 1);
       }
     } else {
@@ -363,7 +369,11 @@ exports.addOrRemoveReaction = async (req, res) => {
         : bug.reactions[parseInt(emojiIndex)].users.push(req.user.id)
     }
 
-    const newBug = await bug.save();
+    const newBug = await bug
+      .save()
+      .then(t =>
+        t.populate('reactions.users', 'name username').execPopulate()
+      );
     if (!newBug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok({ data: newBug.reactions });

@@ -13,10 +13,11 @@ import BaseDropdown from 'components/common/BaseDropdown';
 import { AuthorProps } from 'pages/SingleBug/SingleBug';
 import {
   addOrRemoveReacts,
-  addOrRemoveReactsComment
+  addOrRemoveReactsComment,
+  COMMENT_REACTIONS_OPTI
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import { ReactionsWrapper, ReactionType } from './Reactions';
+import { ReactionsWrapper, ReactionType, ReactionUser } from './Reactions';
 
 const REACTIONS: { emoji: string }[] = [
   { emoji: ':+1:' },
@@ -46,8 +47,8 @@ const CommentHeader: React.FC<CommentProps> = ({
   handleEditorState
 }) => {
   const dispatch = useDispatch();
-  const currentUserId = useSelector(
-    (state: StoreState): string => state.auth.user.id as string
+  const currentUserId: any = useSelector(
+    (state: StoreState) => state.auth.user.id
   );
 
   const copyCommentLink = () => {
@@ -58,10 +59,19 @@ const CommentHeader: React.FC<CommentProps> = ({
   };
 
   const handleReaction = (emoji: string) => {
+    let optimisticData = {
+      username: author.username,
+      name: author.name,
+      id: author.id
+    };
     // if commentId is missing that means its a bug.body
     if (commentId === '') {
       dispatch(addOrRemoveReacts(bugId, emoji));
     } else {
+      dispatch({
+        type: COMMENT_REACTIONS_OPTI,
+        payload: { commentId, optimisticData, emoji: emoji }
+      });
       dispatch(addOrRemoveReactsComment(bugId, commentId, emoji));
     }
   };
@@ -112,7 +122,9 @@ const CommentHeader: React.FC<CommentProps> = ({
             {REACTIONS?.map(reaction => {
               let isSelected = reactions.some(
                 r =>
-                  r.emoji == reaction.emoji && r.users.includes(currentUserId)
+                  r.emoji == reaction.emoji &&
+                  r.users.find(u => u.id === currentUserId)
+                // r.users.includes(currentUserId)
               );
               return (
                 <span

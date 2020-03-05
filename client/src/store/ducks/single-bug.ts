@@ -3,7 +3,8 @@ import socket from 'utils/socket';
 import { CLEAR_ALL_ERRORS } from './errors';
 import { ApiAction } from 'store/middlewares/apiMiddleware';
 import { createAPIAction } from 'store/helpers';
-
+import { toggleArrayItem } from 'utils';
+import { normalize, schema } from 'normalizr';
 // action
 export const API = 'API';
 export const CLEAR_BUG_DATA = 'singlebug/CLEAR_BUG_DATA';
@@ -16,6 +17,7 @@ export const UPDATE_REACTIONS = createAPIAction('singlebug/UPDATE_REACTIONS');
 export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
 export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
 export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
+export const COMMENT_REACTIONS_OPTI = 'singlebug/COMMENT_REACTIONS_OPTI';
 
 export interface SinglebugReducerState {
   bug: any,
@@ -29,7 +31,10 @@ const DEFAULT_STATE: SinglebugReducerState = {
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case FETCH_BUG.SUCCESS:
-      return { ...state, bug: action.payload }
+      const comments = new schema.Entity('comments');
+      let normalizedComments = normalize(action.payload, [comments])
+      action.payload.comments = null;
+      return { ...state, bug: { ...action.payload, ...normalizedComments } }
     case ADD_COMMENT.SUCCESS:
       return {
         ...state,
@@ -87,6 +92,57 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           comments: action.payload
         }
       }
+    // optimistic
+    // {user:{
+    //   username: string;
+    //   id: string;
+    //   name: string;
+    // }}
+    case COMMENT_REACTIONS_OPTI:
+      return {
+        ...state,
+        bug: {
+          ...state.bug,
+          comments: state.bug.comments.map((comment: any) => {
+            if (comment.id !== action.payload.commentId) {
+              // This isn't the item we care about - keep it as-is
+              return comment
+            }
+
+            function addReaction(payload: {
+              emoji: string;
+              user: any;
+            }) {
+              comment.reactions.forEach((react: any) => {
+                let isEmojiPresent = comment.reactions.some(
+                  (e: any) => e.emoji === payload.emoji
+                );
+                if (!isEmojiPresent) {
+                  // emoji isn't present
+                  comment.reactions.push({
+                    emoji: payload.emoji,
+                    users: [payload.user]
+                  });
+                }
+                if (react.emoji !== payload.emoji) {
+                  // emoji mismatch
+                  return;
+                }
+                react.emoji = payload.emoji;
+                react.users = toggleArrayItem(react.users, payload.user);
+                if (react.users.length < 1) {
+                  // users is empty remove the reaction
+                  comment.reactions.splice(comment.reactions.indexOf(react), 1)
+                }
+              });
+            }
+
+            addReaction({ emoji: action.payload.emoji, user: action.payload.optimisticData })
+
+            return comment;
+          })
+        }
+      }
     case CLEAR_BUG_DATA:
       return { ...state, bug: null }
     default:
@@ -108,7 +164,9 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
     dispatch({ type: CLEAR_BUG_DATA });
     dispatch({ type: FETCH_BUG.REQUEST });
   },
-  onSuccess: FETCH_BUG.SUCCESS,
+  onSuccess: (dispatch: any, data: any) => {
+    dispatch({ type: FETCH_BUG.SUCCESS, payload: data })
+  },
   onFailure: FETCH_BUG.FAILURE
 });
 

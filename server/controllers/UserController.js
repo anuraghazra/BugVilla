@@ -255,6 +255,36 @@ exports.getByUsername = async (req, res) => {
 }
 
 /**
+ * @route GET /user/:user_id
+ * @type RequestHandler
+ */
+exports.getMultipleByIds = async (req, res) => {
+  let { error, value } = Joi.object({
+    user_ids: Joi.array().items(Joi.string()).required()
+  }).validate(req.body);
+
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  try {
+    let user = await User.find({
+      '_id': {
+        $in: [...value.user_ids]
+      }
+    }).select('username')
+    if (!user) return res.notFound({ error: `Users not found` })
+
+    res.ok({ data: user });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: 'Something went wrong'
+    });
+  }
+}
+
+/**
  * @route GET /user/
  * @type RequestHandler
  */

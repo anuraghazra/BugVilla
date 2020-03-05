@@ -153,46 +153,47 @@ exports.addOrRemoveReaction = async (req, res) => {
     // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
     let bug = await Bug.findOne({
       bugId: req.params.bugId,
-      comments: {
-        $elemMatch: {
-          '_id': req.params.comment_id,
-        }
-      }
+      'comments._id': req.params.comment_id,
     })
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
-    const userId = req.user.id.toString();
-    // find index of the reactions, if its already exist then we will remove
-    // the reactions else we will add it.
-    // TODO: fix perf issues
-    for (let i = 0; i < bug.comments.length; i++) {
-      let comment = bug.comments[parseInt(i)];
-      if (comment.id !== req.params.comment_id) continue;
-      // find the index of matching user & emoji pair
-      const index = bug.comments[parseInt(i)].reactions.findIndex((reaction) => {
-        const isSameReaction = reaction.emoji === value.emoji
-        const isSameId = reaction.users.includes(userId);
-        return (isSameId && isSameReaction);
-      });
 
-      if (index > -1) {
-        // findIndex of user to remove it from the users list
-        const indexOfUser = bug.comments[parseInt(i)].reactions[parseInt(index)].users.indexOf(userId)
-        bug.comments[parseInt(i)].reactions[parseInt(index)].users.splice(indexOfUser, 1);
-        // if users list is empty then remove the entire reaction
-        if (bug.comments[parseInt(i)].reactions[parseInt(index)].users.length < 1) {
-          bug.comments[parseInt(i)].reactions.splice(index, 1);
-        }
-      } else {
-        const emojiIndex = bug.comments[parseInt(i)].reactions.findIndex(r => r.emoji === value.emoji);
-        // if emoji is absent then push it to the reactions list
-        // else push the userId to the users list
-        emojiIndex === -1
-          ? bug.comments[parseInt(i)].reactions.push({ emoji: value.emoji, users: [req.user.id] })
-          : bug.comments[parseInt(i)].reactions[parseInt(emojiIndex)].users.push(req.user.id)
+    // TODO: fix perf issues
+    const userId = req.user.id.toString();
+    let comments = bug.comments;
+    let commentIndex = parseInt(comments.findIndex(c => c.id === req.params.comment_id))
+    let comment = comments[parseInt(commentIndex)];
+
+    // find the index of matching user & emoji pair
+    const index = comment.reactions.findIndex((reaction) => {
+      const isSameReaction = reaction.emoji === value.emoji
+      const isSameId = reaction.users.includes(userId);
+      return (isSameId && isSameReaction);
+    });
+
+    if (index > -1) {
+      // findIndex of user to remove it from the users list
+      let indexedComment = comment.reactions[parseInt(index)]
+      const indexOfUser = indexedComment.users.indexOf(userId)
+      indexedComment.users.splice(indexOfUser, 1);
+      // if users list is empty then remove the entire reaction
+      if (indexedComment.users.length < 1) {
+        comment.reactions.splice(index, 1);
       }
+    } else {
+      const emojiIndex = comment.reactions.findIndex(r => r.emoji === value.emoji);
+      // if emoji is absent then push it to the reactions list
+      // else push the userId to the users list
+      emojiIndex === -1
+        ? comment.reactions.push({ emoji: value.emoji, users: [req.user.id] })
+        : comment.reactions[parseInt(emojiIndex)].users.push(req.user.id)
     }
 
-    const newBug = await bug.save();
+
+    let newBug = await bug
+      .save()
+      .then(t =>
+        t.populate('comments.reactions.users', 'name username').execPopulate()
+      );
     if (!newBug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok({ data: newBug.comments });
@@ -211,12 +212,15 @@ exports.addOrRemoveReaction = async (req, res) => {
  */
 exports.getReactions = async (req, res) => {
   try {
-    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
-    let bug = await Bug.findOne({ bugId: req.params.bugId })
-      .select('comments')
-      .populate('comments.reactions.user', 'name username')
+    // https://stackoverflow.com/a/41354060/10629172
+    let bug = await Bug.findOne({
+      bugId: req.params.bugId,
+      'comments._id': req.params.comment_id,
+    }, { 'comments.$': 1 })
+      .select('comments.reactions')
+      .populate('comments.reactions.users', 'name username')
 
-    res.ok({ data: bug.comments });
+    res.ok({ data: bug });
   } catch (err) {
     console.log(err)
     res.internalError({
