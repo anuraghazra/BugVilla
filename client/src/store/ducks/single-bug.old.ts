@@ -1,120 +1,81 @@
 import { Dispatch } from 'redux';
-import { normalize } from 'normalizr';
 import socket from 'utils/socket';
-import cloneDeep from 'lodash/cloneDeep';
-
-import { ApiAction } from 'store/middlewares/apiMiddleware';
 import { CLEAR_ALL_ERRORS } from './errors';
+import { ApiAction } from 'store/middlewares/apiMiddleware';
 import { createAPIAction } from 'store/helpers';
-import { bugSchema } from 'store/schemas';
-
+import { toggleArrayItem } from 'utils';
+import { normalize, schema } from 'normalizr';
+import { commentSchema, bugSchema } from 'store/schemas';
 // action
 export const API = 'API';
 export const CLEAR_BUG_DATA = 'singlebug/CLEAR_BUG_DATA';
+
 export const FETCH_BUG = createAPIAction('singlebug/FETCH_BUG');
 export const TOGGLE_BUG = createAPIAction('singlebug/TOGGLE_BUG');
 export const EDIT_LABELS = createAPIAction('singlebug/EDIT_LABELS');
 export const UPDATE_BUG = createAPIAction('singlebug/UPDATE_BUG');
+export const UPDATE_REACTIONS = createAPIAction('singlebug/UPDATE_REACTIONS');
 export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
 export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
-export const UPDATE_BUG_REACTIONS = createAPIAction('singlebug/UPDATE_BUG_REACTIONS');
 export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
-export const COMMENT_REACTIONS_OPTIMISTIC = 'singlebug/COMMENT_REACTIONS_OPTIMISTIC';
-
+export const COMMENT_REACTIONS_OPTI = 'singlebug/COMMENT_REACTIONS_OPTI';
 
 export interface SinglebugReducerState {
-  entities: {
-    comments: {
-      [x: string]: any
-    }
+  result?: {
+    [x: string]: any
   },
-  result: {
-    activities: any[];
-    body: string;
-    title: string;
-    bugId: number;
-    labels: any[];
-    comments: string[];
-    reactions: any[];
-    references: any[];
-    date_opened: string;
-    author: any;
+  entities?: {
     [x: string]: any
   }
 }
+
 const DEFAULT_STATE: SinglebugReducerState = {
-  entities: {
-    comments: {}
-  },
-  result: {
-    activities: [],
-    body: '',
-    title: '',
-    bugId: 0,
-    labels: [],
-    comments: [],
-    reactions: [],
-    references: [],
-    date_opened: '',
-    author: { username: '' },
-  }
+
 }
 
+// reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case FETCH_BUG.SUCCESS:
+      // let normalizedComments = normalize(action.payload, { comments: [commentSchema] })
       return {
         ...state,
         ...action.payload
-      };
-    //  return { ...state, entities: merge({}, state.entities, action.payload.entities) }
-    case EDIT_COMMENT.SUCCESS:
+      }
     case ADD_COMMENT.SUCCESS:
+      // let norm1 = normalize(action.payload, [commentSchema])
       return {
         ...state,
         entities: {
-          ...state.entities,
+          reactions: {
+            ...state?.entities?.reactions,
+          },
           comments: {
-            ...state.entities.comments,
-            [action.payload.id]: {
-              ...action.payload
-            }
-          }
+            ...state?.entities?.comments,
+          },
+        },
+        result: {
+          ...state.result,
+          comments: [...state?.result?.comments, action.payload[action.payload.length - 1].id]
         }
       }
-    case COMMENT_REACTIONS_OPTIMISTIC:
-      let { emoji, userData } = action.payload;
-      let comment = toggleCommentReaction(
-        state.entities.comments[action.payload.commentId],
-        { emoji, userData }
-      );
-
+    case EDIT_COMMENT.SUCCESS:
+      // let norm = normalize(action.payload[0], commentSchema)
       return {
         ...state,
         entities: {
-          ...state.entities,
           comments: {
-            ...state.entities.comments,
-            [action.payload.commentId]: {
-              ...comment
-            }
+            ...state?.entities?.comments,
           }
-        }
+        },
       }
     case UPDATE_BUG.SUCCESS:
       return {
         ...state,
-        result: { ...state.result, body: action.payload.body }
-      }
-    case UPDATE_BUG_REACTIONS.SUCCESS:
-      return {
-        ...state,
-        result: { ...state.result, reactions: action.payload }
-      }
-    case EDIT_LABELS.SUCCESS:
-      return {
-        ...state,
-        result: { ...state.result, labels: action.payload }
+        result: {
+          ...state.result,
+          body: action.payload.body
+        }
       }
     case TOGGLE_BUG.SUCCESS:
       return {
@@ -125,63 +86,82 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           isOpen: action.payload.bug_state === 'open' ? true : false
         }
       }
+    case EDIT_LABELS.SUCCESS:
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          labels: action.payload
+        }
+      }
+    case UPDATE_REACTIONS.SUCCESS:
+      return {
+        ...state,
+        reactions: action.payload
+      }
+    case UPDATE_COMMENT_REACTIONS.SUCCESS:
+      return {
+        ...state,
+        comments: action.payload
+      }
+    // optimistic
+    // {user:{
+    //   username: string;
+    //   id: string;
+    //   name: string;
+    // }}
+    case COMMENT_REACTIONS_OPTI:
+      return {
+        ...state,
+        // comments: state?.result.comments.map((comment: any) => {
+        //   if (comment.id !== action.payload.commentId) {
+        //     // This isn't the item we care about - keep it as-is
+        //     return comment
+        //   }
+
+        //   function addReaction(payload: {
+        //     emoji: string;
+        //     user: any;
+        //   }) {
+        //     comment.reactions.forEach((react: any) => {
+        //       let isEmojiPresent = comment.reactions.some(
+        //         (e: any) => e.emoji === payload.emoji
+        //       );
+        //       if (!isEmojiPresent) {
+        //         // emoji isn't present
+        //         comment.reactions.push({
+        //           emoji: payload.emoji,
+        //           users: [payload.user]
+        //         });
+        //       }
+        //       if (react.emoji !== payload.emoji) {
+        //         // emoji mismatch
+        //         return;
+        //       }
+        //       react.emoji = payload.emoji;
+        //       react.users = toggleArrayItem(react.users, payload.user);
+        //       if (react.users.length < 1) {
+        //         // users is empty remove the reaction
+        //         comment.reactions.splice(comment.reactions.indexOf(react), 1)
+        //       }
+        //     });
+        //   }
+
+        //   addReaction({ emoji: action.payload.emoji, user: action.payload.optimisticData })
+
+        //   return comment;
+        // })
+      }
     case CLEAR_BUG_DATA:
-      return {}
+      return { ...state, bug: null }
     default:
-      // if (action?.payload?.entities?.comments) {
-      //   return merge({}, state, action?.payload?.entities?.comments);
-      // }
       return state;
   }
 }
+
 export default reducer;
 
 // side effects
-
-/**
- * @description optimistic update of reactions
- */
-const toggleCommentReaction = (
-  inputComment: any,
-  payload: { emoji: string; userData: any }
-) => {
-  let comment = cloneDeep(inputComment);
-  if (comment.reactions.length < 1) {
-    comment.reactions.push({
-      emoji: payload.emoji,
-      users: [payload.userData]
-    });
-    return comment;
-  }
-  comment.reactions.forEach((react: any, index: number) => {
-    let isEmojiPresent = comment.reactions.some(
-      (e: any) => e.emoji === payload.emoji
-    );
-    if (!isEmojiPresent) {
-      comment.reactions.push({
-        emoji: payload.emoji,
-        users: [payload.userData]
-      });
-    }
-    // emoji mismatch
-    if (react.emoji !== payload.emoji) return;
-    let indexOfUser = react.users.findIndex((u: any) =>
-      u.username === payload.userData.username
-    );
-
-    if (indexOfUser > -1) {
-      react.users.splice(indexOfUser, 1)
-    } else {
-      react.emoji = payload.emoji;
-      react.users = payload.userData;
-    }
-
-    // if users array is empty remove the reaction from list
-    if (react.users.length < 1) comment.reactions.splice(index, 1);
-  });
-  return comment;
-};
-
 export const fetchBugWithId = (bugId: number | string): ApiAction => ({
   type: API,
   payload: {
@@ -194,16 +174,16 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
     dispatch({ type: FETCH_BUG.REQUEST });
   },
   onSuccess: (dispatch: any, data) => {
+    let norm = normalize(data, [bugSchema])
+    console.log(norm)
     dispatch({
       type: FETCH_BUG.SUCCESS,
-      payload: normalize(data, bugSchema)
+      payload: norm
     })
   },
   onFailure: FETCH_BUG.FAILURE
 });
 
-
-//#region 
 export const addComment = (
   bugId: number | string,
   formData: { body: string }
@@ -234,10 +214,7 @@ export const editComment = (
     formData: formData,
   },
   onRequest: EDIT_COMMENT.REQUEST,
-  onSuccess: (dispatch: Dispatch, data: any) => {
-    dispatch({ type: EDIT_COMMENT.SUCCESS, payload: data });
-    socket.emit('send-notification', { message: 'Add comment' })
-  },
+  onSuccess: EDIT_COMMENT.SUCCESS,
   onFailure: EDIT_COMMENT.FAILURE
 });
 
@@ -334,8 +311,8 @@ export const addOrRemoveReacts = (
     url: `/api/bugs/${bugId}/reactions`,
     formData: { emoji },
   },
-  onSuccess: UPDATE_BUG_REACTIONS.SUCCESS,
-  onFailure: UPDATE_BUG_REACTIONS.FAILURE,
+  onSuccess: UPDATE_REACTIONS.SUCCESS,
+  onFailure: UPDATE_REACTIONS.FAILURE,
 });
 
 // add or remove reactions from comments
@@ -350,9 +327,6 @@ export const addOrRemoveReactsComment = (
     url: `/api/bugs/${bugId}/comments/${commentId}/reactions`,
     formData: { emoji },
   },
-  onSuccess: (dispatch: Dispatch, data: any) => {
-    dispatch({ type: UPDATE_COMMENT_REACTIONS.SUCCESS, payload: data });
-  },
+  onSuccess: UPDATE_COMMENT_REACTIONS.SUCCESS,
   onFailure: UPDATE_COMMENT_REACTIONS.FAILURE,
 });
-//#endregion

@@ -14,10 +14,10 @@ import { AuthorProps } from 'pages/SingleBug/SingleBug';
 import {
   addOrRemoveReacts,
   addOrRemoveReactsComment,
-  COMMENT_REACTIONS_OPTI
+  COMMENT_REACTIONS_OPTIMISTIC
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import { ReactionsWrapper, ReactionType, ReactionUser } from './Reactions';
+import { ReactionsWrapper, ReactionType } from './Reactions';
 
 const REACTIONS: { emoji: string }[] = [
   { emoji: ':+1:' },
@@ -27,6 +27,54 @@ const REACTIONS: { emoji: string }[] = [
   { emoji: ':smile:' },
   { emoji: ':confused:' }
 ];
+
+const ReactionsDropdown: React.FC<{
+  handleReaction: (e: any) => void;
+  reactions: ReactionType[];
+}> = React.memo(({ handleReaction, reactions }) => {
+  const currentUserId: any = useSelector(
+    (state: StoreState) => state.auth.user.id
+  );
+
+  return (
+    <BaseDropdown
+      isOpen={false}
+      shouldCloseOnClick
+      trigger={toggle => (
+        <Flex nowrap onClick={toggle} className="add-smile-icon hover__button">
+          <FontAwesomeIcon icon="smile" />
+          <sup>
+            <FontAwesomeIcon icon="plus" />
+          </sup>
+        </Flex>
+      )}
+    >
+      <ReactionsWrapper
+        align="center"
+        justify="space-between"
+        nowrap
+        style={{ marginTop: 0 }}
+      >
+        {REACTIONS?.map(reaction => {
+          let isSelected = reactions?.some(
+            r =>
+              r.emoji == reaction.emoji &&
+              r?.users?.find(u => u.id === currentUserId)
+          );
+          return (
+            <span
+              key={reaction.emoji}
+              onClick={() => handleReaction(reaction.emoji)}
+              className={`reaction ${isSelected ? 'reaction_selected' : ''}`}
+            >
+              <Twemoji emoji={reaction.emoji} className="reaction_emoji" />
+            </span>
+          );
+        })}
+      </ReactionsWrapper>
+    </BaseDropdown>
+  );
+});
 
 interface CommentProps {
   bugId: number | string;
@@ -47,10 +95,7 @@ const CommentHeader: React.FC<CommentProps> = ({
   handleEditorState
 }) => {
   const dispatch = useDispatch();
-  const currentUserId: any = useSelector(
-    (state: StoreState) => state.auth.user.id
-  );
-
+  const currentUser: any = useSelector((state: StoreState) => state.auth.user);
   const copyCommentLink = () => {
     let fullPath = window.location.origin + window.location.pathname;
     let url = commentId ? `${fullPath}?comment_id=${commentId}` : fullPath;
@@ -59,18 +104,18 @@ const CommentHeader: React.FC<CommentProps> = ({
   };
 
   const handleReaction = (emoji: string) => {
-    let optimisticData = {
-      username: author.username,
-      name: author.name,
-      id: author.id
+    let userData = {
+      username: currentUser.username,
+      name: currentUser.name,
+      id: currentUser.id
     };
     // if commentId is missing that means its a bug.body
     if (commentId === '') {
       dispatch(addOrRemoveReacts(bugId, emoji));
     } else {
       dispatch({
-        type: COMMENT_REACTIONS_OPTI,
-        payload: { commentId, optimisticData, emoji: emoji }
+        type: COMMENT_REACTIONS_OPTIMISTIC,
+        payload: { commentId, userData, emoji: emoji }
       });
       dispatch(addOrRemoveReactsComment(bugId, commentId, emoji));
     }
@@ -97,50 +142,10 @@ const CommentHeader: React.FC<CommentProps> = ({
         nowrap
         className="comment__actions"
       >
-        <BaseDropdown
-          isOpen={false}
-          shouldCloseOnClick
-          trigger={toggle => (
-            <Flex
-              nowrap
-              onClick={toggle}
-              className="add-smile-icon hover__button"
-            >
-              <FontAwesomeIcon icon="smile" />
-              <sup>
-                <FontAwesomeIcon icon="plus" />
-              </sup>
-            </Flex>
-          )}
-        >
-          <ReactionsWrapper
-            align="center"
-            justify="space-between"
-            nowrap
-            style={{ marginTop: 0 }}
-          >
-            {REACTIONS?.map(reaction => {
-              let isSelected = reactions.some(
-                r =>
-                  r.emoji == reaction.emoji &&
-                  r.users.find(u => u.id === currentUserId)
-                // r.users.includes(currentUserId)
-              );
-              return (
-                <span
-                  key={reaction.emoji}
-                  onClick={() => handleReaction(reaction.emoji)}
-                  className={`reaction ${
-                    isSelected ? 'reaction_selected' : ''
-                  }`}
-                >
-                  <Twemoji emoji={reaction.emoji} className="reaction_emoji" />
-                </span>
-              );
-            })}
-          </ReactionsWrapper>
-        </BaseDropdown>
-
+        <ReactionsDropdown
+          handleReaction={handleReaction}
+          reactions={reactions}
+        />
         <BaseDropdown
           isOpen={false}
           shouldCloseOnClick
@@ -166,4 +171,4 @@ const CommentHeader: React.FC<CommentProps> = ({
   );
 };
 
-export default CommentHeader;
+export default React.memo(CommentHeader);

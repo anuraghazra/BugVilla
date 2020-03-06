@@ -20,7 +20,7 @@ export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 
 
 
-interface UserProps {
+export interface UserProps {
   username?: string;
   name?: string;
   bio?: string;

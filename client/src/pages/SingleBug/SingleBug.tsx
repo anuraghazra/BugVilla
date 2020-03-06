@@ -40,7 +40,7 @@ const SingleBug: React.FC = () => {
   const dispatch = useDispatch<Dispatch>();
   const { bugId } = useParams<any>();
 
-  const bug = useSelector((state: StoreState) => state.singlebug.bug);
+  const bug = useSelector((state: StoreState) => state.singlebug);
   const [isFetching, fetchError] = useSelector((state: StoreState) => [
     state.loading['singlebug/FETCH_BUG'],
     state.error['singlebug/FETCH_BUG']
@@ -58,8 +58,10 @@ const SingleBug: React.FC = () => {
 
   // get the concatenated timeline
   let timeline: any = [];
-  if (bug) {
-    timeline = [...bug.activities, ...bug.references].sort(
+  if (bug?.result) {
+    let activities = bug.result.activities || [];
+    let references = bug.result.references || [];
+    timeline = [...activities, ...references].sort(
       (a: any, b: any) => (new Date(a.date) as any) - (new Date(b.date) as any)
     );
   }
@@ -69,18 +71,18 @@ const SingleBug: React.FC = () => {
     <SingleBugWrapper>
       {isFetching && <Loading />}
       {fetchError && <Illustration type="error" />}
-      {bug && (
+      {bug?.result && (
         <>
           <section>
             <DashboardHeader>
               <h1>
-                {bug.title} <span className="color--gray">#{bugId}</span>
+                {bug.result.title} <span className="color--gray">#{bugId}</span>
               </h1>
               <MetaInfo
-                isOpen={bug.isOpen}
-                date={bug.date_opened}
-                author={bug.author}
-                commentsCount={bug?.comments?.length}
+                isOpen={bug.result.isOpen}
+                date={bug.result.date_opened}
+                author={bug.result.author}
+                commentsCount={bug.result?.comments?.length}
               />
             </DashboardHeader>
 
@@ -88,23 +90,25 @@ const SingleBug: React.FC = () => {
               <Comment
                 bugId={bugId}
                 commentId={''} // assumes it's not a comment
-                body={bug.body}
-                author={bug.author}
-                date={bug.date_opened}
-                reactions={bug.reactions}
+                body={bug.result.body}
+                author={bug.result.author}
+                date={bug.result.date_opened}
+                reactions={bug.result.reactions}
               />
-              {bug?.comments.result.map((comment: any) => (
-                <Comment
-                  bugId={bugId}
-                  commentId={bug.comments.entities.comments[comment].id}
-                  key={bug.comments.entities.comments[comment].id}
-                  body={bug.comments.entities.comments[comment].body}
-                  author={bug.comments.entities.comments[comment].author}
-                  date={bug.comments.entities.comments[comment].date}
-                  reactions={bug.comments.entities.comments[comment].reactions}
-                  isSelected={query_comment_id === comment}
-                />
-              ))}
+              {Object.values(bug.entities.comments || {}).map(
+                (comment: any) => (
+                  <Comment
+                    bugId={bugId}
+                    commentId={comment.id}
+                    key={comment.id}
+                    body={comment.body}
+                    author={comment.author}
+                    date={comment.date}
+                    reactions={comment.reactions}
+                    isSelected={query_comment_id === comment.id}
+                  />
+                )
+              )}
               <section>
                 {timeline?.map((data: any, i: number) => (
                   <Timeline
@@ -117,7 +121,7 @@ const SingleBug: React.FC = () => {
                 ))}
               </section>
 
-              <CommentEditorForm bugIsOpen={bug.isOpen} />
+              <CommentEditorForm bugIsOpen={bug.result.isOpen} />
             </VerticalLine>
           </section>
           <section className="singlebug__aside">
@@ -129,4 +133,4 @@ const SingleBug: React.FC = () => {
   );
 };
 
-export default SingleBug;
+export default React.memo(SingleBug);

@@ -60,7 +60,7 @@ exports.createComment = async (req, res) => {
     });
     await notification.save();
 
-    res.ok({ data: newBug.comments });
+    res.ok({ data: newBug.comments[newBug.comments.length - 1] });
   } catch (err) {
     res.internalError({
       error: 'Something went wrong while adding new comment',
@@ -115,18 +115,19 @@ exports.updateComment = async (req, res) => {
             '_id': req.params.comment_id,
             'author._id': req.user.id
           }
-        }
+        },
       },
       {
         $set: {
           'comments.$.body': value.body
         }
       },
-      { new: true, runValidators: true, select: 'comments' }
+      { new: true, runValidators: true }
     )
+
     if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok({ data: bug.comments });
+    res.ok({ data: bug.comments.filter(e => e.id === req.params.comment_id)[0] });
   } catch (err) {
     console.log(err)
     res.internalError({
@@ -196,7 +197,7 @@ exports.addOrRemoveReaction = async (req, res) => {
       );
     if (!newBug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    res.ok({ data: newBug.comments });
+    res.ok({ data: newBug.comments.filter(e => e.id === req.params.comment_id)[0]  });
   } catch (err) {
     console.log(err)
     res.internalError({

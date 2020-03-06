@@ -15,15 +15,12 @@ import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
-  if (bug && bug.comments) {
-    return bug.comments
-      .map((c: any) => c.author.username)
-      .filter(
-        (item: string, pos: number, array: string[]) =>
-          array.indexOf(item) === pos
-      );
-  }
-  return [];
+  return Object.values(bug?.entities?.comments || {})
+    .map((comment: any) => comment.author?.username)
+    .filter(
+      (item: string, pos: number, array: string[]) =>
+        array.indexOf(item) === pos
+    );
 };
 
 interface SingleBugAsideProps {
@@ -48,7 +45,6 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
   };
 
   let participants: string[] = getParticipants(bug);
-
   labelEditError && toast.error(labelEditError);
 
   return (
@@ -58,7 +54,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
           Labels
           <LabelEditDropdown
             updateSelectedLabels={labels => setSelectedLabels(labels)}
-            defaultChecked={bug.labels}
+            defaultChecked={bug?.result.labels}
             className="label__dropdown"
             trigger={toggle => (
               <FontAwesomeIcon
@@ -85,7 +81,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         </h4>
 
         <Flex>
-          {bug?.labels.map((label: string, i: number) => (
+          {bug?.result?.labels.map((label: string, i: number) => (
             <Label className="mt-5" type={label} key={i}>
               {label}
             </Label>

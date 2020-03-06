@@ -56,7 +56,7 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
   return (
     <ReactionsWrapper align="center">
       {reactions?.map((react, index: number) => {
-        let names = react.users.map((e: any) => e.username);
+        let names = react?.users?.map((e: any) => e.username);
         let sliced = names.slice(0, 2);
         let msg = `${sliced.join(' ')} `;
         let remaining = names.length - sliced.length;
@@ -89,4 +89,4 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
   );
 };
 
-export default Reactions;
+export default React.memo(Reactions);

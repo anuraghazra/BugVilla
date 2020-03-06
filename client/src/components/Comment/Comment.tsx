@@ -1,5 +1,5 @@
-import React, { useState, } from 'react';
-import ReactMarkdown from 'react-markdown';
+import React, { useState, useCallback } from 'react';
+import RM from 'react-markdown';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,6 +27,7 @@ import { StoreState } from 'store';
 import CommentHeader from './CommentHeader';
 import Reactions from './Reactions';
 
+const ReactMarkdown = React.memo(RM);
 const MarkdownPlugins = {
   code: CodeBlock
 };
@@ -77,11 +78,14 @@ const Comment: React.FC<CommentProps> = ({
     error['singlebug/EDIT_COMMENT'] || error['singlebug/UPDATE_BUG']
   ]);
 
-  const handleEditorState = (e: any) => {
-    e.preventDefault();
-    setValue('body', '');
-    setIsEditing(!isEditing);
-  };
+  const handleEditorState = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      setValue('body', '');
+      setIsEditing(!isEditing);
+    },
+    [isEditing]
+  );
 
   const onSubmit = (formData: any) => {
     if (commentId === '') {

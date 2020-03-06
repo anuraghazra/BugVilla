@@ -15,7 +15,9 @@ import Profiles from 'pages/Profiles/Profiles';
 import SingleBug from 'pages/SingleBug/SingleBug';
 import Notifications from 'pages/Notifications/Notifications';
 
-const Dashboard: React.FC = () => {
+
+// extracting out the logic to prevent re-render
+const Navigation = React.memo(() => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const handleSidebar = () => {
@@ -29,11 +31,18 @@ const Dashboard: React.FC = () => {
       }
     });
   }, []);
-
   return (
-    <DashboardWrapper>
+    <>
       <Navbar handleSidebar={handleSidebar} />
       <Sidebar isOpen={isSidebarOpen} />
+    </>
+  );
+});
+
+const Dashboard: React.FC = () => {
+  return (
+    <DashboardWrapper>
+      <Navigation />
       <DashboardBody>
         <Switch>
           <AuthRoute exact path="/dashboard/bugs" component={Bugs} />
