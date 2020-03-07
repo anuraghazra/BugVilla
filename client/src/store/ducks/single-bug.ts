@@ -7,6 +7,7 @@ import { ApiAction } from 'store/middlewares/apiMiddleware';
 import { CLEAR_ALL_ERRORS } from './errors';
 import { createAPIAction } from 'store/helpers';
 import { bugSchema } from 'store/schemas';
+import { batch } from 'react-redux';
 
 // action
 export const API = 'API';
@@ -104,7 +105,7 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
     case UPDATE_BUG.SUCCESS:
       return {
         ...state,
-        result: { ...state.result, body: action.payload.body }
+        result: { ...state.result, body: action.payload }
       }
     case UPDATE_BUG_REACTIONS.SUCCESS:
       return {
@@ -189,9 +190,11 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
     url: `/api/bugs/${bugId}`,
   },
   onRequest: (dispatch: any) => {
-    dispatch({ type: CLEAR_ALL_ERRORS });
-    dispatch({ type: CLEAR_BUG_DATA });
-    dispatch({ type: FETCH_BUG.REQUEST });
+    batch(() => {
+      dispatch({ type: CLEAR_ALL_ERRORS });
+      dispatch({ type: CLEAR_BUG_DATA });
+      dispatch({ type: FETCH_BUG.REQUEST });
+    })
   },
   onSuccess: (dispatch: any, data) => {
     dispatch({

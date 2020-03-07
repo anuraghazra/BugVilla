@@ -18,7 +18,9 @@ const requestHandler = (config: AxiosRequestConfig) => {
 instance.interceptors.request.use(requestHandler);
 instance.interceptors.response.use(undefined, (error: AxiosError) => {
   // handle error
-  console.log(error.response);
+  if (axios.isCancel(error)) {
+    console.log(`request cancelled`);
+  }
   return Promise.reject(error.response?.data?.error)
 });
 

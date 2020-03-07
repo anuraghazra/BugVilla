@@ -136,7 +136,7 @@ exports.updateBug = async (req, res) => {
     );
     if (!bug) return res.notFound({ error: `Can not update Bug#${req.params.bugId}` });
 
-    res.ok({ data: bug });
+    res.ok({ data: bug.body });
   } catch (err) {
     console.error(err)
     res.internalError({

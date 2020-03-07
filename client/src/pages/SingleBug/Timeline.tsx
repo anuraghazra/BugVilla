@@ -82,4 +82,4 @@ const Timeline: React.FC<TimelineProps> = ({ author, date, from, action }) => {
   );
 };
 
-export default Timeline;
+export default React.memo(Timeline);

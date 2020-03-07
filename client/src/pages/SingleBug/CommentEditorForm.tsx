@@ -50,19 +50,14 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     [bugId]
   );
 
-  const {
-    loading: {
-      'singlebug/ADD_COMMENT': isCommentLoading,
-      'singlebug/TOGGLE_BUG': isToggleLoading
-    },
-    error: {
-      'singlebug/ADD_COMMENT': commentError,
-      'singlebug/TOGGLE_BUG': toggleError
-    }
-  } = useSelector((state: StoreState) => ({
-    loading: state.loading,
-    error: state.error
-  }));
+  const [isCommentLoading, commentError] = useSelector((state: StoreState) => [
+    state.loading['singlebug/ADD_COMMENT'],
+    state.error['singlebug/ADD_COMMENT']
+  ]);
+  const [isToggleLoading, toggleError] = useSelector((state: StoreState) => [
+    state.loading['singlebug/TOGGLE_BUG'],
+    state.error['singlebug/TOGGLE_BUG']
+  ]);
 
   commentError && toast.error(commentError);
   toggleError && toast.error(toggleError);
@@ -92,4 +87,4 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   );
 };
 
-export default CommentEditorForm;
+export default React.memo(CommentEditorForm);

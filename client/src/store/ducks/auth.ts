@@ -68,11 +68,6 @@ export default reducer;
 
 // actions creators
 export const logUserOut = () => ({ type: AUTH_LOGOUT });
-export const setUser = (data: UserProps | null) => ({ type: AUTH_SET_USER, payload: data })
-
-export const loginClearError = () => ({ type: LOGIN_CLEAR_ERROR })
-export const signupClearError = () => ({ type: SIGNUP_CLEAR_ERROR })
-
 
 
 // side effects
