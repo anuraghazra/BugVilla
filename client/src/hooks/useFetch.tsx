@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import http from 'utils/httpInstance';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 interface memStoreTypes {
   [x: string]: string;
@@ -18,31 +18,43 @@ const useFetch = (
   const [shouldRefetch, reFetch] = useState({});
 
   useEffect(() => {
+    let unmounted = false;
+    let source = axios.CancelToken.source();
     const getData = async () => {
       setIsLoading(true);
       try {
         let httpConfig: AxiosRequestConfig = {
           method: 'GET',
           url: url,
-          ...axiosOptions
+          ...axiosOptions,
+          cancelToken: source.token,
         };
         let res = await http(httpConfig);
-        setIsLoading(false);
-        setData(res.data);
-        if (props.cache) memStore[url] = res.data;
+        if (!unmounted) {
+          setIsLoading(false);
+          setData(res.data);
+          if (props.cache) memStore[url] = res.data;
+        }
       } catch (err) {
-        console.log(err);
-        setIsLoading(false);
-        setError(err);
+        if (!unmounted) {
+          console.log(err);
+          setIsLoading(false);
+          setError(err);
+        }
       }
     };
 
-    if (memStore[url]) {
+    if (memStore[url] && !unmounted) {
       setIsLoading(false);
       setData(memStore[url]);
     } else {
       getData();
     }
+
+    return () => {
+      unmounted = true;
+      source.cancel(`${url} canceled`);
+    };
   }, [url, shouldRefetch]);
 
   return [data, isLoading, error, reFetch];
