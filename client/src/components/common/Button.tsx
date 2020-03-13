@@ -50,7 +50,7 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   }
 
   @media screen and (${p => p.theme.media.mobile}) {
-    padding: 15px 40px;
+    padding: 10px 25px;
   }
 `;
 
@@ -83,11 +83,16 @@ const Button: React.FC<ButtonProps> = ({
 );
 
 export const ButtonGroup = styled.div<{ float?: string }>`
+  float: ${p => p.float || 'initial'};
+
   > button {
     margin-right: 10px !important;
   }
-
-  float: ${p => p.float || 'initial'};
+  @media screen and (${p => p.theme.media.mobile}) {
+    > button {
+      float: right;
+    }
+  }
 `;
 
 export default Button;

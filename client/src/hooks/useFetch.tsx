@@ -7,11 +7,17 @@ interface memStoreTypes {
 }
 const memStore: memStoreTypes = {};
 
-const useFetch = (
-  url: string,
-  props: { cache?: boolean } = {},
-  axiosOptions: AxiosRequestConfig = {}
-) => {
+interface useFetchProps {
+  (
+    url: string,
+    props?: {
+      cache?: boolean;
+    },
+    axiosOptions?: AxiosRequestConfig
+  ): [any, boolean, any, React.Dispatch<React.SetStateAction<{}>>];
+}
+
+const useFetch: useFetchProps = (url, props = {}, axiosOptions = {}) => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
@@ -27,7 +33,7 @@ const useFetch = (
           method: 'GET',
           url: url,
           ...axiosOptions,
-          cancelToken: source.token,
+          cancelToken: source.token
         };
         let res = await http(httpConfig);
         if (!unmounted) {

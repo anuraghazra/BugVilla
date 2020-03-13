@@ -15,6 +15,7 @@ const AvatarContainer = styled.section<{ size?: string }>`
     width: 100%;
     height: 100%;
     text-align: center;
+    border-radius: 100%;
     background-color: rgba(88, 111, 253, 0.9);
     color: ${p => p.theme.colors.common.white};
     opacity: 0;

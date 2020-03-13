@@ -33,7 +33,7 @@ interface TooltipProps {
 }
 const Tooltip: React.FC<TooltipProps> = ({ children, content }) => {
   return (
-    <TooltipWrapper className="tooltip">
+    <TooltipWrapper data-testid="tooltip" className="tooltip">
       <div className="tooltip--content">{content}</div>
       {children}
     </TooltipWrapper>

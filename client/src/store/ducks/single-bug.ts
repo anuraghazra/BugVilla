@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { normalize } from 'normalizr';
 import socket from 'utils/socket';
 import cloneDeep from 'lodash/cloneDeep';
@@ -61,6 +60,9 @@ const DEFAULT_STATE: SinglebugReducerState = {
   }
 }
 
+// saving the payload of OPTIMISTIC Reaction update
+// for handling fallback
+let selectedReaction: { emoji: string; userData: any } | null = null
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case FETCH_BUG.SUCCESS:
@@ -84,6 +86,11 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         }
       }
     case COMMENT_REACTIONS_OPTIMISTIC:
+    case UPDATE_COMMENT_REACTIONS.FAILURE:
+      if (action.type === COMMENT_REACTIONS_OPTIMISTIC) {
+        selectedReaction = action.payload
+        console.log(selectedReaction)
+      }
       let { emoji, userData } = action.payload;
       let comment = toggleCommentReaction(
         state.entities.comments[action.payload.commentId],
@@ -174,7 +181,7 @@ const toggleCommentReaction = (
       react.users.splice(indexOfUser, 1)
     } else {
       react.emoji = payload.emoji;
-      react.users = payload.userData;
+      react.users = [payload.userData];
     }
 
     // if users array is empty remove the reaction from list
@@ -218,7 +225,7 @@ export const addComment = (
     formData: formData,
   },
   onRequest: ADD_COMMENT.REQUEST,
-  onSuccess: (dispatch: Dispatch, data: any) => {
+  onSuccess: (dispatch, data) => {
     dispatch({ type: ADD_COMMENT.SUCCESS, payload: data });
     socket.emit('send-notification', { message: 'Add comment' })
   },
@@ -237,7 +244,7 @@ export const editComment = (
     formData: formData,
   },
   onRequest: EDIT_COMMENT.REQUEST,
-  onSuccess: (dispatch: Dispatch, data: any) => {
+  onSuccess: (dispatch, data) => {
     dispatch({ type: EDIT_COMMENT.SUCCESS, payload: data });
     socket.emit('send-notification', { message: 'Add comment' })
   },
@@ -269,7 +276,7 @@ export const openOrCloseBug = (
     url: `/api/bugs/${bugId}/${state}`,
   },
   onRequest: TOGGLE_BUG.REQUEST,
-  onSuccess: (dispatch: Dispatch, data: any) => {
+  onSuccess: (dispatch, data) => {
     dispatch({
       type: TOGGLE_BUG.SUCCESS,
       payload: { data, bug_state: state },
@@ -290,7 +297,7 @@ export const editLabels = (
     formData: { labels: labelData },
   },
   onRequest: EDIT_LABELS.REQUEST,
-  onSuccess: (dispatch: Dispatch, data: any) => {
+  onSuccess: (dispatch, data) => {
     dispatch({ type: EDIT_LABELS.SUCCESS, payload: data });
   },
   onFailure: EDIT_LABELS.FAILURE
@@ -353,9 +360,12 @@ export const addOrRemoveReactsComment = (
     url: `/api/bugs/${bugId}/comments/${commentId}/reactions`,
     formData: { emoji },
   },
-  onSuccess: (dispatch: Dispatch, data: any) => {
+  onSuccess: (dispatch, data: any) => {
     dispatch({ type: UPDATE_COMMENT_REACTIONS.SUCCESS, payload: data });
   },
-  onFailure: UPDATE_COMMENT_REACTIONS.FAILURE,
+  onFailure: (dispatch) => {
+    // on failure remove the reaction
+    dispatch({ type: UPDATE_COMMENT_REACTIONS.FAILURE, payload: selectedReaction });
+  },
 });
 //#endregion

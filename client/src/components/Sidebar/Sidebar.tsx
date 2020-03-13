@@ -21,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const user = useSelector((state: StoreState) => state.auth.user);
 
   const logout = () => {
-    http.get('/api/user/logout').then(data => {
+    http.get('/api/user/logout').then(() => {
       console.log('logged out');
       history.push('/');
       dispatch(logUserOut());

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 import { ErrorMessage } from 'react-hook-form';
@@ -6,7 +6,6 @@ import { MentionsInput, Mention } from 'react-mentions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import useFetch from 'hooks/useFetch';
 import Flex from 'components/common/Flex';
 import Avatar from 'components/common/Avatar';
 import { InputWrapper } from 'components/common/Form';
@@ -15,6 +14,7 @@ import CodeBlock from './CodeBlock';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
 import { renderMarkdown, htmlDecode } from 'utils';
+import useSuggestion from './useSuggestion';
 
 const MarkdownPlugins = {
   code: CodeBlock
@@ -26,27 +26,6 @@ interface EditorProps {
   errors?: any;
   handleMarkdown?: (e: any) => void;
 }
-
-const useSuggestion = (url: string, prop: string[]) => {
-  const [suggestions] = useFetch(url, { cache: true });
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    if (!suggestions) return;
-    const isBug = prop[1] === 'bugId';
-    const suggestionsArray = suggestions.data.map((suggestions: any) => {
-      let display = suggestions[prop[0]];
-      if (isBug) {
-        // if it's a bug then append the #1 (bugId) to the display
-        display = suggestions[prop[0]] + ' #' + suggestions[prop[1]];
-      }
-      return { display, id: suggestions[prop[1]] };
-    });
-    setData(suggestionsArray);
-  }, [suggestions]);
-
-  return data;
-};
 
 const Editor: React.FC<EditorProps> = ({
   markdown,
