@@ -20,7 +20,6 @@ export const StyledLabel = styled.div<StyledLabelProps>`
   font-size: 14px;
   padding: 5px 10px;
   border-radius: 50px;
-  margin-right: 10px;
   margin-bottom: 5px;
   width: fit-content;
   line-height: 1;
@@ -54,7 +53,7 @@ export const StyledBulletLabel = styled(StyledLabel)`
   }
 `;
 
-const Label: React.FC<LabelProps> = ({ children, type, style }) => {
+export const Label: React.FC<LabelProps> = ({ children, type }) => {
   return (
     <StyledLabel variant={VARIANTS_MAP[type as string]}>{children}</StyledLabel>
   );

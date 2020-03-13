@@ -15,7 +15,7 @@ const twemojiStyles = {
   margin: '0px 0.05em 0px 0.1em',
   verticalAlign: '-0.1em'
 };
-const Twemoji: React.FC<{ emoji: string; [x: string]: any }> = ({
+export const Twemoji: React.FC<{ emoji: string; [x: string]: any }> = ({
   emoji,
   ...props
 }) => {

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface StyledButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
-  size?: 'sm' | 'md';
+  size?: 'small' | 'medium';
   width?: string;
 }
 
@@ -31,11 +31,11 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   transition: 0.2s;
   cursor: pointer;
 
-  ${p => p.size === 'sm' && css`
+  ${p => p.size === 'small' && css`
     padding: 8px 10px;
     font-size: 12px;
   `}
-  ${p => p.size === 'md' && css`
+  ${p => p.size === 'medium' && css`
     padding: 10px 15px;
     font-size: 12px;
   `}
@@ -54,7 +54,7 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   }
 `;
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size,
   width,

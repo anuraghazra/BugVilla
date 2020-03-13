@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux';
 import { StoreState } from 'store';
 import { useHistory } from 'react-router-dom';
 
-import Flex from 'components/common/Flex';
+import { Flex, IconLink } from '@bug-ui';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 
 import HomeWrapper from './Home.style';
-import IconLink from 'components/common/IconLink';
 
 interface HomeProps {
   right: any;

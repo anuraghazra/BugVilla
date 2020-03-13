@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toast } from 'components/common/Toast';
-import { Textarea } from 'components/common/Form';
-import Button, { ButtonGroup } from 'components/common/Button';
+import { toast, Button, ButtonGroup } from '@bug-ui';
+import { Textarea } from '@bug-ui/Form';
 
 import { StoreState } from 'store';
 import { updateUserBio } from 'store/ducks/auth';
@@ -72,7 +71,7 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
         <ButtonGroup>
           <Button
             className="edit__button"
-            size="sm"
+            size="small"
             icon="edit"
             onClick={isBioEditing ? updateBio : toggleBioEdit}
             variant={isBioEditing ? 'success' : 'secondary'}

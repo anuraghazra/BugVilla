@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 
+import { Illustration, Loading } from '@bug-ui';
 import socket from 'utils/socket';
-import Loading from 'components/common/Loading';
 import useFetch from 'hooks/useFetch';
 
 import DashboardHeader from 'components/DashboardHeader';
 import NotificationItem from './NotificationItem';
-import Illustration from 'components/common/Illustration';
 
 const NotificationsWrapper = styled.section`
   width: 100%;

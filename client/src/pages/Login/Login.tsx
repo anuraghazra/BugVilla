@@ -4,12 +4,8 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
-import Flex from 'components/common/Flex';
-import { Input } from 'components/common/Form';
-import IconLink from 'components/common/IconLink';
-import Button from 'components/common/Button';
-import { toast } from 'components/common/Toast';
-import BugVillaLogo from 'components/common/Logo';
+import { Button, BugVillaLogo, Flex, IconLink, toast } from '@bug-ui';
+import { Input } from '@bug-ui/Form';
 
 import { loginUser, checkAuth } from 'store/ducks/auth';
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,13 +27,12 @@ const LoginSchema = yup.object().shape({
 });
 
 const GoogleButton = styled(Button)`
-  background-color: white;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  color: ${p => p.theme.colors.text.black};
   display: flex;
   align-items: center;
-  margin: 10px auto 25px auto;
-  /* padding: 20px 30px; */
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: ${p => p.theme.colors.common.black};
+  margin: 10px auto 25px auto !important;
 
   img {
     margin-right: 10px;
@@ -118,7 +113,6 @@ const Login: React.FC = () => {
             Login
           </Button>
         </form>
-
         <GoogleButton onClick={googleOauth}>
           <img src={googleLogo} /> Continue with Google
         </GoogleButton>

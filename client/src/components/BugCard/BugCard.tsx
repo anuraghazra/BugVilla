@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Flex from 'components/common/Flex';
-import Label from 'components/common/Label';
+import { Flex, Label } from '@bug-ui';
 import { StyledBugCard, BugCardIcon, StyledMetaInfo } from './BugCard.style';
 
 interface Author {
@@ -56,7 +55,7 @@ const BugCard: React.FC<BugCardProps> = ({
       </Link>
 
       {labels.length ? (
-        <Flex className="bug__label-container">
+        <Flex gap="medium" className="mt-large">
           {labels.map((label: string, index: number) => (
             <Link key={index} to={`/dashboard/bugs/?label=${label}`}>
               <Label type={label}>{label}</Label>
@@ -65,7 +64,7 @@ const BugCard: React.FC<BugCardProps> = ({
         </Flex>
       ) : null}
 
-      <div className="bug__body--text">{body.slice(0, 150)}</div>
+      <div className="bug__body--text mt-large">{body.slice(0, 150)}</div>
     </StyledBugCard>
   );
 };

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { getRefsOrMentions } from 'utils';
-import Button, { ButtonGroup } from 'components/common/Button';
+import { Button, ButtonGroup, toast } from '@bug-ui';
 
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
@@ -16,7 +16,6 @@ import {
   addReferences
 } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
-import { toast } from 'components/common/Toast';
 
 const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   const dispatch = useDispatch<any>();

@@ -1,3 +1,5 @@
+import { ReactionType } from "components/Comment/Reactions";
+
 export const formatDate = (date: string): string =>
   new Date(date)
     .toDateString()
@@ -112,4 +114,23 @@ export const toggleArrayItem = (arr: any[], value: any) => {
   return arr.some(a => item === JSON.stringify(a))
     ? arr.filter(i => JSON.stringify(i) !== item) // remove item
     : [...arr, value]; // add item
+};
+
+// TODO: improve algo
+export const calculateReputation = (reactions: ReactionType[]) => {
+  const REPUTATION_MAP: any = {
+    ':+1:': 30,
+    ':-1:': -20,
+    ':smile:': 20,
+    ':heart:': 30,
+    ':confused:': -10,
+    ':tada:': 20
+  };
+
+  let avg = 0;
+  reactions?.forEach((react) => {
+    avg += REPUTATION_MAP[react.emoji] * react.users.length;
+  });
+
+  return avg / 5 || 0;
 };

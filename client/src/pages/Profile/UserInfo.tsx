@@ -3,12 +3,8 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { timeAgo } from 'utils';
-import Avatar from 'components/common/Avatar';
-import Button, { ButtonGroup } from 'components/common/Button';
-import CircleIcon from 'components/common/CircleIcon';
-import Flex from 'components/common/Flex';
-import { toast } from 'components/common/Toast';
+import { timeAgo, calculateReputation } from 'utils';
+import { Avatar, Button, ButtonGroup, CircleIcon, Flex, toast } from '@bug-ui';
 
 import { StoreState } from 'store';
 import { updateUserAvatar } from 'store/ducks/auth';
@@ -45,24 +41,6 @@ interface UserInfoProps {
   totalBugs: string | number;
 }
 
-const calculateReputation = (reactions: ReactionType[]) => {
-  const REPUTATION_MAP: any = {
-    ':+1:': 30,
-    ':-1:': -20,
-    ':smile:': 20,
-    ':heart:': 30,
-    ':confused:': -10,
-    ':tada:': 20
-  };
-
-  let avg = 0;
-  reactions?.forEach((react, index) => {
-    avg += REPUTATION_MAP[react.emoji] * react.users.length;
-  });
-
-  return avg / 5 || 0;
-};
-
 const UserInfo: React.FC<UserInfoProps> = ({
   user,
   totalComments,
@@ -74,7 +52,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
 
   const currentUser = useSelector((state: StoreState) => state.auth.user);
   const [reactions] = useFetch(`/api/user/${user.username}/reactions/count`);
-  
+
   const [isUploadPending] = useSelector((state: StoreState) => [
     state.loading['user/UPLOAD_AVATAR']
   ]);
@@ -108,7 +86,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
       >
         <h2>
           <Flex align="center">
-            <CircleIcon className="mr-10" icon="check" />
+            <CircleIcon className="mr-medium" icon="check" />
             Confirmation
           </Flex>
         </h2>
@@ -138,24 +116,14 @@ const UserInfo: React.FC<UserInfoProps> = ({
               size="150px"
               name="image"
               file={file}
-              defaultImg={
-                <Avatar
-                  className="img__preview"
-                  size={150}
-                  username={user.username}
-                />
-              }
+              defaultImg={`/api/user/${user.username}/avatar/raw?size=${150}`}
               handleFile={file => {
                 setIsOpen(true);
                 setFile(file);
               }}
             />
           ) : (
-            <Avatar
-              className="img__preview"
-              size={150}
-              username={user.username}
-            />
+            <Avatar size={150} username={user.username} />
           )}
         </Flex>
         <Bio currentUser={currentUser} user={user} />
@@ -173,6 +141,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         </small>
         <br />
         <small className="color--gray"></small>
+        <br />
         {reactions?.data && <Reactions reactions={reactions.data} />}
       </div>
     </UserInfoWrapper>

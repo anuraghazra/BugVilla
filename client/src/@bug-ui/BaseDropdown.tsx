@@ -5,12 +5,12 @@ import React from 'react';
 interface BaseDropdownProps {
   isOpen?: boolean;
   children: any;
-  trigger?: (toggle: any) => any;
+  trigger?: (toggle: () => void) => any;
   shouldCloseOnClick?: boolean;
   [x: string]: any;
 }
 
-const BaseDropdown: React.FC<BaseDropdownProps> = ({
+export const BaseDropdown: React.FC<BaseDropdownProps> = ({
   isOpen,
   children,
   trigger,
@@ -23,7 +23,7 @@ const BaseDropdown: React.FC<BaseDropdownProps> = ({
     if (e.target.closest('.dropdown__content') && !shouldCloseOnClick) return;
     setDropdownState(false);
   };
-  const toggleDropdown = (e: any) => {
+  const toggleDropdown = () => {
     setDropdownState(!isDropdownOpen);
   };
 
@@ -35,7 +35,7 @@ const BaseDropdown: React.FC<BaseDropdownProps> = ({
   // if type is object then its a ReactElement,
   // add OnClick handler to it automatically
   return (
-    <span style={{ position: 'relative' }}>
+    <span role="menu" style={{ position: 'relative' }}>
       {trigger!(toggleDropdown)}
       <StyledDropdown
         data-testid="dropdown-content"

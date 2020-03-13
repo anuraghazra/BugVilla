@@ -1,11 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Flex from 'components/common/Flex';
-import Twemoji from 'components/common/Twemoji';
-import Tooltip from 'components/common/Tooltip';
+import { Flex, Twemoji, Tooltip } from '@bug-ui';
 
 export const ReactionsWrapper = styled(Flex)`
-  margin-top: 20px;
   .reaction {
     padding: 5px 8px;
     border: 1px solid ${p => p.theme.colors.common.offwhite};

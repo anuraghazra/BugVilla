@@ -1,6 +1,5 @@
-import { DefaultTheme } from 'styled-components';
-import colorVariants from 'components/common/colorVariants';
-import { CSSProp } from 'styled-components';
+import { DefaultTheme, CSSProp } from 'styled-components';
+import { colorVariants } from '@bug-ui';
 
 // and extend them!
 declare module 'styled-components' {
@@ -19,17 +18,15 @@ declare module 'styled-components' {
         accent: string;
       };
       common: {
-        white: string;
         offwhite: string;
-        red: string;
-        green: string;
-        redlight: string;
-        greenlight: string;
-        cardBg: string;
-      };
-      text: {
+        white: string;
         black: string;
         gray: string;
+        green: string;
+        greenlight: string;
+        red: string;
+        redlight: string;
+        cardBg: string;
       };
     };
     font: {
@@ -46,6 +43,12 @@ declare module 'styled-components' {
       right: number;
       my: string;
       mx: string;
+    };
+    space: {
+      none: number;
+      small: number;
+      medium: number;
+      large: number;
     };
     border: string;
     media: {
@@ -67,17 +70,15 @@ const colors = {
     accent: '#E5E9FF'
   },
   common: {
-    white: '#FBFBFF',
     offwhite: '#EAEEFF',
-    red: '#FF5555',
-    green: '#25B93E',
-    redlight: '#FFDADA',
-    greenlight: '#CEFDD7',
-    cardBg: '#F7F8FF'
-  },
-  text: {
+    white: '#FBFBFF',
     black: '#3D3C47',
-    gray: '#A5ADC6'
+    gray: '#A5ADC6',
+    green: '#25B93E',
+    greenlight: '#CEFDD7',
+    red: '#FF5555',
+    redlight: '#FFDADA',
+    cardBg: '#F7F8FF'
   }
 };
 
@@ -108,6 +109,12 @@ const theme: DefaultTheme = {
     right: 25,
     my: '20px',
     mx: '20px'
+  },
+  space: {
+    none: 0,
+    small: 5,
+    medium: 10,
+    large: 15
   },
   border: `2px solid ${colors.common.offwhite}`,
   media: {

@@ -10,16 +10,16 @@ interface AvatarProps {
   [x: string]: any;
 }
 
-export const StyledAvatar = styled.img<AvatarProps>`
-  width: ${p => p.width || '150px'};
-  height: ${p => p.height || '150px'};
-  border: ${p => p.theme.border};
-  border-radius: 100%;
-  object-fit: cover;
-  margin: 0px;
-`;
+const AvatarImage = styled.img(p => ({
+  width: p.width || 150,
+  height: p.height || 150,
+  border: p.theme.border,
+  borderRadius: '100%',
+  objectFit: 'cover',
+  margin: 0
+}));
 
-const Avatar: React.FC<AvatarProps> = ({
+export const Avatar: React.FC<AvatarProps> = ({
   username,
   size,
   width,
@@ -27,8 +27,8 @@ const Avatar: React.FC<AvatarProps> = ({
   ...props
 }) => {
   return (
-    <Link to={`/profiles/${username}`}>
-      <StyledAvatar
+    <Link style={{ lineHeight: 0 }} to={`/profiles/${username}`}>
+      <AvatarImage
         src={`/api/user/${username}/avatar/raw?size=${size}`}
         width={width}
         height={height}
@@ -37,5 +37,4 @@ const Avatar: React.FC<AvatarProps> = ({
     </Link>
   );
 };
-
 export default Avatar;

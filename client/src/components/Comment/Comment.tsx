@@ -9,8 +9,7 @@ import {
   addCommentSchema as CommentSchema
 } from 'pages/SingleBug/SingleBug';
 
-import Button, { ButtonGroup } from 'components/common/Button';
-import { toast } from 'components/common/Toast';
+import { Button, ButtonGroup, toast } from '@bug-ui';
 
 import CodeBlock from 'components/Editor/CodeBlock';
 import Editor from 'components/Editor/Editor';
@@ -130,14 +129,14 @@ const Comment: React.FC<CommentProps> = ({
               <Button
                 variant="danger"
                 icon="times"
-                size="sm"
+                size="small"
                 onClick={handleEditorState}
               >
                 Cancel
               </Button>
               <Button
                 icon="edit"
-                size="sm"
+                size="small"
                 type="submit"
                 isLoading={isEditingPending}
               >

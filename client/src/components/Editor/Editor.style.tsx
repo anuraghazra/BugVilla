@@ -16,7 +16,7 @@ const StyledEditor = styled.div`
     min-height: 250px;
     border-radius: 5px;
     padding: 20px;
-    color: ${p => p.theme.colors.text.black};
+    color: ${p => p.theme.colors.common.black};
 
     textarea {
       width: 100%;
@@ -26,7 +26,7 @@ const StyledEditor = styled.div`
       border: 1px solid ${p => p.theme.colors.common.offwhite};
       resize: vertical;
       &::placeholder {
-        color: ${p => p.theme.colors.text.gray};
+        color: ${p => p.theme.colors.common.gray};
       }
     }
   }

@@ -21,7 +21,7 @@ export const isNavStyles = css`
 interface LinkProps extends NavLinkProps {
   isNav?: boolean;
 }
-const Link = styled(NavLink)<LinkProps>`
+export const Link = styled(NavLink)<LinkProps>`
   display: flex;
   align-items: center;
   ${p =>
@@ -55,7 +55,7 @@ const defaultProps: IconLinkProps = {
   icon: 'arrow-right'
 };
 
-const IconLink: React.FC<IconLinkProps> = ({
+export const IconLink: React.FC<IconLinkProps> = ({
   to,
   icon,
   children,

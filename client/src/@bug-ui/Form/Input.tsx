@@ -21,10 +21,10 @@ const InputLabel = styled.label<InputLabelProps>`
   height: 40px;
   padding: 5px;
   padding: 0 20px;
-  color: ${p => p.theme.colors.text.black};
+  color: ${p => p.theme.colors.common.black};
 
   span {
-    color: ${p => p.theme.colors.text.gray} !important;
+    color: ${p => p.theme.colors.common.gray} !important;
     transition: 0.2s;
   }
 `;
@@ -43,7 +43,7 @@ export const StyledInput = styled.input`
   }
 
   &::placeholder {
-    color: ${p => p.theme.colors.text.gray};
+    color: ${p => p.theme.colors.common.gray};
   }
 `;
 
@@ -83,7 +83,12 @@ interface InputProps {
   [x: string]: any;
 }
 
-const Input: React.FC<InputProps> = ({ icon, errors, inputRef, ...props }) => {
+export const Input: React.FC<InputProps> = ({
+  icon,
+  errors,
+  inputRef,
+  ...props
+}) => {
   return (
     <InputWrapper>
       <InputLabel indicateError={errors && errors[props.name]}>

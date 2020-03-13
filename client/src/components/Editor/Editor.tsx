@@ -6,9 +6,8 @@ import { MentionsInput, Mention } from 'react-mentions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import Flex from 'components/common/Flex';
-import Avatar from 'components/common/Avatar';
-import { InputWrapper } from 'components/common/Form';
+import { Avatar, Flex } from '@bug-ui';
+import { InputWrapper } from '@bug-ui/Form';
 
 import CodeBlock from './CodeBlock';
 import { StyledMentionList } from './Editor.style';

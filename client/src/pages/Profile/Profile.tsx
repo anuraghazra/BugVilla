@@ -5,12 +5,11 @@ import { useParams } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 import useFetch from 'hooks/useFetch';
-import Loading from 'components/common/Loading';
+import { Illustration, Loading } from '@bug-ui';
 
 import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
 import UserInfo from './UserInfo';
-import Illustration from 'components/common/Illustration';
 
 const breakpointColumns = {
   default: 3,

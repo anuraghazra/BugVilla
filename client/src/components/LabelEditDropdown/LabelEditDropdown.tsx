@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-import Flex from 'components/common/Flex';
-import { BulletLabel } from 'components/common/Label';
-import BaseDropdown from 'components/common/BaseDropdown';
+import { BulletLabel, BaseDropdown } from '@bug-ui';
 
 interface DropdownProps {
   updateSelectedLabels: (labels: string[]) => void;

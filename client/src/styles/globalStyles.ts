@@ -23,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: inherit;
     height: 100vh;
-    color: ${p => p.theme.colors.text.black};
+    color: ${p => p.theme.colors.common.black};
     background: ${p => p.theme.colors.common.white};
   }
 
@@ -31,7 +31,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: inherit;
     font-weight: inherit;
     font-size: 14px;
-    color: ${p => p.theme.colors.text.black};
+    color: ${p => p.theme.colors.common.black};
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -49,7 +49,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     line-height: 1.5em;
-    color: ${p => p.theme.colors.text.black};
+    color: ${p => p.theme.colors.common.black};
   }
 
   code, pre {
@@ -66,7 +66,7 @@ const GlobalStyles = createGlobalStyle`
   }
   
   .markdown-preview {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     img {
       width: 50%;
     }

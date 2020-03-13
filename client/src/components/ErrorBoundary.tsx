@@ -1,5 +1,5 @@
 import React from 'react';
-import Illustration from './common/Illustration';
+import { Illustration } from '@bug-ui';
 
 interface ErrorBoundaryState {
   hasError: boolean;

@@ -17,7 +17,7 @@ const secondary = css`
   background-color: ${p => p.theme.colors.brand.accent};
 `;
 
-const colorVariants: any = {
+export const colorVariants: any = {
   danger,
   success,
   primary,

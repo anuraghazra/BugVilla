@@ -74,7 +74,7 @@ const illustrationTypes: any = {
   )
 };
 
-const Illustration: React.FC<IllustrationProps> = ({ type, message }) => (
+export const Illustration: React.FC<IllustrationProps> = ({ type, message }) => (
   <IllustrationWrapper>
     <Flex className="flex__container" align="center">
       <div style={{ width: '100%' }}>

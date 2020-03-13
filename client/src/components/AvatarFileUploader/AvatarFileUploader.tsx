@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { toast } from 'components/common/Toast';
+import { toast } from '@bug-ui';
 import AvatarContainer from './AvatarFileUploader.style';
 
 interface PreviewFile extends File {
@@ -51,11 +51,11 @@ const AvatarFileUploader: React.FC<Props> = ({
         <p>Change Avatar</p>
       </div>
 
-      {file ? (
-        <img key={file.name} className="img__preview" src={file.preview} />
-      ) : (
-        defaultImg
-      )}
+      <img
+        className="avatar-uploader--preview"
+        alt={file ? 'Avatar image' : 'Default Avatar Image'}
+        src={file ? file.preview : defaultImg}
+      />
     </AvatarContainer>
   );
 };

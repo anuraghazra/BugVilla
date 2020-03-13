@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StyledLabel } from 'components/common/Label';
+import { StyledLabel } from '@bug-ui';
 
 const StyledNotificationIcon = styled(StyledLabel)`
   display: flex;
@@ -30,9 +30,7 @@ const NotificationIcon: React.FC<{ type: string; bugStatus?: string }> = ({
     NEW_BUG: ['bug', 'danger']
   };
   return (
-    <StyledNotificationIcon
-      variant={icons[type][1]}
-    >
+    <StyledNotificationIcon variant={icons[type][1]}>
       <FontAwesomeIcon className="faIcon" icon={icons[type][0]} />
     </StyledNotificationIcon>
   );

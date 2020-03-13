@@ -3,13 +3,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Avatar from 'components/common/Avatar';
-import Flex from 'components/common/Flex';
-import Twemoji from 'components/common/Twemoji';
-import { toast } from 'components/common/Toast';
+import { Avatar, BaseDropdown, Flex, Twemoji, toast } from '@bug-ui';
 import { copyToClipboard, timeAgo } from 'utils';
 
-import BaseDropdown from 'components/common/BaseDropdown';
 import { AuthorProps } from 'pages/SingleBug/SingleBug';
 import {
   addOrRemoveReacts,
@@ -28,6 +24,15 @@ const REACTIONS: { emoji: string }[] = [
   { emoji: ':confused:' }
 ];
 
+const SmileAddIcon = ({ handleClick }: any) => (
+  <Flex nowrap onClick={handleClick} className="add-smile-icon hover__button">
+    <FontAwesomeIcon icon="smile" />
+    <sup>
+      <FontAwesomeIcon icon="plus" />
+    </sup>
+  </Flex>
+);
+
 const ReactionsDropdown: React.FC<{
   handleReaction: (e: any) => void;
   reactions: ReactionType[];
@@ -40,21 +45,9 @@ const ReactionsDropdown: React.FC<{
     <BaseDropdown
       isOpen={false}
       shouldCloseOnClick
-      trigger={toggle => (
-        <Flex nowrap onClick={toggle} className="add-smile-icon hover__button">
-          <FontAwesomeIcon icon="smile" />
-          <sup>
-            <FontAwesomeIcon icon="plus" />
-          </sup>
-        </Flex>
-      )}
+      trigger={toggle => <SmileAddIcon handleClick={toggle} />}
     >
-      <ReactionsWrapper
-        align="center"
-        justify="space-between"
-        nowrap
-        style={{ marginTop: 0 }}
-      >
+      <ReactionsWrapper nowrap align="center" justify="space-between">
         {REACTIONS?.map(reaction => {
           let isSelected = reactions?.some(
             r =>
@@ -123,13 +116,14 @@ const CommentHeader: React.FC<CommentProps> = ({
 
   return (
     <Flex
-      className="comment__header"
       nowrap
+      gap="large"
       align="center"
       justify="space-between"
+      className="comment__header"
     >
       <Avatar width="45px" height="45px" size={45} username={author.username} />
-      <span className="color--gray ml-15">
+      <span className="color--gray">
         <Link className="text--medium" to={`/profiles/${author.username}`}>
           {author.name}{' '}
         </Link>
@@ -137,9 +131,10 @@ const CommentHeader: React.FC<CommentProps> = ({
       </span>
 
       <Flex
+        nowrap
+        gap="large"
         align="center"
         justify="space-between"
-        nowrap
         className="comment__actions"
       >
         <ReactionsDropdown
@@ -155,12 +150,12 @@ const CommentHeader: React.FC<CommentProps> = ({
             </span>
           )}
         >
-          <Flex direction="column">
+          <Flex gap="medium" direction="column">
             <span onClick={copyCommentLink} className="hover__button">
               Copy link
             </span>
             {isAuthorOfComment && (
-              <span onClick={handleEditorState} className="hover__button mt-5">
+              <span onClick={handleEditorState} className="hover__button">
                 Edit Comment
               </span>
             )}

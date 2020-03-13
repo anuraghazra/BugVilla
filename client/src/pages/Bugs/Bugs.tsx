@@ -6,16 +6,12 @@ import { NavLink } from 'react-router-dom';
 import useQuery from 'hooks/useQuery';
 
 import { formatDate } from 'utils';
-import Flex from 'components/common/Flex';
-import Label from 'components/common/Label';
-import Button from 'components/common/Button';
-import Loading from 'components/common/Loading';
+import { Flex, Label, Loading, Button, Illustration } from '@bug-ui';
 
 import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
 import { fetchBugs } from 'store/ducks/bugs';
 import { StoreState } from 'store';
-import Illustration from 'components/common/Illustration';
 
 const breakpointColumns = {
   default: 3,

@@ -4,10 +4,7 @@ import { Dispatch } from 'redux';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toast } from 'components/common/Toast';
-import Loading from 'components/common/Loading';
-import Illustration from 'components/common/Illustration';
-import VerticalLine from 'components/common/VerticalLine';
+import { Loading, Illustration, VerticalLine, toast } from '@bug-ui';
 import useQuery from 'hooks/useQuery';
 
 import DashboardHeader from 'components/DashboardHeader';

@@ -29,7 +29,7 @@ const StyledLoader = styled.div`
   }
 `;
 
-const Loading: React.FC = () => {
+export const Loading: React.FC = () => {
   return (
     <StyledLoader>
       <div className="loader"></div>

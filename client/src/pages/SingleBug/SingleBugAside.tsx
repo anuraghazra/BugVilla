@@ -5,11 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StoreState } from 'store';
 import { editLabels } from 'store/ducks/single-bug';
 
-import Avatar from 'components/common/Avatar';
-import Button from 'components/common/Button';
-import Flex from 'components/common/Flex';
-import Label from 'components/common/Label';
-import { toast } from 'components/common/Toast';
+import { Avatar, Button, Flex, Label, toast } from '@bug-ui';
 
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
@@ -68,7 +64,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
             {(toggleDropdown: Function) => (
               <Button
                 icon="tag"
-                size="sm"
+                size="small"
                 isLoading={labelEditPending}
                 onClick={() => {
                   handleSaveLabel(toggleDropdown);
@@ -80,9 +76,9 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
           </LabelEditDropdown>
         </h4>
 
-        <Flex>
+        <Flex gap="medium">
           {bug?.result?.labels.map((label: string, i: number) => (
-            <Label className="mt-5" type={label} key={i}>
+            <Label className="mt-medium" type={label} key={i}>
               {label}
             </Label>
           ))}
@@ -90,13 +86,12 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
       </div>
       <div>
         <h4 className="color--gray">{participants.length} participants</h4>
-        <Flex>
+        <Flex gap="medium">
           {participants.map((participant: string, i: number) => (
             <Avatar
               key={i}
               width="40px"
               height="40px"
-              style={{ marginRight: 10 }}
               size={45}
               username={participant}
             />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderWithStyledTheme } from 'utils/test-utils';
-import Tooltip from 'components/common/Tooltip';
+import { Tooltip } from '@bug-ui';
 
 describe('Tooltip', () => {
   it('should renders <Tooltip>', () => {

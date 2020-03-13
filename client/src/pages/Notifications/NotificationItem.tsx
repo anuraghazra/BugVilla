@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Flex from 'components/common/Flex';
+import { Flex } from '@bug-ui';
 import { timeAgo } from 'utils';
 
 import NotificationIcon from './NotificationIcon';
@@ -21,7 +21,7 @@ const StyledNotificationItem = styled.div`
   }
   small {
     font-size: 14px;
-    color: ${p => p.theme.colors.text.gray};
+    color: ${p => p.theme.colors.common.gray};
   }
 
   a {
@@ -29,7 +29,7 @@ const StyledNotificationItem = styled.div`
     color: ${p => p.theme.colors.brand.primary};
 
     &:hover {
-      color: ${p => p.theme.colors.text.black};
+      color: ${p => p.theme.colors.common.black};
     }
   }
 
@@ -50,7 +50,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notify }) => {
   return (
     <StyledNotificationItem>
       <Flex justify="space-between" nowrap>
-        <Flex style={{ width: '85%' }} nowrap>
+        <Flex style={{ width: '85%' }} gap="large" nowrap>
           <NotificationIcon bugStatus={notify.bug_status} type={notify.type} />
           <span>{notification_switch[notify.type](notify)}</span>
         </Flex>

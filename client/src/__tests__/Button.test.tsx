@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from 'components/common/Button';
+import { Button } from '@bug-ui';
 import { renderWithStyledTheme } from 'utils/test-utils';
 
 describe('Button', () => {

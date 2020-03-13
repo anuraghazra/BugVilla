@@ -6,7 +6,7 @@ interface StatusIconProps {
   referred?: boolean;
   [x: string]: any;
 }
-const StatusIcon: React.FC<StatusIconProps> = ({
+export const StatusIcon: React.FC<StatusIconProps> = ({
   isOpen,
   referred,
   ...props

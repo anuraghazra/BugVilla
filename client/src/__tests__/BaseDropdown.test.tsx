@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-import BaseDropdown from 'components/common/BaseDropdown';
+import { BaseDropdown } from '@bug-ui';
 import { renderWithStyledTheme } from 'utils/test-utils';
 
 describe('BaseDropdown', () => {

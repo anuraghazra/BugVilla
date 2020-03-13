@@ -32,7 +32,7 @@ const AvatarContainer = styled.section<{ size?: string }>`
     }
   }
 
-  .img__preview {
+  .avatar-uploader--preview {
     width: 100%;
     height: 100%;
     object-fit: cover;

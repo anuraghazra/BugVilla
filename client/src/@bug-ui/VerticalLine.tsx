@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const VerticalLine = styled.section`
+export const VerticalLine = styled.section`
   position: relative;
   :before {
     content: '';

@@ -3,10 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import http from 'utils/httpInstance';
-import Avatar from 'components/common/Avatar';
-import BugVillaLogo from 'components/common/Logo';
-import Flex from 'components/common/Flex';
-import IconLink from 'components/common/IconLink';
+import { Avatar, BugVillaLogo, Flex, IconLink } from '@bug-ui';
 
 import SidebarWrapper, { SidebarLinks } from './Sidebar.style';
 import { StoreState } from 'store';
@@ -47,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         </Flex>
 
         <SidebarLinks>
-          <Flex direction="column">
+          <Flex gap="large" direction="column">
             <IconLink isNav icon="home" to="/dashboard/bugs">
               Dashboard
             </IconLink>

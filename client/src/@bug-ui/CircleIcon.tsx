@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const StyledCircleIcon = styled.div<{ variant?: string; size?: string }>`
@@ -21,7 +21,7 @@ interface CircleIconProps {
   size?: string;
   [x: string]: any;
 }
-const CircleIcon: React.FC<CircleIconProps> = ({
+export const CircleIcon: React.FC<CircleIconProps> = ({
   icon,
   variant = 'secondary',
   size,

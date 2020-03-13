@@ -3,12 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import genericAvatar from 'assets/images/avatar-generic.jpg';
 
-import Flex from 'components/common/Flex';
-import IconLink from 'components/common/IconLink';
-import Button from 'components/common/Button';
-import { toast } from 'components/common/Toast';
-import BugVillaLogo from 'components/common/Logo';
-import { Input, StyledH3Input } from 'components/common/Form';
+import { Flex, Button, IconLink, BugVillaLogo, Avatar, toast } from '@bug-ui';
+import { Input, StyledH3Input } from '@bug-ui/Form';
 
 import AvatarFileUploader from 'components/AvatarFileUploader';
 import SignupSchema from './SignupSchema';
@@ -16,7 +12,6 @@ import SignupSchema from './SignupSchema';
 import SignupWrapper from './Signup.style';
 import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
-import { StyledAvatar } from 'components/common/Avatar';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,14 +42,7 @@ const Signup: React.FC = () => {
         <BugVillaLogo />
         <form onSubmit={handleSubmit(onSubmit)}>
           <AvatarFileUploader
-            defaultImg={
-              <StyledAvatar
-                style={{ width: '100%', height: '100%' }}
-                alt="avatar"
-                size={150}
-                src={genericAvatar}
-              />
-            }
+            defaultImg={genericAvatar}
             name="image"
             inputRef={register({ required: 'Image is required' })}
             file={file}

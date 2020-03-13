@@ -28,15 +28,11 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
 
   .comment__actions {
     margin-left: auto;
-
-    > span:not(:last-child) {
-      margin-right: 10px;
-    }
   }
 
   .hover__button {
     cursor: pointer;
-    color: ${p => p.theme.colors.text.gray};
+    color: ${p => p.theme.colors.common.gray};
 
     &:hover {
       color: ${p => p.theme.colors.brand.primary};
@@ -44,7 +40,7 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
   }
 
   .add-smile-icon {
-    color: ${p => p.theme.colors.text.gray};
+    color: ${p => p.theme.colors.common.gray};
 
     .fa-smile {
       margin-right: 0 !important;

@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
-import { Input, StyledH3Input } from 'components/common/Form';
-import Button from 'components/common/Button';
-import { toast } from 'components/common/Toast';
+import { Input, StyledH3Input } from '@bug-ui/Form';
+import { Button, toast } from '@bug-ui';
 
 import AddBugSchema from './AddBugSchema';
 import Editor from 'components/Editor/Editor';

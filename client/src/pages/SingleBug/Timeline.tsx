@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import Avatar from 'components/common/Avatar';
-import CircleIcon from 'components/common/CircleIcon';
-import Flex from 'components/common/Flex';
+import { Avatar, CircleIcon, Flex } from '@bug-ui';
 
 import { formatDate } from 'utils';
 import { AuthorProps } from './SingleBug';
@@ -39,7 +37,7 @@ const Timeline: React.FC<TimelineProps> = ({ author, date, from, action }) => {
   }
 
   let renderExcerpt = (
-    <span className="ml-15">
+    <span>
       {!isReference && (
         <>{action === 'opened' ? 'Opened' : 'Closed'} by&nbsp;</>
       )}
@@ -60,7 +58,7 @@ const Timeline: React.FC<TimelineProps> = ({ author, date, from, action }) => {
 
   return (
     <StyledTimeline>
-      <Flex align="center" nowrap>
+      <Flex gap="large" align="center" nowrap>
         <CircleIcon
           className="icon"
           size="30px"
@@ -69,7 +67,6 @@ const Timeline: React.FC<TimelineProps> = ({ author, date, from, action }) => {
         />
 
         <Avatar
-          style={{ marginLeft: 15 }}
           width="30px"
           height="30px"
           size={45}

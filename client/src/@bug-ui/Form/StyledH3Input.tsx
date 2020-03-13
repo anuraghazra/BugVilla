@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledH3Input = styled.div`
+export const StyledH3Input = styled.div`
   width: 280px;
   display: flex;
   align-items: center;
