@@ -30,7 +30,7 @@ const StandOut = styled.p<{ prefix: any }>`
   &:before {
     content: '${p => p.prefix} ';
     font-size: 1.5em;
-    color: ${p => p.theme.colors.brand.primary};
+    color: ${p => p.theme.colors.primary};
     font-family: ${p => p.theme.font.primaryMedium};
   }
 `;

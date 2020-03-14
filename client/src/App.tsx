@@ -8,7 +8,7 @@ import { toast } from '@bug-ui';
 import socket from 'utils/socket';
 import history from 'utils/history';
 import GlobalStyles from './styles/globalStyles';
-import theme from './theme';
+import theme from '@bug-ui/theme';
 
 import Login from 'pages/Login/Login';
 import Signup from 'pages/Signup/Signup';
@@ -44,16 +44,16 @@ const App: React.FC = () => {
             top: '85%',
             colors: {
               error: {
-                color: theme.colors.common.red,
-                backgroundColor: theme.colors.common.redlight
+                color: theme.colors.red,
+                backgroundColor: theme.colors.redlight
               },
               success: {
-                color: theme.colors.common.green,
-                backgroundColor: theme.colors.common.greenlight
+                color: theme.colors.green,
+                backgroundColor: theme.colors.greenlight
               },
               info: {
-                color: theme.colors.brand.primary,
-                backgroundColor: theme.colors.brand.accent
+                color: theme.colors.primary,
+                backgroundColor: theme.colors.accent
               }
             }
           }}

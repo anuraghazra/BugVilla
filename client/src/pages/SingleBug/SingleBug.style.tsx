@@ -40,7 +40,7 @@ const SingleBugWrapper = styled.section`
       position: relative;
       &:hover,
       &:hover .open_modal_btn {
-        color: ${p => p.theme.colors.brand.primary};
+        color: ${p => p.theme.colors.primary};
       }
     }
     .label__dropdown {

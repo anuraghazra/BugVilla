@@ -13,8 +13,8 @@ const StyledLoader = styled.div`
     margin: auto;
     width: 50px;
     height: 50px;
-    border: 5px solid ${p => p.theme.colors.brand.accent};
-    border-top-color: ${p => p.theme.colors.brand.primary};
+    border: 5px solid ${p => p.theme.colors.accent};
+    border-top-color: ${p => p.theme.colors.primary};
     border-radius: 50%;
     animation: rotation 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) infinite;
   }

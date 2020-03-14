@@ -42,13 +42,13 @@ export const StyledBulletLabel = styled(StyledLabel)`
     margin-right: 8px;
     border-radius: 50px;
     &.danger {
-      background-color: ${p => p.theme.colors.common.red};
+      background-color: ${p => p.theme.colors.red};
     }
     &.success {
-      background-color: ${p => p.theme.colors.common.green};
+      background-color: ${p => p.theme.colors.green};
     }
     &.secondary {
-      background-color: ${p => p.theme.colors.brand.primary};
+      background-color: ${p => p.theme.colors.primary};
     }
   }
 `;

@@ -5,13 +5,13 @@ import { Flex, Twemoji, Tooltip } from '@bug-ui';
 export const ReactionsWrapper = styled(Flex)`
   .reaction {
     padding: 5px 8px;
-    border: 1px solid ${p => p.theme.colors.common.offwhite};
+    border: 1px solid ${p => p.theme.colors.offwhite};
     border-left: none;
     cursor: pointer;
     z-index: 0;
 
     &:hover {
-      background-color: ${p => p.theme.colors.brand.accent};
+      background-color: ${p => p.theme.colors.accent};
     }
     .reaction_emoji {
       font-size: 16px;
@@ -22,10 +22,10 @@ export const ReactionsWrapper = styled(Flex)`
     }
   }
   .reaction_selected {
-    background-color: ${p => p.theme.colors.brand.accent};
+    background-color: ${p => p.theme.colors.accent};
   }
   .reaction:first-child {
-    border: 1px solid ${p => p.theme.colors.common.offwhite};
+    border: 1px solid ${p => p.theme.colors.offwhite};
     border-radius: 5px 0 0 5px;
   }
   .reaction:last-child {

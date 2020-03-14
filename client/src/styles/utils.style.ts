@@ -11,23 +11,23 @@ export default css`
     font-family: ${p => p.theme.font.primaryMedium}
   }
   .color--error {
-    color: ${p => p.theme.colors.common.red} !important;
+    color: ${p => p.theme.colors.red} !important;
   }
   .text--error {
     font-size: 14px;
-    color: ${p => p.theme.colors.common.red};
+    color: ${p => p.theme.colors.red};
   }
   .color--white {
-    color: ${p => p.theme.colors.common.white}
+    color: ${p => p.theme.colors.white}
   }
   .color--gray {
-    color: ${p => p.theme.colors.common.gray}
+    color: ${p => p.theme.colors.gray}
   }
   .color--black {
-    color: ${p => p.theme.colors.common.black}
+    color: ${p => p.theme.colors.black}
   }
   .color--brand {
-    color: ${p => p.theme.colors.brand.primary}
+    color: ${p => p.theme.colors.primary}
   }
   
   .mt-small {

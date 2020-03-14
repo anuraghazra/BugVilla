@@ -23,15 +23,15 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: inherit;
     height: 100vh;
-    color: ${p => p.theme.colors.common.black};
-    background: ${p => p.theme.colors.common.white};
+    color: ${p => p.theme.colors.black};
+    background: ${p => p.theme.colors.white};
   }
 
   input, button, select, textarea, optgroup, option {
     font-family: inherit;
     font-weight: inherit;
     font-size: 14px;
-    color: ${p => p.theme.colors.common.black};
+    color: ${p => p.theme.colors.black};
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -49,7 +49,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     line-height: 1.5em;
-    color: ${p => p.theme.colors.common.black};
+    color: ${p => p.theme.colors.black};
   }
 
   code, pre {
@@ -73,7 +73,7 @@ const GlobalStyles = createGlobalStyle`
 
     a {
       position: relative;
-      color: ${p => p.theme.colors.brand.primary};
+      color: ${p => p.theme.colors.primary};
 
       &:before {
         content: '';
@@ -82,7 +82,7 @@ const GlobalStyles = createGlobalStyle`
         left: 0;
         width: 0%;
         height: 2px;
-        background-color: ${p => p.theme.colors.brand.primary};
+        background-color: ${p => p.theme.colors.primary};
         transition: 0.2s;
       }
       &:hover:before {
@@ -98,7 +98,7 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 5px;
     padding: 30px 40px;
     border: ${p => p.theme.border};
-    background-color: ${p => p.theme.colors.common.white};
+    background-color: ${p => p.theme.colors.white};
     box-shadow: 0 8px 25px 0px rgba(0,0,0,0.1);
     &:focus {
       outline: none;

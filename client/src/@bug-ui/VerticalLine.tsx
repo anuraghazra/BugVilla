@@ -10,7 +10,7 @@ export const VerticalLine = styled.section`
     left: 15px;
     width: 0;
     height: 100%;
-    border: 1px solid ${p => p.theme.colors.common.offwhite};
+    border: 1px solid ${p => p.theme.colors.offwhite};
     z-index: -1;
   }
 `;

@@ -13,8 +13,8 @@ const TooltipWrapper = styled.div`
     padding-bottom: 10px;
     margin-top: 5px;
     border-radius: 5px;
-    border: 2px solid ${p => p.theme.colors.common.offwhite};
-    background-color: ${p => p.theme.colors.common.white};
+    border: 2px solid ${p => p.theme.colors.offwhite};
+    background-color: ${p => p.theme.colors.white};
     transform: translate(-50%, 0);
     opacity: 0;
     text-align: center;

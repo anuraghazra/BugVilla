@@ -10,10 +10,10 @@ export const isNavStyles = css`
     transition: 0.2s;
   }
   &:hover {
-    color: ${p => p.theme.colors.brand.primary};
+    color: ${p => p.theme.colors.primary};
     .icon {
-      background-color: ${p => p.theme.colors.brand.primary};
-      color: ${p => p.theme.colors.brand.accent};
+      background-color: ${p => p.theme.colors.primary};
+      color: ${p => p.theme.colors.accent};
     }
   }
 `;

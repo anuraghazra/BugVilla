@@ -21,12 +21,12 @@ describe('Should Check Signup', () => {
       .focus()
       .clear()
       .type('fakepassword123{enter}')
-    cy.findByText(/Username \/ Email Already Exsist/i)
-    cy.findByPlaceholderText(/example@gmail.com/i)
-      .clear()
-      .type('cypresstest@gmail.com')
-      .findByText(/signup/i)
-      .click();
+    // cy.findByText(/Username \/ Email Already Exsist/i)
+    // cy.findByPlaceholderText(/example@gmail.com/i)
+    //   .clear()
+    //   .type('cypresstest@gmail.com')
+    //   .findByText(/signup/i)
+    //   .click();
     cy.findByText(/Please Select An Image/i)
   })
 })

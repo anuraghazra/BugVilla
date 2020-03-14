@@ -15,7 +15,7 @@ export const UserMetaInfo = styled.div`
   grid-template-columns: 150px 1fr;
   grid-gap: 40px;
   padding-right: 30px;
-  border-right: 2px solid ${p => p.theme.colors.brand.accent};
+  border-right: 2px solid ${p => p.theme.colors.accent};
 
   textarea {
     resize: none;

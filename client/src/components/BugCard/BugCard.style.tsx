@@ -5,8 +5,8 @@ import { CircleIcon } from '@bug-ui';
 export const StyledBugCard = styled.div`
   width: auto;
   position: relative;
-  background-color: ${p => p.theme.colors.common.cardBg};
-  border: 1px solid ${p => p.theme.colors.brand.accent};
+  background-color: ${p => p.theme.colors.cardBg};
+  border: 1px solid ${p => p.theme.colors.accent};
   border-radius: 10px;
   padding: 25px;
   transition: 0.2s;
@@ -29,7 +29,7 @@ export const StyledBugCard = styled.div`
 
   .bug__body--text {
     font-size: 16px;
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
     word-break: break-word;
   }
 `;
@@ -38,15 +38,15 @@ export const StyledMetaInfo = styled.span`
   display: block;
   margin: 3px 0;
   font-size: 14px;
-  color: ${p => p.theme.colors.common.gray};
+  color: ${p => p.theme.colors.gray};
 
   a {
     height: 30px;
     font-size: 14px;
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
 
     &:hover {
-      color: ${p => p.theme.colors.common.black};
+      color: ${p => p.theme.colors.black};
     }
   }
 

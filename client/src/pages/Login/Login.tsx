@@ -31,11 +31,11 @@ const GoogleButton = styled(Button)`
   align-items: center;
   background-color: white;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  color: ${p => p.theme.colors.common.black};
+  color: ${p => p.theme.colors.black};
   margin: 10px auto 25px auto !important;
 
   img {
-    margin-right: 10px;
+    margin-right: ${p => p.theme.space.medium}px;
     width: 20px;
   }
 `;

@@ -63,7 +63,7 @@ describe('Test Dashboard', () => {
     cy.findByText(/Cypres testing/i, { selector: 'h3' })
       .click()
       .wait(500)
-      .get('.label__header>svg').click()
+      .get('.label__header>span').click()
       .get('.dropdown__items')
       .findAllByText(/feature/i).first().click()
       .findByText(/update labels/i).click()

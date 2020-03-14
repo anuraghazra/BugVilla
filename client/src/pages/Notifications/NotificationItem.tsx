@@ -21,15 +21,15 @@ const StyledNotificationItem = styled.div`
   }
   small {
     font-size: 14px;
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
   }
 
   a {
     font-size: 16px;
-    color: ${p => p.theme.colors.brand.primary};
+    color: ${p => p.theme.colors.primary};
 
     &:hover {
-      color: ${p => p.theme.colors.common.black};
+      color: ${p => p.theme.colors.black};
     }
   }
 

@@ -15,10 +15,20 @@ interface ButtonProps extends StyledButtonProps {
   [x: string]: any;
 }
 
-// prettier-ignore
-const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTMLDivElement>>`
-  ${p => (p.theme.variants as any)[p.variant as string]}
-  
+const button_sizes: any = {
+  small: css`
+    padding: 8px 10px;
+    font-size: 12px;
+  `,
+  medium: css`
+    padding: 10px 15px;
+    font-size: 12px;
+  `
+};
+
+type IStyledButton = StyledButtonProps & React.HTMLAttributes<HTMLDivElement>;
+
+const StyledButton = styled.button<IStyledButton>`
   width: ${p => p.width};
   height: fit-content;
   margin: 10px 0;
@@ -31,15 +41,6 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   transition: 0.2s;
   cursor: pointer;
 
-  ${p => p.size === 'small' && css`
-    padding: 8px 10px;
-    font-size: 12px;
-  `}
-  ${p => p.size === 'medium' && css`
-    padding: 10px 15px;
-    font-size: 12px;
-  `}
-
   &:hover {
     transform: scale(1.05);
     transition: 0.2s;
@@ -48,6 +49,9 @@ const StyledButton = styled.button<StyledButtonProps & React.HTMLAttributes<HTML
   &:disabled {
     opacity: 0.8;
   }
+
+  ${p => (p.theme.variants as any)[p.variant as string]}
+  ${p => button_sizes[p.size as string]};
 
   @media screen and (${p => p.theme.media.mobile}) {
     padding: 10px 25px;

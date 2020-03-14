@@ -13,18 +13,18 @@ const InputLabel = styled.label<InputLabelProps>`
   align-items: center;
   justify-content: center;
 
-  background-color: ${p => p.theme.colors.common.offwhite};
+  background-color: ${p => p.theme.colors.offwhite};
   border: 1px solid
-    ${p => (p.indicateError ? p.theme.colors.common.red : 'transparent')};
+    ${p => (p.indicateError ? p.theme.colors.red : 'transparent')};
 
   border-radius: 50px;
   height: 40px;
   padding: ${p => p.theme.space.small}px;
   padding: 0 20px;
-  color: ${p => p.theme.colors.common.black};
+  color: ${p => p.theme.colors.black};
 
   span {
-    color: ${p => p.theme.colors.common.gray} !important;
+    color: ${p => p.theme.colors.gray} !important;
     transition: 0.2s;
   }
 `;
@@ -37,20 +37,20 @@ export const StyledInput = styled.input`
   margin-left: 10px;
   padding: 10px;
   &:focus + span {
-    color: ${p => p.theme.colors.brand.primary} !important;
+    color: ${p => p.theme.colors.primary} !important;
     border-radius: 50px;
     transition: 0.2s;
   }
 
   &::placeholder {
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
   }
 `;
 
 export const Textarea = styled(StyledInput).attrs(p => ({ as: 'textarea' }))`
   padding: ${p => p.theme.space.medium}px;
   margin: 0;
-  outline: 2px solid ${p => p.theme.colors.brand.accent};
+  outline: 2px solid ${p => p.theme.colors.accent};
 `;
 
 export const InputWrapper = styled.div`

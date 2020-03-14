@@ -11,23 +11,19 @@ declare module 'styled-components' {
       success: CSSProp;
     };
     colors: {
-      brand: {
-        primary: string;
-        secondary: string;
-        light: string;
-        accent: string;
-      };
-      common: {
-        offwhite: string;
-        white: string;
-        black: string;
-        gray: string;
-        green: string;
-        greenlight: string;
-        red: string;
-        redlight: string;
-        cardBg: string;
-      };
+      primary: string;
+      secondary: string;
+      light: string;
+      accent: string;
+      offwhite: string;
+      white: string;
+      black: string;
+      gray: string;
+      green: string;
+      greenlight: string;
+      red: string;
+      redlight: string;
+      cardBg: string;
     };
     font: {
       primary: string;
@@ -63,23 +59,19 @@ declare module 'styled-components' {
 }
 
 const colors = {
-  brand: {
-    primary: '#586FFA',
-    secondary: '#8B9AF4',
-    light: '#A5B1FC',
-    accent: '#E5E9FF'
-  },
-  common: {
-    offwhite: '#EAEEFF',
-    white: '#FBFBFF',
-    black: '#3D3C47',
-    gray: '#A5ADC6',
-    green: '#25B93E',
-    greenlight: '#CEFDD7',
-    red: '#FF5555',
-    redlight: '#FFDADA',
-    cardBg: '#F7F8FF'
-  }
+  primary: '#586FFA',
+  secondary: '#8B9AF4',
+  light: '#A5B1FC',
+  accent: '#E5E9FF',
+  offwhite: '#EAEEFF',
+  white: '#FBFBFF',
+  black: '#3D3C47',
+  gray: '#A5ADC6',
+  green: '#25B93E',
+  greenlight: '#CEFDD7',
+  red: '#FF5555',
+  redlight: '#FFDADA',
+  cardBg: '#F7F8FF'
 };
 
 const size = {
@@ -116,7 +108,7 @@ const theme: DefaultTheme = {
     medium: 10,
     large: 15
   },
-  border: `2px solid ${colors.common.offwhite}`,
+  border: `2px solid ${colors.offwhite}`,
   media: {
     mobileS: `max-width: ${size.mobileS}`,
     mobile: `max-width: ${size.mobile}`,

@@ -6,8 +6,8 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
   word-break: break-word;
 
   ${({ theme }) => css`
-    border: 1px solid ${theme.colors.common.offwhite};
-    background-color: ${theme.colors.common.white};
+    border: 1px solid ${theme.colors.offwhite};
+    background-color: ${theme.colors.white};
     margin-top: ${theme.spacings.top}px;
     margin-bottom: ${theme.spacings.bottom}px;
   `}
@@ -15,7 +15,7 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
   ${p =>
     p.isSelected &&
     css`
-      border: 1px solid ${p => p.theme.colors.common.green};
+      border: 1px solid ${p => p.theme.colors.green};
     `}
 
   .comment__header, a {
@@ -32,15 +32,15 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
 
   .hover__button {
     cursor: pointer;
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
 
     &:hover {
-      color: ${p => p.theme.colors.brand.primary};
+      color: ${p => p.theme.colors.primary};
     }
   }
 
   .add-smile-icon {
-    color: ${p => p.theme.colors.common.gray};
+    color: ${p => p.theme.colors.gray};
 
     .fa-smile {
       margin-right: 0 !important;

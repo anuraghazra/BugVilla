@@ -2,7 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const StyledCircleIcon = styled.div<{ variant?: string; size?: string }>`
+type variant = 'primary' | 'success' | 'danger' | 'secondary';
+interface StyledCircleProps {
+  variant: variant;
+  size?: string | undefined;
+}
+export const StyledCircleIcon = styled.div<StyledCircleProps>`
   font-size: 14px;
   border-radius: 50px;
   min-width: ${p => p.size || '40px'};
@@ -16,7 +21,7 @@ export const StyledCircleIcon = styled.div<{ variant?: string; size?: string }>`
 `;
 
 interface CircleIconProps {
-  variant?: 'primary' | 'success' | 'danger' | 'secondary';
+  variant?: variant;
   icon: any;
   size?: string;
   [x: string]: any;

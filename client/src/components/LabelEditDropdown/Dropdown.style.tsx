@@ -7,7 +7,7 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
   position: absolute;
   right: 0;
 
-  background-color: ${p => p.theme.colors.common.white};
+  background-color: ${p => p.theme.colors.white};
   border: ${p => p.theme.border};
 
   opacity: 0;
@@ -33,12 +33,12 @@ const StyledDropdown = styled.div<{ isOpen?: boolean }>`
       border-radius: 5px;
       border: 1px solid transparent;
       &:hover {
-        background-color: ${p => p.theme.colors.common.offwhite};
+        background-color: ${p => p.theme.colors.offwhite};
       }
     }
     .label__selected {
-      background-color: ${p => p.theme.colors.common.offwhite};
-      border: 1px solid ${p => p.theme.colors.brand.secondary};
+      background-color: ${p => p.theme.colors.offwhite};
+      border: 1px solid ${p => p.theme.colors.secondary};
     }
   }
 
