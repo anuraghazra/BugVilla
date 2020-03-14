@@ -19,7 +19,7 @@ const InputLabel = styled.label<InputLabelProps>`
 
   border-radius: 50px;
   height: 40px;
-  padding: 5px;
+  padding: ${p => p.theme.space.small}px;
   padding: 0 20px;
   color: ${p => p.theme.colors.common.black};
 
@@ -48,7 +48,7 @@ export const StyledInput = styled.input`
 `;
 
 export const Textarea = styled(StyledInput).attrs(p => ({ as: 'textarea' }))`
-  padding: 10px;
+  padding: ${p => p.theme.space.medium}px;
   margin: 0;
   outline: 2px solid ${p => p.theme.colors.brand.accent};
 `;
