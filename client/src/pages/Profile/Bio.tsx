@@ -20,14 +20,14 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
 
   const [isSaveButton, setIsSaveButton] = useState(false);
   const [isBioEditing, setBioEditing] = useState(false);
-  const toggleBioEdit = (e: any) => {
+  const toggleBioEdit = () => {
     setBioEditing(() => {
       console.log(textareaRef.current.focus());
       return !isBioEditing;
     });
   };
 
-  const updateBio = (e: any) => {
+  const updateBio = () => {
     setBioEditing(false);
     dispatch(updateUserBio({ bio: textareaRef.current.value }))
       .then(() => {

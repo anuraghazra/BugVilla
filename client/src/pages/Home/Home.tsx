@@ -9,7 +9,7 @@ import circleShapes from 'assets/svg/circle_shapes.svg';
 import HomeWrapper from './Home.style';
 
 interface HomeProps {
-  right: any;
+  right: React.FC<{}>;
 }
 const Home: React.FC<HomeProps> = ({ right: Right }) => {
   const history = useHistory();

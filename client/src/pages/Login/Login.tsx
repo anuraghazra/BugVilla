@@ -1,15 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
 import * as yup from 'yup';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
 import { Button, BugVillaLogo, Flex, IconLink, toast } from '@bug-ui';
 import { Input } from '@bug-ui/Form';
 
-import { loginUser, checkAuth } from 'store/ducks/auth';
-import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from 'store';
+import { loginUser, checkAuth } from 'store/ducks/auth';
 import googleLogo from 'assets/svg/google.svg';
 
 const LoginSchema = yup.object().shape({

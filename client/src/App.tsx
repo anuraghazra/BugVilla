@@ -1,23 +1,25 @@
 import React, { useEffect } from 'react';
+import Notifications from 'react-notify-toast';
 import { ThemeProvider } from 'styled-components';
 import { Router, Route, Switch } from 'react-router-dom';
-import Notifications from 'react-notify-toast';
-import AuthRoute from 'components/AuthRoute';
 
 import { toast } from '@bug-ui';
+import theme from '@bug-ui/theme';
+
 import socket from 'utils/socket';
 import history from 'utils/history';
 import GlobalStyles from './styles/globalStyles';
-import theme from '@bug-ui/theme';
 
 import Login from 'pages/Login/Login';
 import Signup from 'pages/Signup/Signup';
 import Home from 'pages/Home/Home';
 import Dashboard from 'pages/Dashboard/Dashboard';
+
 import NotFound from 'components/NotFound';
+import AuthRoute from 'components/AuthRoute';
 import ErrorBoundary from 'components/ErrorBoundary';
 
-socket.on('received-notification', (data: any) => {
+socket.on('received-notification', () => {
   toast.info('New notifications available');
 });
 
