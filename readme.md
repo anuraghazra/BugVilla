@@ -26,13 +26,14 @@
 ## ✨ Features
 
 - Issue discussions
-- Comment Reactions
-- Social Interactions
-- User Reputation System
+- Markdown support
+- Comment reactions
+- Social interactions
+- User reputation system
 - #Reference other bugs
 - @Mentions users
 - Notifications
-- Bug Labels
+- Bug labels
 
 ## Tech Stack
 
@@ -87,16 +88,18 @@ A quick look at the folder structure of this project.
     
     .
     ├── client
-    │   │
-    │   ├───@bug-ui
-    │   ├───assets
-    │   ├───components
-    │   ├───hooks
-    │   ├───pages
-    │   ├───store
-    │   ├───styles
-    │   ├───utils
-    │   └───__tests__
+    |   ├─cypress
+    |   ├─public
+    │   └─src
+    │     ├───@bug-ui
+    │     ├───assets
+    │     ├───components
+    │     ├───hooks
+    │     ├───pages
+    │     ├───store
+    │     ├───styles
+    │     ├───utils
+    │     └───__tests__
     └── server
         │
         ├───controllers
@@ -128,4 +131,4 @@ git push YOUR_REPO_URL develop
 
 ------
 
-Made with :heart: and Gatsbyjs
+Made with :heart: and javascript
