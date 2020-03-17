@@ -3,6 +3,7 @@ export * from './BaseDropdown';
 export * from './Button';
 export * from './CircleIcon';
 export * from './Flex';
+export * from './Grid';
 export * from './Illustration';
 export * from './Label';
 export * from './Loading';

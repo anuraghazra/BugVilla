@@ -45,6 +45,8 @@ declare module 'styled-components' {
       small: number;
       medium: number;
       large: number;
+      xlarge: number;
+      huge: number;
     };
     border: string;
     media: {
@@ -76,7 +78,7 @@ const colors = {
 
 const size = {
   mobileS: '320px',
-  mobile: '425px',
+  mobile: '480px',
   tablet: '768px',
   desktop: '1024px',
   desktopL: '1440px'
@@ -106,7 +108,9 @@ const theme: DefaultTheme = {
     none: 0,
     small: 5,
     medium: 10,
-    large: 15
+    large: 15,
+    xlarge: 30,
+    huge: 40
   },
   border: `2px solid ${colors.offwhite}`,
   media: {

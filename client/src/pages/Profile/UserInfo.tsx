@@ -4,11 +4,19 @@ import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { timeAgo, calculateReputation } from 'utils';
-import { Avatar, Button, ButtonGroup, CircleIcon, Flex, toast } from '@bug-ui';
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  CircleIcon,
+  Flex,
+  Grid,
+  toast
+} from '@bug-ui';
 
 import { StoreState } from 'store';
 import { updateUserAvatar } from 'store/ducks/auth';
-import { UserInfoWrapper, UserMetaInfo } from './UserInfo.style';
+import { UserMetaInfo } from './UserInfo.style';
 import AvatarFileUploader from 'components/AvatarFileUploader';
 import Bio from './Bio';
 import Reactions, { ReactionType } from 'components/Comment/Reactions';
@@ -76,7 +84,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
 
   const reputation: number = calculateReputation(reactions?.data);
   return (
-    <UserInfoWrapper>
+    <Grid columns={{ desktop: `1fr 1fr`, tablet: '1fr' }} gap="xlarge">
       <Modal
         closeTimeoutMS={300}
         isOpen={modalIsOpen}
@@ -110,23 +118,29 @@ const UserInfo: React.FC<UserInfoProps> = ({
       </Modal>
 
       <UserMetaInfo>
-        <Flex align="center" direction="column">
-          {isCurrentUser ? (
-            <AvatarFileUploader
-              size="150px"
-              name="image"
-              file={file}
-              defaultImg={`/api/user/${user.username}/avatar/raw?size=${150}`}
-              handleFile={file => {
-                setIsOpen(true);
-                setFile(file);
-              }}
-            />
-          ) : (
-            <Avatar size={150} username={user.username} />
-          )}
-        </Flex>
-        <Bio currentUser={currentUser} user={user} />
+        <Grid columns={{ desktop: `150px 1fr`, tablet: '1fr' }} gap="xlarge">
+          <Flex
+            align="center"
+            direction="column"
+            className="usermetainfo__avatar"
+          >
+            {isCurrentUser ? (
+              <AvatarFileUploader
+                size="150px"
+                name="image"
+                file={file}
+                defaultImg={`/api/user/${user.username}/avatar/raw?size=${150}`}
+                handleFile={file => {
+                  setIsOpen(true);
+                  setFile(file);
+                }}
+              />
+            ) : (
+              <Avatar size={150} username={user.username} />
+            )}
+          </Flex>
+          <Bio currentUser={currentUser} user={user} />
+        </Grid>
       </UserMetaInfo>
       <div>
         <StandOut prefix={'Reputation'}>{reputation}%</StandOut>
@@ -144,7 +158,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         <br />
         {reactions?.data && <Reactions reactions={reactions.data} />}
       </div>
-    </UserInfoWrapper>
+    </Grid>
   );
 };
 

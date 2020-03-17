@@ -1,13 +1,13 @@
 import styled, { css } from 'styled-components/macro';
 
-type gap = 'none' | 'small' | 'medium' | 'large';
+export type IGaps = 'none' | 'small' | 'medium' | 'large' | 'xlarge' | 'huge';
 
 interface FlexProps {
   direction?: React.CSSProperties['flexDirection'];
   justify?: React.CSSProperties['justifyContent'];
   align?: React.CSSProperties['alignItems'];
   nowrap?: boolean;
-  gap?: gap;
+  gap?: IGaps;
 }
 
 export const Flex = styled.div<FlexProps>(
