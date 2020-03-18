@@ -1,5 +1,5 @@
 export * from './Avatar';
-export * from './BaseDropdown';
+export * from './Dropdown';
 export * from './Button';
 export * from './CircleIcon';
 export * from './Flex';

@@ -21,10 +21,6 @@ const SingleBugWrapper = styled.section`
   .singlebug__aside {
     margin-bottom: ${p => p.theme.spacings.bottom}px;
 
-    .open_modal_btn {
-      cursor: pointer;
-    }
-
     &--sticky {
       position: sticky;
       top: ${p => p.theme.spacings.top}px;
@@ -38,20 +34,10 @@ const SingleBugWrapper = styled.section`
 
     .label__header {
       position: relative;
-      &:hover,
-      &:hover .open_modal_btn {
-        color: ${p => p.theme.colors.primary};
-      }
-    }
-    .label__dropdown {
-      position: absolute;
-      top: 30px;
-      left: 0;
-      text-align: center;
+      cursor: pointer;
 
-      @media screen and (${p => p.theme.media.mobile}) {
-        top: 30px;
-        left: 0;
+      &:hover {
+        color: ${p => p.theme.colors.primary};
       }
     }
   }

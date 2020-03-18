@@ -34,9 +34,9 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
     state.error['singlebug/EDIT_LABELS']
   ]);
 
-  const handleSaveLabel = (toggleDropdown: Function) => {
+  const handleSaveLabel = (closeDropdown: Function) => {
     dispatch(editLabels(bugId, selectedLabels)).then(() => {
-      toggleDropdown(false);
+      closeDropdown(false);
     });
   };
 
@@ -47,27 +47,23 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
     <aside className="singlebug__aside--sticky">
       <div>
         <h4 className="label__header color--gray">
-          Labels
           <LabelEditDropdown
             updateSelectedLabels={labels => setSelectedLabels(labels)}
             defaultChecked={bug?.result.labels}
-            className="label__dropdown"
-            trigger={toggle => (
-              <FontAwesomeIcon
-                className="open_modal_btn"
-                onClick={toggle}
-                size="sm"
-                icon="cog"
-              />
-            )}
+            trigger={
+              <span data-testid="label_dropdown">
+                Labels
+                <FontAwesomeIcon size="sm" icon="cog" />
+              </span>
+            }
           >
-            {(toggleDropdown: Function) => (
+            {close => (
               <Button
                 icon="tag"
                 size="small"
                 isLoading={labelEditPending}
                 onClick={() => {
-                  handleSaveLabel(toggleDropdown);
+                  handleSaveLabel(close);
                 }}
               >
                 Update labels

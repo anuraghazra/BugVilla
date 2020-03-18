@@ -30,10 +30,15 @@ const TooltipWrapper = styled.div`
 interface TooltipProps {
   children: React.ReactNode;
   content: React.ReactNode;
+  className?: string;
 }
-export const Tooltip: React.FC<TooltipProps> = ({ children, content }) => {
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  content,
+  className
+}) => {
   return (
-    <TooltipWrapper data-testid="tooltip" className="tooltip">
+    <TooltipWrapper data-testid="tooltip" className={className}>
       <div className="tooltip--content">{content}</div>
       {children}
     </TooltipWrapper>

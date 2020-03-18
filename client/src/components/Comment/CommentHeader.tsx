@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Avatar, BaseDropdown, Flex, Twemoji, toast } from '@bug-ui';
+import { Avatar, Dropdown, Flex, Twemoji, toast } from '@bug-ui';
 import { copyToClipboard, timeAgo } from 'utils';
 
 import { AuthorProps } from 'pages/SingleBug/SingleBug';
@@ -42,30 +42,31 @@ const ReactionsDropdown: React.FC<{
   );
 
   return (
-    <BaseDropdown
-      isOpen={false}
-      shouldCloseOnClick
-      trigger={toggle => <SmileAddIcon handleClick={toggle} />}
-    >
-      <ReactionsWrapper nowrap align="center" justify="space-between">
-        {REACTIONS?.map(reaction => {
-          let isSelected = reactions?.some(
-            r =>
-              r.emoji == reaction.emoji &&
-              r?.users?.find(u => u.id === currentUserId)
-          );
-          return (
-            <span
-              key={reaction.emoji}
-              onClick={() => handleReaction(reaction.emoji)}
-              className={`reaction ${isSelected ? 'reaction_selected' : ''}`}
-            >
-              <Twemoji emoji={reaction.emoji} className="reaction_emoji" />
-            </span>
-          );
-        })}
-      </ReactionsWrapper>
-    </BaseDropdown>
+    <Dropdown shouldCloseOnClick>
+      <Dropdown.Toggle>
+        {toggle => <SmileAddIcon handleClick={toggle} />}
+      </Dropdown.Toggle>
+      <Dropdown.Content>
+        <ReactionsWrapper nowrap align="center" justify="space-between">
+          {REACTIONS?.map(reaction => {
+            let isSelected = reactions?.some(
+              r =>
+                r.emoji == reaction.emoji &&
+                r?.users?.find(u => u.id === currentUserId)
+            );
+            return (
+              <span
+                key={reaction.emoji}
+                onClick={() => handleReaction(reaction.emoji)}
+                className={`reactions ${isSelected ? 'reaction_selected' : ''}`}
+              >
+                <Twemoji emoji={reaction.emoji} className="reaction_emoji" />
+              </span>
+            );
+          })}
+        </ReactionsWrapper>
+      </Dropdown.Content>
+    </Dropdown>
   );
 });
 
@@ -141,26 +142,25 @@ const CommentHeader: React.FC<CommentProps> = ({
           handleReaction={handleReaction}
           reactions={reactions}
         />
-        <BaseDropdown
-          isOpen={false}
-          shouldCloseOnClick
-          trigger={toggle => (
-            <span onClick={toggle} className="hover__button">
+        <Dropdown shouldCloseOnClick>
+          <Dropdown.Toggle>
+            <span className="hover__button">
               <FontAwesomeIcon icon="ellipsis-v" />
             </span>
-          )}
-        >
-          <Flex gap="medium" direction="column">
-            <span onClick={copyCommentLink} className="hover__button">
-              Copy link
-            </span>
-            {isAuthorOfComment && (
-              <span onClick={handleEditorState} className="hover__button">
-                Edit Comment
+          </Dropdown.Toggle>
+          <Dropdown.Content>
+            <Flex gap="medium" direction="column">
+              <span onClick={copyCommentLink} className="hover__button">
+                Copy link
               </span>
-            )}
-          </Flex>
-        </BaseDropdown>
+              {isAuthorOfComment && (
+                <span onClick={handleEditorState} className="hover__button">
+                  Edit Comment
+                </span>
+              )}
+            </Flex>
+          </Dropdown.Content>
+        </Dropdown>
       </Flex>
     </Flex>
   );

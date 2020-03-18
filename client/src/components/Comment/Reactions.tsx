@@ -3,10 +3,8 @@ import styled from 'styled-components';
 import { Flex, Twemoji, Tooltip } from '@bug-ui';
 
 export const ReactionsWrapper = styled(Flex)`
-  .reaction {
+  .reactions {
     padding: 5px 8px;
-    border: 1px solid ${p => p.theme.colors.offwhite};
-    border-left: none;
     cursor: pointer;
     z-index: 0;
 
@@ -20,19 +18,22 @@ export const ReactionsWrapper = styled(Flex)`
       margin-left: 5px;
       font-size: 14px;
     }
+
+    border: 1px solid ${p => p.theme.colors.offwhite};
+    border-left: none;
+    &:first-child {
+      border-left: 1px solid ${p => p.theme.colors.offwhite};
+      border-radius: 5px 0 0 5px;
+    }
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+    &:only-child {
+      border-radius: 5px;
+    }
   }
   .reaction_selected {
     background-color: ${p => p.theme.colors.accent};
-  }
-  .reaction:first-child {
-    border: 1px solid ${p => p.theme.colors.offwhite};
-    border-radius: 5px 0 0 5px;
-  }
-  .reaction:last-child {
-    border-radius: 0 5px 5px 0;
-  }
-  .reaction:only-child {
-    border-radius: 5px;
   }
 `;
 
@@ -58,7 +59,7 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
         let msg = `${sliced.join(' ')} `;
         let remaining = names.length - sliced.length;
         let reactionJSX = (
-          <Flex align="center" className="reaction">
+          <Flex align="center">
             <Twemoji className="reaction_emoji" emoji={react.emoji} />
             <span className="color--gray reaction_count">
               {' '}
@@ -69,8 +70,9 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
         return react.users[0]?.username ? (
           <Tooltip
             key={index}
+            className="reactions"
             content={
-              <small className="color--gray">
+              <small className=" color--gray">
                 {msg} <br /> {remaining > 0 ? `${remaining} others` : ''}{' '}
                 reacted with <Twemoji emoji={react.emoji} />
               </small>
@@ -79,7 +81,7 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
             {reactionJSX}
           </Tooltip>
         ) : (
-          reactionJSX
+          <div className="reactions">{reactionJSX}</div>
         );
       })}
     </ReactionsWrapper>
