@@ -21,7 +21,7 @@ jobs:
         run: npm run heroku-prebuild
       
       - name: Start server in the background
-        run: npm run develop:ci
+        run: npm run develop:ci &
 
       - name: E2E
         uses: cypress-io/github-action@v1
