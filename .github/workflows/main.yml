@@ -1,0 +1,16 @@
+name: 'Tests'
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v1
+      - name: E2E
+      - uses: cypress-io/github-action@v1
+        with:
+          start: npm run develop
+          wait-on: 'http://localhost:3000'
+          headless: true
+          working-directory: 'client'
