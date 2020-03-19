@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:3000",
   "video": false,
-  "watchForFileChanges": false
+  "watchForFileChanges": false,
+  "defaultCommandTimeout": 10000
 }

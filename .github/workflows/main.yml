@@ -7,11 +7,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        
+
+      - name: Install dependencies
+        uses: cypress-io/github-action@v1
+        with:
+          runTests: false
+      - name: setup node
+        uses: actions/setup-node@v1
+
+      - name: install server 
+        run: npm install
+      - name: install client
+        run: npm run heroku-prebuild
+      
+      - name: Start server in the background
+        run: npm run start:client &
+
       - name: E2E
         uses: cypress-io/github-action@v1
         with:
-          start: npm run develop:ci
-          wait-on: 'http://localhost:3000'
+          install: false
           headless: true
-          working-directory: 'client/cypress'
+          working-directory: 'client'
+          env: host=10.1.0.4,port=3000
+          wait-on: 'http://10.1.0.4:3000'
