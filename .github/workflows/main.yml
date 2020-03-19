@@ -15,8 +15,10 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v1
 
-      - name: install
+      - name: install server 
         run: npm install
+      - name: install client
+        run: heroku-prebuild
       
       - name: Start server in the background
         run: npm run develop:ci
