@@ -29,4 +29,5 @@ jobs:
           install: false
           headless: true
           working-directory: 'client'
+          env: host=localhost,port=3000
           wait-on: 'http://localhost:3000'
