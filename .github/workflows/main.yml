@@ -8,18 +8,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: setup node
-        uses: actions/setup-node@v1
 
       - name: Install dependencies
         uses: cypress-io/github-action@v1
         with:
           runTests: false
 
-      - name: install server &
-        run: npm install &
-      - name: install client &
-        run: cd client & npm install &
+      - name: setup node
+        uses: actions/setup-node@v1
+      - run: npm install
+      - run: cd client & npm install &
+        env:
+          CI: true
       
       - name: Start server in the background
         run: npm run develop:ci &
