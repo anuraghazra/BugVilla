@@ -16,10 +16,10 @@ jobs:
         with:
           runTests: false
 
-      - name: install server 
+      - name: install server &
         run: npm install &
       - name: install client &
-        run: cd client & npm install
+        run: cd client & npm install &
       
       - name: Start server in the background
         run: npm run develop:ci &
