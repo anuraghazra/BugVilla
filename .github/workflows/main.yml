@@ -18,16 +18,14 @@ jobs:
       - name: install server 
         run: npm install
       - name: install client
-        run: npm run heroku-prebuild
+        run: cd client & npm install
       
       - name: Start server in the background
-        run: npm run start:client &
+        run: npm run develop:ci &
 
       - name: E2E
         uses: cypress-io/github-action@v1
         with:
           install: false
-          headless: true
           working-directory: 'client'
-          env: host=10.1.0.4,port=3000
-          wait-on: 'http://10.1.0.4:3000'
+          wait-on: 'http://localhost:3000'
