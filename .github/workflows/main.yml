@@ -16,8 +16,8 @@ jobs:
         uses: actions/setup-node@v1
 
       - name: install server 
-        run: npm install
-      - name: install client
+        run: npm install &
+      - name: install client &
         run: cd client & npm install
       
       - name: Start server in the background
