@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v1
       - run: npm install
       - run: npm run heroku-prebuild
-      - run: npm run develop:ci &
+      - run: npm run start &
       - run: npm run cy:run
         env:
           CI: true
