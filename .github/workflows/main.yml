@@ -30,4 +30,12 @@ jobs:
           EXPIRATION_TIME: ${{ secrets.EXPIRATION_TIME }}
       - run: npm run ci:run
         env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          DB_CONNECT_ATLAS: ${{ secrets.DB_CONNECT_ATLAS }}
+          DB_CONNECT_MLAB: ${{ secrets.DB_CONNECT_MLAB }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EXPIRATION_TIME: ${{ secrets.EXPIRATION_TIME }}
           CI: true
