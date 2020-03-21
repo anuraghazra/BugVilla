@@ -19,12 +19,6 @@ jobs:
       - run: npm install
       - run: npm run heroku-prebuild
       - run: npm run develop:ci &
+      - run: npm run cy:run
         env:
           CI: true
-      
-      - name: E2E
-        uses: cypress-io/github-action@v1
-        with:
-          install: false
-          working-directory: 'client'
-          wait-on: 'http://localhost:3000'
