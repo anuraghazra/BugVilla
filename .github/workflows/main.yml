@@ -16,7 +16,7 @@ jobs:
 
       - name: setup node
         uses: actions/setup-node@v1
-        with:
+        env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_CONNECT_ATLAS: ${{ secrets.DB_CONNECT_ATLAS }}
           DB_CONNECT_MLAB: ${{ secrets.DB_CONNECT_MLAB }}
