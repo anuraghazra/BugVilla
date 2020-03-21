@@ -18,7 +18,8 @@ jobs:
         uses: actions/setup-node@v1
       - run: npm install
       - run: npm run heroku-prebuild
-      - run: npm run cy:run
+      - run: npm run develop:ci -- --silent &
+      - run: npm run ci:run
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_CONNECT_ATLAS: ${{ secrets.DB_CONNECT_ATLAS }}
