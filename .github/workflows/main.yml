@@ -16,11 +16,7 @@ jobs:
 
       - name: setup node
         uses: actions/setup-node@v1
-      - run: npm install
-      - run: npm run heroku-prebuild
-      - run: npm run develop:ci -- --silent &
-      - run: npm run ci:run
-        env:
+        with:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_CONNECT_ATLAS: ${{ secrets.DB_CONNECT_ATLAS }}
           DB_CONNECT_MLAB: ${{ secrets.DB_CONNECT_MLAB }}
@@ -29,4 +25,9 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EXPIRATION_TIME: ${{ secrets.EXPIRATION_TIME }}
+      - run: npm install
+      - run: npm run heroku-prebuild
+      - run: npm run develop:ci -- --silent &
+      - run: npm run ci:run
+        env:
           CI: true
