@@ -24,7 +24,8 @@ const InputLabel = styled.label<InputLabelProps>`
   color: ${p => p.theme.colors.black};
 
   span {
-    color: ${p => p.theme.colors.gray} !important;
+    color: ${p =>
+      p.indicateError ? p.theme.colors.red : p.theme.colors.gray} !important;
     transition: 0.2s;
   }
 `;

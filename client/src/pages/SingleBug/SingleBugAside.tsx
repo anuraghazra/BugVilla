@@ -5,8 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StoreState } from 'store';
 import { editLabels } from 'store/ducks/single-bug';
 
-import { Avatar, Button, Flex, Label, toast } from '@bug-ui';
-
+import { Avatar, Button, Flex, Label, LabelTypes, toast } from '@bug-ui';
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
 // get unique avatar images from all comments
@@ -73,7 +72,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
         </h4>
 
         <Flex gap="medium">
-          {bug?.result?.labels.map((label: string, i: number) => (
+          {bug?.result?.labels.map((label: LabelTypes, i: number) => (
             <Label className="mt-medium" type={label} key={i}>
               {label}
             </Label>

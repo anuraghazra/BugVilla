@@ -33,6 +33,7 @@ const SingleBugWrapper = styled.section`
     }
 
     .label__header {
+      -webkit-tap-highlight-color: transparent;
       position: relative;
       cursor: pointer;
 

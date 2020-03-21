@@ -8,7 +8,7 @@ import { Loading, Illustration, VerticalLine, toast } from '@bug-ui';
 import useQuery from 'hooks/useQuery';
 
 import DashboardHeader from 'components/DashboardHeader';
-import Comment from '../../components/Comment/Comment';
+import Comment from 'components/Comment/Comment';
 import Timeline from './Timeline';
 import MetaInfo from './MetaInfo';
 import SingleBugWrapper from './SingleBug.style';

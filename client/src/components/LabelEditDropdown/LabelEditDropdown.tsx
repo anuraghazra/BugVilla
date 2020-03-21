@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { BulletLabel, Dropdown } from '@bug-ui';
+import { BulletLabel, Dropdown, LabelTypes } from '@bug-ui';
 
 const StyledLabelEditDropdown = styled.div`
   .label__dropdown--content {
     position: absolute;
     text-align: center;
-    top: 30px;
     left: 0;
 
     @media screen and (${p => p.theme.media.mobile}) {
@@ -44,7 +43,7 @@ interface LabelDropdownProps {
 }
 
 // initial data
-let checkboxes: string[] = ['bug', 'feature', 'help wanted', 'enhancement'];
+let checkboxes: LabelTypes[] = ['bug', 'feature', 'help wanted', 'enhancement'];
 
 const LabelEditDropdown: React.FC<LabelDropdownProps> = ({
   updateSelectedLabels,

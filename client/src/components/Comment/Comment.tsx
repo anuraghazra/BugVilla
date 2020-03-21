@@ -114,7 +114,7 @@ const Comment: React.FC<CommentProps> = ({
     <StyledComment
       id={commentId}
       isSelected={isSelected}
-      style={{ padding: showCommentEditor ? 0 : 20 }}
+      isCommentEditorOpen={showCommentEditor}
     >
       {showCommentEditor ? (
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -72,7 +72,7 @@ const Reactions: React.FC<ReactionsProps> = ({ reactions }) => {
             key={index}
             className="reactions"
             content={
-              <small className=" color--gray">
+              <small className="color--gray">
                 {msg} <br /> {remaining > 0 ? `${remaining} others` : ''}{' '}
                 reacted with <Twemoji emoji={react.emoji} />
               </small>

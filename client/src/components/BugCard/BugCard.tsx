@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Flex, Label } from '@bug-ui';
+import { Flex, Label, LabelTypes } from '@bug-ui';
 import { StyledBugCard, BugCardIcon, StyledMetaInfo } from './BugCard.style';
 
 interface Author {
@@ -18,7 +18,7 @@ interface BugMetaProps {
 interface BugCardProps {
   number: number;
   title: string;
-  labels: any;
+  labels: Array<LabelTypes>;
   body: string;
   isOpen: boolean;
   date: string;
@@ -56,7 +56,7 @@ const BugCard: React.FC<BugCardProps> = ({
 
       {labels.length ? (
         <Flex gap="medium" className="mt-large">
-          {labels.map((label: string, index: number) => (
+          {labels.map((label, index: number) => (
             <Link key={index} to={`/dashboard/bugs/?label=${label}`}>
               <Label type={label}>{label}</Label>
             </Link>

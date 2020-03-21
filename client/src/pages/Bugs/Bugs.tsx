@@ -6,7 +6,14 @@ import { NavLink } from 'react-router-dom';
 import useQuery from 'hooks/useQuery';
 
 import { formatDate } from 'utils';
-import { Flex, Label, Loading, Button, Illustration } from '@bug-ui';
+import {
+  Flex,
+  Button,
+  Loading,
+  Label,
+  LabelTypes,
+  Illustration
+} from '@bug-ui';
 
 import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
@@ -105,7 +112,10 @@ const Bugs: React.FC = () => {
             <br />
             <Flex align="center">
               <p>Filter: &nbsp;</p>
-              <Label style={{ margin: 0 }} type={query.get('label')}>
+              <Label
+                style={{ margin: 0 }}
+                type={query.get('label') as LabelTypes}
+              >
                 {query.get('label')}
               </Label>
             </Flex>

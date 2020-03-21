@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import genericAvatar from 'assets/images/avatar-generic.jpg';
 
-import { Flex, Button, IconLink, BugVillaLogo, Avatar, toast } from '@bug-ui';
+import { Flex, Button, IconLink, BugVillaLogo, toast } from '@bug-ui';
 import { Input, StyledH3Input } from '@bug-ui/Form';
 
 import AvatarFileUploader from 'components/AvatarFileUploader';
@@ -17,7 +17,8 @@ const Signup: React.FC = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState<File>();
   const { register, handleSubmit, errors, watch }: any = useForm({
-    validationSchema: SignupSchema
+    validationSchema: SignupSchema,
+    mode: 'onChange'
   });
 
   const [isLoading, signupError] = useSelector((state: StoreState) => [

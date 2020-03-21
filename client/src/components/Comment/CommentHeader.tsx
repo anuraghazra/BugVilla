@@ -148,13 +148,19 @@ const CommentHeader: React.FC<CommentProps> = ({
               <FontAwesomeIcon icon="ellipsis-v" />
             </span>
           </Dropdown.Toggle>
-          <Dropdown.Content>
-            <Flex gap="medium" direction="column">
-              <span onClick={copyCommentLink} className="hover__button">
+          <Dropdown.Content style={{ padding: 0 }}>
+            <Flex direction="column">
+              <span
+                onClick={copyCommentLink}
+                className="comment__dropdown--item"
+              >
                 Copy link
               </span>
               {isAuthorOfComment && (
-                <span onClick={handleEditorState} className="hover__button">
+                <span
+                  onClick={handleEditorState}
+                  className="comment__dropdown--item"
+                >
                   Edit Comment
                 </span>
               )}

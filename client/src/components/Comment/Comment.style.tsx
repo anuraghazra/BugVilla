@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
 
-const StyledComment = styled.div<{ isSelected?: boolean }>`
-  padding: 20px;
+// prettier-ignore
+const StyledComment = styled.div<{ isSelected?: boolean; isCommentEditorOpen?: boolean}>`
+  padding: ${p => (p.isCommentEditorOpen ? 0 : 20)}px;
   border-radius: 10px;
   word-break: break-word;
 
@@ -17,6 +18,7 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
     css`
       border: 1px solid ${p => p.theme.colors.green};
     `}
+  
 
   .comment__header, a {
     font-size: 14px;
@@ -36,6 +38,16 @@ const StyledComment = styled.div<{ isSelected?: boolean }>`
 
     &:hover {
       color: ${p => p.theme.colors.primary};
+    }
+  }
+  .comment__dropdown--item {
+    cursor: pointer;
+    padding: 10px 15px;
+    color: ${p => p.theme.colors.gray};
+
+    &:hover {
+      color: ${p => p.theme.colors.primary};
+      background-color: ${p => p.theme.colors.offwhite};
     }
   }
 

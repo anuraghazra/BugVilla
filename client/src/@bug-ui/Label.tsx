@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-const VARIANTS_MAP: any = {
+const VARIANTS_MAP = {
   'help wanted': 'secondary',
   enhancement: 'secondary',
   feature: 'success',
   bug: 'danger'
 };
 
+export type LabelTypes = 'bug' | 'feature' | 'help wanted' | 'enhancement';
 interface LabelProps {
-  type: 'bug' | 'feature' | 'help wanted' | 'enhancement' | string | null;
+  type: LabelTypes;
   children: React.ReactNode;
   [x: string]: any;
 }
@@ -41,6 +42,7 @@ export const StyledBulletLabel = styled(StyledLabel)`
     margin-top: 2px;
     margin-right: 8px;
     border-radius: 50px;
+    pointer-events: none;
     &.danger {
       background-color: ${p => p.theme.colors.red};
     }
@@ -53,16 +55,18 @@ export const StyledBulletLabel = styled(StyledLabel)`
   }
 `;
 
-export const Label: React.FC<LabelProps> = ({ children, type }) => {
+export const Label: React.FC<LabelProps> = ({ children, type, ...props }) => {
   return (
-    <StyledLabel variant={VARIANTS_MAP[type as string]}>{children}</StyledLabel>
+    <StyledLabel variant={VARIANTS_MAP[type]} {...props}>
+      {children}
+    </StyledLabel>
   );
 };
 
 export const BulletLabel: React.FC<LabelProps> = ({ type, children }) => {
   return (
-    <StyledBulletLabel variant={VARIANTS_MAP[type as string]}>
-      <div className={`bullet ${VARIANTS_MAP[type as string]}`} />
+    <StyledBulletLabel variant={VARIANTS_MAP[type]}>
+      <div className={`bullet ${VARIANTS_MAP[type]}`} />
       {children}
     </StyledBulletLabel>
   );

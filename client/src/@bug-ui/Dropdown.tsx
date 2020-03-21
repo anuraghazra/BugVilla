@@ -133,6 +133,7 @@ const StyledDropdownContent = styled.div<{ isOpen?: boolean }>`
   border-radius: 5px;
   position: absolute;
   right: 0;
+  margin-top: 5px;
 
   background-color: ${p => p.theme.colors.white};
   border: ${p => p.theme.border};

@@ -47,7 +47,8 @@ const Login: React.FC = () => {
     state.error['user/LOGIN']
   ]);
   const { register, handleSubmit, errors }: any = useForm({
-    validationSchema: LoginSchema
+    validationSchema: LoginSchema,
+    mode: 'onChange'
   });
 
   const onSubmit = async (data: { name: string; email: string }) => {
