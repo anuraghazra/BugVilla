@@ -8,12 +8,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
+      - name: setup node
+        uses: actions/setup-node@v1
+
       - name: Install dependencies
         uses: cypress-io/github-action@v1
         with:
           runTests: false
-      - name: setup node
-        uses: actions/setup-node@v1
 
       - name: install server 
         run: npm install &
