@@ -2,7 +2,7 @@
 const { Bug } = require('../models/bugModel');
 const { validateComment } = require('../models/commentModel');
 const { Notification } = require('../models/notificationModel');
-const { notify_types } = require('../constants');
+const { NOTIFY_TYPES } = require('../constants');
 const Joi = require('@hapi/joi')
 
 /**
@@ -53,7 +53,7 @@ exports.createComment = async (req, res) => {
 
     // send notifications
     let notification = new Notification({
-      type: notify_types.COMMENTED,
+      type: NOTIFY_TYPES.COMMENTED,
       byUser: req.user.id,
       onBug: newBug._id,
       notificationTo: [],

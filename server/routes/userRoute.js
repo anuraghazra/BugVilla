@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const passport = require('passport');
 
-const verify = require('../middleware/verify')
 const UserController = require('../controllers/UserController');
 const upload = require('../middleware/fileUpload');
 let avatarUpload = upload.single('image');

@@ -23,6 +23,8 @@ module.exports = function generateUserToken(req, res) {
         <title>BugVilla</title>
       </head>
       <body>
+      <p>BugVilla Authorized.</p>
+      <p>You can close this window now</p>
       <script>
         window.onload = window.close();
         let originUrl = window.location.origin;

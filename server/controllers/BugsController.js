@@ -2,7 +2,7 @@
 const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
 const { Notification } = require('../models/notificationModel')
-const { notify_types } = require('../constants')
+const { NOTIFY_TYPES } = require('../constants')
 
 /**
  * @route GET /api/bugs/
@@ -93,7 +93,7 @@ exports.createBug = async (req, res) => {
 
     // send notifications
     let notification = new Notification({
-      type: notify_types.NEW_BUG,
+      type: NOTIFY_TYPES.NEW_BUG,
       byUser: req.user.id,
       onBug: newBug._id,
       notificationTo: [],
@@ -171,7 +171,7 @@ exports.toggleBugOpenClose = ({ state }) => {
 
       // send notifications
       let notification = new Notification({
-        type: notify_types.BUG_STATUS,
+        type: NOTIFY_TYPES.BUG_STATUS,
         byUser: req.user.id,
         onBug: bug._id,
         bug_status: state ? 'opened' : 'closed',
@@ -258,7 +258,7 @@ exports.addReferences = async (req, res) => {
     }).select('_id');
     // send notifications
     let notification = new Notification({
-      type: notify_types.REFERENCED,
+      type: NOTIFY_TYPES.REFERENCED,
       byUser: req.user.id,
       fromBug: bug._id,
       references: referencedIds.map(v => v._id),

@@ -20,7 +20,7 @@ module.exports = {
   PORT: 5000,
 }
 
-module.exports.notify_types = {
+module.exports.NOTIFY_TYPES = {
   COMMENTED: 'COMMENTED',
   MENTIONED: 'MENTIONED',
   REFERENCED: 'REFERENCED',
