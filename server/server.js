@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
+const expressStaticGzip = require("express-static-gzip");
 const morgan = require('morgan');
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require('express-mongo-sanitize');
@@ -37,7 +38,6 @@ app.set("env", process.env.NODE_ENV);
 app.set("json spaces", 2);
 
 // middlewares
-app.use(express.static('client/build'));
 app.use(helmet()) // security headers
 app.use(cors({
   credentials: true
@@ -93,6 +93,7 @@ app.use("/api/*", function (req, res) {
 
 // Server Side Routing
 // If no API routes are hit, send the React app
+app.use('/', expressStaticGzip('client/build'));
 if (process.env.NODE_ENV === 'production') {
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../client/build/index.html'), function (err) {
