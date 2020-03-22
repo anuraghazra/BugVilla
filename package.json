@@ -14,8 +14,8 @@
     "develop:ci": "concurrently \"npm start\" \"cd client && npm start\"",
     "cy:open": "concurrently \"npm start\" \"cd client && npm run test:e2e\"",
     "cy:run": "concurrently \"npm start\" \"cd client && npm run test:e2e:run\"",
-    "ci:run": "cd client && npm run cy:run",
     "prod": "concurrently \"npm run server:watch\" \"cd client && serve -s build\"",
+    "test:e2e:ci": "cd client && npm run cy:run",
     "test": "cd client && npm run test"
   },
   "author": "Anurag Hazra <hazru.anurag@gmail.com>",
