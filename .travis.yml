@@ -26,4 +26,4 @@ before_script:
 script:
   - set -e
   - npm run test
-  - npm run ci:run
+  - npm run test:e2e:ci

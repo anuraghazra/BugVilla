@@ -1,31 +1,38 @@
 import styled from 'styled-components/macro';
 
-const AvatarContainer = styled.section`
+const AvatarContainer = styled.section<{ size?: string }>`
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: ${p => p.size || '130px'};
+  height: ${p => p.size || '130px'};
   border: ${p => p.theme.border};
   border-radius: 100%;
   overflow: hidden;
   margin: 0px;
 
   .dropzone {
+    display: flex;
     position: absolute;
     width: 100%;
     height: 100%;
-    line-height: 115px;
     text-align: center;
-    background-color: rgba(88, 111, 253, 0.8);
+    border-radius: 100%;
+    background-color: rgba(88, 111, 253, 0.9);
+    color: ${p => p.theme.colors.white};
     opacity: 0;
+    transform: scale(0.85);
+    transition: 0.2s;
     cursor: pointer;
-    color: ${p => p.theme.colors.common.white};
 
+    p {
+      margin: auto;
+    }
     &:hover {
+      transform: scaleY(1);
       opacity: 1;
     }
   }
 
-  .img__preview {
+  .avatar-uploader--preview {
     width: 100%;
     height: 100%;
     object-fit: cover;

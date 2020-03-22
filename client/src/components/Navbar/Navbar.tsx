@@ -10,10 +10,10 @@ const NavbarWrapper = styled.nav`
   padding: 15px 25px;
   position: fixed;
 
-  background-color: ${p => p.theme.colors.brand.primary};
+  background-color: ${p => p.theme.colors.primary};
   z-index: 2;
 
-  color: ${p => p.theme.colors.common.white};
+  color: ${p => p.theme.colors.white};
 
   @media screen and (${p => p.theme.media.minTablet}) {
     display: none;

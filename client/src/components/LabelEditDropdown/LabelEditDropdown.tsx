@@ -1,24 +1,53 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
-import Flex from 'components/common/Flex';
-import { BulletLabel } from 'components/common/Label';
-import BaseDropdown from 'components/common/BaseDropdown';
+import { BulletLabel, Dropdown, LabelTypes } from '@bug-ui';
 
-interface DropdownProps {
-  updateSelectedLabels: (labels: string[]) => void;
-  trigger: (toggle: any) => any;
+const StyledLabelEditDropdown = styled.div`
+  .label__dropdown--content {
+    position: absolute;
+    text-align: center;
+    left: 0;
+
+    @media screen and (${p => p.theme.media.mobile}) {
+      left: 30px;
+    }
+  }
+
+  .dropdown__item {
+    min-width: 150px;
+    display: block;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    &:hover {
+      background-color: ${p => p.theme.colors.offwhite};
+    }
+  }
+  .label__selected {
+    background-color: ${p => p.theme.colors.offwhite};
+    border: 1px solid ${p => p.theme.colors.secondary};
+  }
+
+  .dropdown__checkbox {
+    display: none;
+  }
+`;
+
+interface LabelDropdownProps {
+  trigger: any;
   defaultChecked: string[];
-  className: string;
-  children: any;
+  updateSelectedLabels: (labels: string[]) => void;
+  children(close: any): React.ReactElement;
 }
 
 // initial data
-let checkboxes: string[] = ['bug', 'feature', 'help wanted', 'enhancement'];
+let checkboxes: LabelTypes[] = ['bug', 'feature', 'help wanted', 'enhancement'];
 
-const LabelEditDropdown: React.FC<DropdownProps> = ({
+const LabelEditDropdown: React.FC<LabelDropdownProps> = ({
   updateSelectedLabels,
   defaultChecked,
-  className,
   children,
   trigger
 }) => {
@@ -46,34 +75,34 @@ const LabelEditDropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <BaseDropdown className={className} trigger={trigger}>
-      {(toggleDropdown: any) => (
-        <>
-          <div className="dropdown__items">
-            {checkboxes.map(name => (
-              <label
-                key={name}
-                className={`dropdown__item ${
-                  checkedItems.includes(name) ? 'label__selected' : ''
-                }`}
-              >
+    <StyledLabelEditDropdown>
+      <Dropdown>
+        <Dropdown.Toggle>{trigger}</Dropdown.Toggle>
+        <Dropdown.Content className={'label__dropdown--content'}>
+          {checkboxes.map(name => {
+            let selectedClass = checkedItems.includes(name)
+              ? 'label__selected'
+              : '';
+
+            return (
+              <label key={name} className={`dropdown__item ${selectedClass}`}>
                 <input
-                  className="dropdown__checkbox"
-                  type="checkbox"
                   name={name}
-                  checked={!!checkedItems.includes(name)}
+                  type="checkbox"
                   onChange={handleChange}
+                  checked={!!checkedItems.includes(name)}
+                  className="dropdown__checkbox"
                 />
-                <div style={{ padding: '5px 0' }}>
-                  <BulletLabel type={name}>{name}</BulletLabel>
-                </div>
+                <BulletLabel type={name}>{name}</BulletLabel>
               </label>
-            ))}
-          </div>
-          {children(toggleDropdown)}
-        </>
-      )}
-    </BaseDropdown>
+            );
+          })}
+          <Dropdown.Toggle>
+            {(_toggle, close) => children(close)}
+          </Dropdown.Toggle>
+        </Dropdown.Content>
+      </Dropdown>
+    </StyledLabelEditDropdown>
   );
 };
 

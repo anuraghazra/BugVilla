@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import dummyImage from 'assets/images/avatar_dummy.png';
+import { toast } from '@bug-ui';
 import AvatarContainer from './AvatarFileUploader.style';
 
 interface PreviewFile extends File {
@@ -11,22 +11,30 @@ interface Props {
   name?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
   file?: PreviewFile;
+  defaultImg?: any;
   handleFile: (file: PreviewFile) => void;
+  size?: string;
 }
 
 const AvatarFileUploader: React.FC<Props> = ({
   name,
   inputRef,
   handleFile,
-  file
+  defaultImg,
+  file,
+  size
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     maxSize: 1 * 1024 * 1024,
     onDrop: (acceptedFiles: PreviewFile[]): void => {
-      acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
-      handleFile(acceptedFiles[0]);
+      try {
+        acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
+        handleFile(acceptedFiles[0]);
+      } catch (err) {
+        toast.error('Something went crazy!');
+      }
     }
   });
 
@@ -37,17 +45,17 @@ const AvatarFileUploader: React.FC<Props> = ({
   }, [file]);
 
   return (
-    <AvatarContainer>
+    <AvatarContainer size={size}>
       <div className="dropzone" {...getRootProps({ className: 'dropzone' })}>
         <input type="file" name={name} ref={inputRef} {...getInputProps()} />
-        <p>Upload Image</p>
+        <p>Change Avatar</p>
       </div>
 
-      {file ? (
-        <img key={file.name} className="img__preview" src={file.preview} />
-      ) : (
-        <img className="img__preview" src={dummyImage} />
-      )}
+      <img
+        className="avatar-uploader--preview"
+        alt={file ? 'Avatar image' : 'Default Avatar Image'}
+        src={file ? file.preview : defaultImg}
+      />
     </AvatarContainer>
   );
 };

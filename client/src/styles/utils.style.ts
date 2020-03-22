@@ -11,28 +11,50 @@ export default css`
     font-family: ${p => p.theme.font.primaryMedium}
   }
   .color--error {
-    color: ${p => p.theme.colors.common.red} !important;
+    color: ${p => p.theme.colors.red} !important;
   }
   .text--error {
     font-size: 14px;
-    color: ${p => p.theme.colors.common.red};
+    color: ${p => p.theme.colors.red};
   }
   .color--white {
-    color: ${p => p.theme.colors.common.white}
+    color: ${p => p.theme.colors.white}
   }
   .color--gray {
-    color: ${p => p.theme.colors.text.gray}
+    color: ${p => p.theme.colors.gray}
   }
   .color--black {
-    color: ${p => p.theme.colors.text.black}
+    color: ${p => p.theme.colors.black}
   }
   .color--brand {
-    color: ${p => p.theme.colors.brand.primary}
+    color: ${p => p.theme.colors.primary}
   }
-  .mt-5 {
-    margin-top: 10px;
+  
+  .mt-small {
+    margin-top: ${p => p.theme.space.small}px;
   }
-  .ml-15 {
-    margin-left: 15px;
+  .mt-medium {
+    margin-top: ${p => p.theme.space.medium}px;
+  }
+  .mr-medium {
+    margin-right: ${p => p.theme.space.medium}px;
+  }
+  .ml-medium {
+    margin-left: ${p => p.theme.space.medium}px;
+  }
+  .mb-medium {
+    margin-left: ${p => p.theme.space.medium}px;
+  }
+  .ml-large {
+    margin-left: ${p => p.theme.space.large}px;
+  }
+  .mr-large {
+    margin-right: ${p => p.theme.space.large}px;
+  }
+  .mt-large {
+    margin-top: ${p => p.theme.space.large}px;
+  }
+  .mb-large {
+    margin-bottom: ${p => p.theme.space.large}px;
   }
 `

@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 const { UserInfoSchema } = require('./userModel');
+const ReactionSchema = require('./ReactionSchema')
+
 
 const CommentSchema = new mongoose.Schema({
   body: {
@@ -14,6 +16,7 @@ const CommentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  reactions: [{ type: ReactionSchema }],
   author: { type: UserInfoSchema, required: true },
 })
 
@@ -32,7 +35,8 @@ const validateComment = (comment) => {
     body: Joi.string().min(6).max(1000).required(),
     date: Joi.date().default(Date.now),
     author: Joi.object(),
-    bugId: Joi.number()
+    bugId: Joi.number(),
+    reactions: Joi.array().default([])
   })
   return schema.validate(comment)
 }

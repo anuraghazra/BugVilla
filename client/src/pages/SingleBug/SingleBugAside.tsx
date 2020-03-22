@@ -5,24 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StoreState } from 'store';
 import { editLabels } from 'store/ducks/single-bug';
 
-import Label from 'components/common/Label';
-import Flex from 'components/common/Flex';
-import Button from 'components/common/Button';
-import Toast from 'components/common/Toast';
-import Avatar from 'components/Avatar/Avatar';
+import { Avatar, Button, Flex, Label, LabelTypes, toast } from '@bug-ui';
 import LabelEditDropdown from 'components/LabelEditDropdown/LabelEditDropdown';
 
 // get unique avatar images from all comments
 const getParticipants = (bug: any): string[] => {
-  if (bug && bug.comments) {
-    return bug.comments
-      .map((c: any) => c.author.username)
-      .filter(
-        (item: string, pos: number, array: string[]) =>
-          array.indexOf(item) === pos
-      );
-  }
-  return [];
+  return Object.values(bug?.entities?.comments || {})
+    .map((comment: any) => comment.author?.username)
+    .filter(
+      (item: string, pos: number, array: string[]) =>
+        array.indexOf(item) === pos
+    );
 };
 
 interface SingleBugAsideProps {
@@ -40,41 +33,36 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
     state.error['singlebug/EDIT_LABELS']
   ]);
 
-  const handleSaveLabel = (toggleDropdown: Function) => {
+  const handleSaveLabel = (closeDropdown: Function) => {
     dispatch(editLabels(bugId, selectedLabels)).then(() => {
-      toggleDropdown(false);
+      closeDropdown(false);
     });
   };
 
   let participants: string[] = getParticipants(bug);
+  labelEditError && toast.error(labelEditError);
 
   return (
-    <>
+    <aside className="singlebug__aside--sticky">
       <div>
-        <Toast isVisible={!!labelEditError} message={labelEditError} />
-
         <h4 className="label__header color--gray">
-          Labels
           <LabelEditDropdown
             updateSelectedLabels={labels => setSelectedLabels(labels)}
-            defaultChecked={bug.labels}
-            className="label__dropdown"
-            trigger={toggle => (
-              <FontAwesomeIcon
-                className="open_modal_btn"
-                onClick={toggle}
-                size="sm"
-                icon="cog"
-              />
-            )}
+            defaultChecked={bug?.result.labels}
+            trigger={
+              <span data-testid="label_dropdown">
+                Labels
+                <FontAwesomeIcon size="sm" icon="cog" />
+              </span>
+            }
           >
-            {(toggleDropdown: Function) => (
+            {close => (
               <Button
                 icon="tag"
-                size="sm"
+                size="small"
                 isLoading={labelEditPending}
                 onClick={() => {
-                  handleSaveLabel(toggleDropdown);
+                  handleSaveLabel(close);
                 }}
               >
                 Update labels
@@ -83,31 +71,29 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
           </LabelEditDropdown>
         </h4>
 
-        <Flex>
-          {bug.labels &&
-            bug.labels.map((label: string, i: number) => (
-              <Label className="mt-5" type={label} key={i}>
-                {label}
-              </Label>
-            ))}
+        <Flex gap="medium">
+          {bug?.result?.labels.map((label: LabelTypes, i: number) => (
+            <Label className="mt-medium" type={label} key={i}>
+              {label}
+            </Label>
+          ))}
         </Flex>
       </div>
       <div>
         <h4 className="color--gray">{participants.length} participants</h4>
-        <Flex>
+        <Flex gap="medium">
           {participants.map((participant: string, i: number) => (
             <Avatar
               key={i}
               width="40px"
               height="40px"
-              style={{ marginRight: 10 }}
               size={45}
               username={participant}
             />
           ))}
         </Flex>
       </div>
-    </>
+    </aside>
   );
 };
 

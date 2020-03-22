@@ -8,17 +8,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import store from './store';
-import { setUser } from 'store/ducks/auth';
 import { Provider } from 'react-redux';
-
-import auth from 'utils/authHelper';
+import { checkAuth } from 'store/ducks/auth';
+import { Router } from 'react-router-dom';
 
 registerIcons();
 
-if (auth.loggedIn()) {
-  store.dispatch(setUser(auth.getUser()));
-  // history.push('/dashboard');
-}
+store.dispatch(checkAuth());
+
 
 ReactDOM.render(
   <Provider store={store}>

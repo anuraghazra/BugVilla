@@ -5,8 +5,6 @@ import api from './middlewares/apiMiddleware';
 import { AuthReducerState } from './ducks/auth';
 import { SinglebugReducerState } from './ducks/single-bug';
 
-const reducers = combineReducers(ducks);
-const INITIAL_STATE = {};
 const composeSetup =
   process.env.NODE_ENV !== 'production' &&
   typeof window === 'object' &&
@@ -25,6 +23,10 @@ export interface StoreState {
     [x: string]: string;
   };
 }
+
+const reducers = combineReducers(ducks);
+const INITIAL_STATE = {};
+
 const store = createStore(
   reducers,
   INITIAL_STATE,

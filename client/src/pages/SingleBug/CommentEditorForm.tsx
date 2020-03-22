@@ -1,16 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { getBugRefsFromMarkdown } from 'utils';
-import Button, { ButtonGroup } from 'components/common/Button';
-import Toast from 'components/common/Toast';
+import { getRefsOrMentions } from 'utils';
+import { Button, ButtonGroup, toast } from '@bug-ui';
 
 import Editor from 'components/Editor/Editor';
 import StyledEditor from 'components/Editor/Editor.style';
 import CloseReopenButton from './CloseReopenButton';
-
 import { addCommentSchema } from './SingleBug';
 import {
   addComment,
@@ -30,7 +28,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     handleSubmit,
     errors: formErrors
   }: any = useForm({ validationSchema: addCommentSchema });
-  
+
   const markdown = watch('body');
   const handleMarkdown = (e: any) => {
     setValue('body', e.target.value);
@@ -38,7 +36,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
 
   const onSubmit = (formData: { body: string }) => {
     dispatch(addComment(bugId, formData)).then(() => {
-      const references = getBugRefsFromMarkdown(markdown);
+      const references = getRefsOrMentions(markdown, '#');
       references.length && dispatch(addReferences(bugId, references));
       setValue('body', '');
     });
@@ -51,24 +49,19 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     [bugId]
   );
 
-  const {
-    loading: {
-      'singlebug/ADD_COMMENT': isCommentLoading,
-      'singlebug/TOGGLE_BUG': isToggleLoading
-    },
-    error: {
-      'singlebug/ADD_COMMENT': commentError,
-      'singlebug/TOGGLE_BUG': toggleError
-    }
-  } = useSelector((state: StoreState) => ({
-    loading: state.loading,
-    error: state.error
-  }));
+  const [isCommentLoading, commentError] = useSelector((state: StoreState) => [
+    state.loading['singlebug/ADD_COMMENT'],
+    state.error['singlebug/ADD_COMMENT']
+  ]);
+  const [isToggleLoading, toggleError] = useSelector((state: StoreState) => [
+    state.loading['singlebug/TOGGLE_BUG'],
+    state.error['singlebug/TOGGLE_BUG']
+  ]);
 
+  commentError && toast.error(commentError);
+  toggleError && toast.error(toggleError);
   return (
     <>
-      <Toast isVisible={!!commentError} message={commentError} />
-      <Toast isVisible={!!toggleError} message={toggleError} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledEditor>
           <Editor
@@ -81,7 +74,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
             <CloseReopenButton
               isOpen={bugIsOpen}
               isLoading={isToggleLoading}
-              handleRequst={sendToggleRequest}
+              onRequestToggle={sendToggleRequest}
             />
             <Button isLoading={isCommentLoading} type="submit" icon="plus">
               Comment
@@ -93,4 +86,4 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   );
 };
 
-export default CommentEditorForm;
+export default React.memo(CommentEditorForm);

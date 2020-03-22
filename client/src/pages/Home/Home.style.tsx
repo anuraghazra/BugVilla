@@ -15,16 +15,17 @@ const HomeWrapper = styled.section`
     align-items: center;
     justify-content: center;
 
-    background-color: ${p => p.theme.colors.brand.primary};
-    color: ${p => p.theme.colors.common.white};
+    background-color: ${p => p.theme.colors.primary};
+    color: ${p => p.theme.colors.white};
 
     .home__text {
       margin-left: -50px;
       z-index: 1;
     }
 
-    @media screen and (${p => p.theme.media.mobile}) {
+    @media screen and (${p => p.theme.media.tablet}) {
       min-height: 45vh;
+      width: 100%;
       .home__text {
         margin-left: 0px;
       }

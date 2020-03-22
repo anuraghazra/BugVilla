@@ -1,23 +1,22 @@
 import React from 'react';
-import Button from 'components/common/Button';
+import { Button } from '@bug-ui';
 
 const CloseReopenButton = ({
-  handleRequst,
+  onRequestToggle,
   isOpen,
   isLoading
 }: {
-  handleRequst: any;
+  onRequestToggle: any;
   isOpen: boolean;
   isLoading: boolean;
 }) => (
   <Button
     isLoading={isLoading}
-    danger={isOpen}
-    success={!isOpen}
+    variant={isOpen ? 'danger' : 'success'}
     icon={isOpen ? 'times' : 'history'}
     onClick={(e: any) => {
       e.preventDefault();
-      handleRequst(isOpen ? 'close' : 'open');
+      onRequestToggle(isOpen ? 'close' : 'open');
     }}
   >
     {isOpen ? 'Close' : 'Reopen'}

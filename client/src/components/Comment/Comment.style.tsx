@@ -1,25 +1,26 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const StyledComment = styled.div`
-  padding: 20px;
-  border: 1px solid ${p => p.theme.colors.common.offwhite};
+// prettier-ignore
+const StyledComment = styled.div<{ isSelected?: boolean; isCommentEditorOpen?: boolean}>`
+  padding: ${p => (p.isCommentEditorOpen ? 0 : 20)}px;
   border-radius: 10px;
-  margin-top: ${p => p.theme.spacings.top}px;
-  margin-bottom: ${p => p.theme.spacings.bottom}px;
-  position: relative;
   word-break: break-word;
 
-  &:after {
-    content: '';
-    position: absolute;
-    left: 15px;
-    bottom: -${p => p.theme.spacings.bottom + 1}px;
-    width: 2px;
-    height: ${p => p.theme.spacings.bottom}px;
-    background-color: ${p => p.theme.colors.common.offwhite};
-  }
-  .comment__header,
-  a {
+  ${({ theme }) => css`
+    border: 1px solid ${theme.colors.offwhite};
+    background-color: ${theme.colors.white};
+    margin-top: ${theme.spacings.top}px;
+    margin-bottom: ${theme.spacings.bottom}px;
+  `}
+
+  ${p =>
+    p.isSelected &&
+    css`
+      border: 1px solid ${p => p.theme.colors.green};
+    `}
+  
+
+  .comment__header, a {
     font-size: 14px;
   }
 
@@ -27,29 +28,37 @@ const StyledComment = styled.div`
     margin-bottom: 20px;
   }
 
+  .comment__actions {
+    margin-left: auto;
+  }
+
   .hover__button {
     cursor: pointer;
-    position: relative;
-    color: ${p => p.theme.colors.text.gray};
-
-    &::after {
-      content: 'Edit';
-      width: 50px;
-      position: absolute;
-      left: -40px;
-      pointer-events: none;
-      text-align: center;
-      font-size: 12px;
-      opacity: 0;
-      transition: 0.2s;
-    }
+    color: ${p => p.theme.colors.gray};
 
     &:hover {
-      &::after {
-        opacity: 1;
-        transition: 0.2s;
-      }
-      color: ${p => p.theme.colors.brand.primary};
+      color: ${p => p.theme.colors.primary};
+    }
+  }
+  .comment__dropdown--item {
+    cursor: pointer;
+    padding: 10px 15px;
+    color: ${p => p.theme.colors.gray};
+
+    &:hover {
+      color: ${p => p.theme.colors.primary};
+      background-color: ${p => p.theme.colors.offwhite};
+    }
+  }
+
+  .add-smile-icon {
+    color: ${p => p.theme.colors.gray};
+
+    .fa-smile {
+      margin-right: 0 !important;
+    }
+    .fa-plus {
+      font-size: 10px;
     }
   }
 `;

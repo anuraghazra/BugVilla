@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 import useFetch from 'hooks/useFetch';
-import Loading from 'components/common/Loading';
+import { Illustration, Loading } from '@bug-ui';
 
 import DashboardHeader from 'components/DashboardHeader';
 import BugCard from 'components/BugCard/BugCard';
@@ -26,38 +26,37 @@ const ProfileWrapper = styled.section`
 
 const Profile = () => {
   const { username } = useParams();
-  const { data: userData, isLoading: userLoading, error: userError } = useFetch(
-    `/api/user/${username}`
-  );
-  const { data: bugData, isLoading: bugsLoading, error: bugsError } = useFetch(
+  const [userData, userLoading, userError] = useFetch(`/api/user/${username}`);
+  const [bugData, bugsLoading, bugsError] = useFetch(
     `/api/user/${username}/bugs`
   );
-  const { data: commentsCountData } = useFetch(
-    `/api/user/${username}/comments/count`
-  );
+  const [commentsCountData] = useFetch(`/api/user/${username}/comments/count`);
 
-  const isLoading = userLoading && bugsLoading;
-  const error = userError && bugsError;
+  const isLoading = userLoading || bugsLoading;
+  const error = userError || bugsError;
   const user = userData?.data;
-  const bugs = bugData?.data;
+  const bugs = bugData?.data || [];
   const commentCount = commentsCountData?.data?.counts;
 
-  if (isLoading) return <Loading />;
-  if (error) return <p>Something went wrong while fetching the data</p>;
-
-  return (
-    <ProfileWrapper>
-      <DashboardHeader>
-        <h1>User</h1>
-      </DashboardHeader>
-      {user && (
-        <UserInfo
-          user={user}
-          totalComments={commentCount}
-          totalBugs={bugs && bugs.length}
+  const renderUserInfo = () => {
+    if (isLoading) return <Loading />;
+    if (error) {
+      return (
+        <Illustration
+          type="error"
+          message="Something went wrong while loading the data"
         />
-      )}
-      {bugs && (
+      );
+    }
+    return (
+      <>
+        {user && (
+          <UserInfo
+            user={user}
+            totalComments={commentCount}
+            totalBugs={bugs?.length}
+          />
+        )}
         <section className="user__bugs">
           <h3>Bugs issued by {username}</h3>
           <br />
@@ -82,13 +81,22 @@ const Profile = () => {
               ))}
             </Masonry>
           ) : (
-            <h3>
-              <span className="color--gray">@{username}</span> did not issued
-              any bugs yet!
-            </h3>
+            <Illustration
+              type="empty"
+              message={`No bugs issued by ${username}`}
+            />
           )}
         </section>
-      )}
+      </>
+    );
+  };
+
+  return (
+    <ProfileWrapper>
+      <DashboardHeader>
+        <h1>User</h1>
+      </DashboardHeader>
+      {renderUserInfo()}
     </ProfileWrapper>
   );
 };

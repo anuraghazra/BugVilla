@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { AuthorProps } from './SingleBug';
 import { formatDate } from 'utils';
+import { Flex, Avatar, CircleIcon } from '@bug-ui';
 
-import Flex from 'components/common/Flex';
-import StatusIcon from 'components/common/StatusIcon';
-import Avatar from 'components/Avatar/Avatar';
+import { AuthorProps } from './SingleBug';
 import { StyledMetaInfo } from 'components/BugCard/BugCard.style';
 
 interface MetaProps {
@@ -25,18 +23,21 @@ const MetaInfo: React.FC<MetaProps> = ({
   showAvatar
 }) => (
   <StyledMetaInfo>
-    <Flex align="center" nowrap>
-      <StatusIcon isOpen={isOpen} />
+    <Flex gap="medium" align="center" nowrap>
+      <CircleIcon
+        size="30px"
+        variant={isOpen ? 'success' : 'danger'}
+        icon={isOpen ? 'exclamation' : 'ban'}
+      />
       {showAvatar && (
         <Avatar
-          style={{ marginLeft: 15 }}
           width="30px"
           height="30px"
           size={45}
           username={author.username}
         />
       )}
-      <span className="ml-15">
+      <span>
         {isOpen ? 'Opened' : 'Closed'} by
         <Link className="text--medium" to={`/profiles/${author.username}`}>
           &nbsp;{author.name}&nbsp;

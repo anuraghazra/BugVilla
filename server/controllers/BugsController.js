@@ -1,7 +1,8 @@
 /// <reference path="./mytypes.d.ts" />
 const Joi = require('@hapi/joi');
 const { Bug, validateBug, validateLabel, validateReferences } = require('../models/bugModel');
-
+const { Notification } = require('../models/notificationModel')
+const { NOTIFY_TYPES } = require('../constants')
 
 /**
  * @route GET /api/bugs/
@@ -46,8 +47,14 @@ exports.getSuggestions = async (req, res) => {
  */
 exports.getBugByNumber = async (req, res) => {
   try {
-    let bug = await Bug.findOne({ bugId: req.params.bugId });
-    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+    let bug = await Bug.findOne({ bugId: req.params.bugId }).populate(
+      'reactions.users',
+      'name username'
+    ).populate(
+      'comments.reactions.users',
+      'name username'
+    );
+    if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` })
 
     res.ok({ data: bug });
   } catch (err) {
@@ -83,6 +90,15 @@ exports.createBug = async (req, res) => {
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let bug = new Bug({ ...value, author: authorDetails });
     const newBug = await bug.save();
+
+    // send notifications
+    let notification = new Notification({
+      type: NOTIFY_TYPES.NEW_BUG,
+      byUser: req.user.id,
+      onBug: newBug._id,
+      notificationTo: [],
+    });
+    await notification.save();
 
     res.created({ data: newBug });
   } catch (err) {
@@ -120,7 +136,7 @@ exports.updateBug = async (req, res) => {
     );
     if (!bug) return res.notFound({ error: `Can not update Bug#${req.params.bugId}` });
 
-    res.ok({ data: bug });
+    res.ok({ data: bug.body });
   } catch (err) {
     console.error(err)
     res.internalError({
@@ -149,9 +165,19 @@ exports.toggleBugOpenClose = ({ state }) => {
           },
           isOpen: state,
         },
-        { new: true }
+        { new: true, runValidators: true }
       );
       if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+      // send notifications
+      let notification = new Notification({
+        type: NOTIFY_TYPES.BUG_STATUS,
+        byUser: req.user.id,
+        onBug: bug._id,
+        bug_status: state ? 'opened' : 'closed',
+        notificationTo: [],
+      });
+      await notification.save();
 
       res.ok({ data: bug.activities });
     } catch (err) {
@@ -222,6 +248,23 @@ exports.addReferences = async (req, res) => {
     )
     if (!updated) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
+    // get the _id for the param.bugId to use it in Notification ref
+    let bug = await Bug.findOne({ bugId: req.params.bugId });
+    // get all `_id`s for `notification.references` 
+    let referencedIds = await Bug.find({
+      bugId: {
+        $in: [...value.references]
+      }
+    }).select('_id');
+    // send notifications
+    let notification = new Notification({
+      type: NOTIFY_TYPES.REFERENCED,
+      byUser: req.user.id,
+      fromBug: bug._id,
+      references: referencedIds.map(v => v._id),
+      notificationTo: [],
+    });
+    await notification.save();
 
     res.ok({ data: { modified: updated.nModified } });
   } catch (err) {
@@ -278,6 +321,194 @@ exports.deleteLabel = async (req, res) => {
   } catch (err) {
     res.internalError({
       error: `Something went wrong while deleting label`,
+    })
+  }
+}
+
+
+/**
+ * @route PATCH /api/bugs/:bugId/reactions
+ * @description PATCH toggle a reaction from specified bugId & reaction name
+ * @type RequestHandler
+ */
+exports.addOrRemoveReaction = async (req, res) => {
+  const { error, value } = Joi.object({
+    emoji: Joi.string().required()
+  }).validate(req.body);
+  if (error) {
+    return res.unprocessable({ error: error.details[0].message })
+  }
+
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let bug = await Bug.findOne({ bugId: req.params.bugId });
+
+    const userId = req.user.id.toString();
+    // find the index of matching user & emoji pair
+    const index = bug.reactions.findIndex((reaction) => {
+      const isSameReaction = reaction.emoji === value.emoji
+      const isSameId = reaction.users.includes(userId);
+      return (isSameId && isSameReaction);
+    });
+    let reactions = bug.reactions[parseInt(index)];
+
+    if (index > -1) {
+      // findIndex of user to remove it from the users list
+      const indexOfUser = reactions.users.indexOf(userId)
+      reactions.users.splice(indexOfUser, 1);
+      // if users list is empty then remove the entire reaction
+      if (reactions.users.length < 1) {
+        bug.reactions.splice(index, 1);
+      }
+    } else {
+      const emojiIndex = bug.reactions.findIndex(r => r.emoji === value.emoji);
+      // if emoji is absent then push it to the reactions list
+      // else push the userId to the users list
+      emojiIndex === -1
+        ? bug.reactions.push({ emoji: value.emoji, users: [req.user.id] })
+        : bug.reactions[parseInt(emojiIndex)].users.push(req.user.id)
+    }
+
+    const newBug = await bug
+      .save()
+      .then(t =>
+        t.populate('reactions.users', 'name username').execPopulate()
+      );
+    if (!newBug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
+
+    res.ok({ data: newBug.reactions });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while adding new reaction`,
+    })
+  }
+}
+
+/**
+ * @route GET /api/bugs/:bugId/reactions
+ * @description GET get all reactions
+ * @type RequestHandler
+ */
+exports.getReactions = async (req, res) => {
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let bug = await Bug.findOne({ bugId: req.params.bugId })
+      .select('reactions')
+      .populate('reactions.user', 'name username')
+
+    res.ok({ data: bug.reactions });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while adding new reaction`,
+    })
+  }
+}
+
+/**
+ * @unused
+ * @route GET /api/bugs/:bugId/reactions/byuser
+ * @description GET get all reactions and group them by userids
+ * (this function is not in use)
+ * @type RequestHandler
+ */
+exports.getReactionsByUsers = async (req, res) => {
+  try {
+    // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
+    let data = await Bug.aggregate([
+      { $match: { 'comments.author.username': req.params.username } },
+      { $unwind: '$comments' },
+      { $match: { 'comments.author.username': req.params.username } },
+      { $project: { reactions: '$comments.reactions' } },
+      { $unwind: '$reactions' },
+
+      { $group: { _id: '$reactions.emoji', emojis: { $push: '$reactions.user' } } }
+    ])
+
+    res.ok({ data: data });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong`,
+    })
+  }
+}
+
+/**
+ * @deprecated
+ * @route GET /api/bugs/:bugId/timeline
+ * @description GET timeline api
+ * @type RequestHandler
+ */
+exports.getTimeline = async (req, res) => {
+  // https://stackoverflow.com/a/41878683/10629172
+  // https://stackoverflow.com/q/25497150/10629172
+  try {
+    let data = await Bug.aggregate([
+      // needs to be a number otherwise it wont check
+      { $match: { bugId: + req.params.bugId } },
+      // concat the arrays
+      { $project: { timeline: { $concatArrays: ["$activities", "$references"] } } },
+      // unwind the timeline array
+      {
+        $unwind: "$timeline",
+      },
+      // sort by date
+      {
+        $sort: { "timeline.date": 1 }
+      },
+      {
+        $project: {
+          // determine if its a reference or an bug_status
+          type: {
+            $cond: { if: { $ifNull: ["$timeline.by", false] }, then: 'referenced', else: 'bug_status' }
+          },
+          action: '$timeline.action',
+          date: '$timeline.date',
+          from: '$timeline.from',
+          author: {
+            $cond: {
+              if: { $ifNull: ["$timeline.by", false] },
+              then: {
+                id: '$timeline.by._id',
+                username: '$timeline.by.username',
+                name: '$timeline.by.name'
+              },
+              else: {
+                id: '$timeline.author._id',
+                username: '$timeline.author.username',
+                name: '$timeline.author.name'
+              }
+            }
+          },
+          // author: {
+          //   id: '$timeline.author._id',
+          //   username: '$timeline.author.username',
+          //   name: '$timeline.author.name'
+          // },
+          'id': '$_id',
+          _id: 0,
+        },
+      },
+      // {
+      //   $group: {
+      //     _id: "$_id",
+      //     author: { $first: 1 },
+      //     action: { $first: 1 },
+      //     date: { $first: 1 },
+      //     by: { $first: 1 },
+      //     from: { $first: 1 },
+      //     timeline: { $push: "$timeline" }
+      //   }
+      // }
+    ]);
+
+    res.ok({ data: data });
+  } catch (err) {
+    console.log(err)
+    res.internalError({
+      error: `Something went wrong while getting timeline data`,
     })
   }
 }

@@ -2,9 +2,13 @@ import styled from 'styled-components';
 
 const SidebarWrapper = styled.aside<{ isOpen?: boolean }>`
   padding: 60px 40px;
-  background-color: ${p => p.theme.colors.common.white};
+  background-color: ${p => p.theme.colors.white};
   border-right: ${p => p.theme.border};
-  
+
+  .sidebar--sticky {
+    position: sticky;
+    top: 0;
+  }
   p {
     margin: 0;
   }
@@ -22,7 +26,7 @@ const SidebarWrapper = styled.aside<{ isOpen?: boolean }>`
     width: 200px;
     height: 100vh;
     z-index: 1;
-    background-color: ${p => p.theme.colors.common.white};
+    background-color: ${p => p.theme.colors.white};
     transition: 0.3s;
 
     a {

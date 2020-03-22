@@ -20,7 +20,12 @@ const SingleBugWrapper = styled.section`
 
   .singlebug__aside {
     margin-bottom: ${p => p.theme.spacings.bottom}px;
-    
+
+    &--sticky {
+      position: sticky;
+      top: ${p => p.theme.spacings.top}px;
+    }
+
     h4 {
       margin: 20px 0;
       margin-bottom: 10px;
@@ -28,17 +33,12 @@ const SingleBugWrapper = styled.section`
     }
 
     .label__header {
+      -webkit-tap-highlight-color: transparent;
       position: relative;
-    }
-    .label__dropdown {
-      position: absolute;
-      top: 30px;
-      left: 0;
-      text-align: center;
+      cursor: pointer;
 
-      @media screen and (${p => p.theme.media.mobile}) {
-        top: 30px;
-        left: 0;
+      &:hover {
+        color: ${p => p.theme.colors.primary};
       }
     }
   }

@@ -1,127 +1,219 @@
-import { Dispatch } from 'redux';
-import { CLEAR_ALL_ERRORS } from './errors';
+import { normalize } from 'normalizr';
+import socket from 'utils/socket';
+import cloneDeep from 'lodash/cloneDeep';
+
 import { ApiAction } from 'store/middlewares/apiMiddleware';
+import { CLEAR_ALL_ERRORS } from './errors';
+import { createAPIAction } from 'store/helpers';
+import { bugSchema } from 'store/schemas';
+import { batch } from 'react-redux';
 
 // action
 export const API = 'API';
 export const CLEAR_BUG_DATA = 'singlebug/CLEAR_BUG_DATA';
-export const FETCH_BUG_REQUEST = 'singlebug/FETCH_BUG_REQUEST';
-export const FETCH_BUG_SUCCESS = 'singlebug/FETCH_BUG_SUCCESS';
-export const FETCH_BUG_FAILURE = 'singlebug/FETCH_BUG_FAILURE';
-
-export const ADD_COMMENT_REQUEST = 'singlebug/ADD_COMMENT_REQUEST';
-export const ADD_COMMENT_SUCCESS = 'singlebug/ADD_COMMENT_SUCCESS';
-export const ADD_COMMENT_FAILURE = 'singlebug/ADD_COMMENT_FAILURE';
-
-export const TOGGLE_BUG_REQUEST = 'singlebug/TOGGLE_BUG_REQUEST';
-export const TOGGLE_BUG_SUCCESS = 'singlebug/TOGGLE_BUG_SUCCESS';
-export const TOGGLE_BUG_FAILURE = 'singlebug/TOGGLE_BUG_FAILURE';
-
-export const EDIT_LABELS_REQUEST = 'singlebug/EDIT_LABELS_REQUEST';
-export const EDIT_LABELS_SUCCESS = 'singlebug/EDIT_LABELS_SUCCESS';
-export const EDIT_LABELS_FAILURE = 'singlebug/EDIT_LABELS_FAILURE';
-
-export const EDIT_COMMENT_REQUEST = 'singlebug/EDIT_COMMENT_REQUEST';
-export const EDIT_COMMENT_SUCCESS = 'singlebug/EDIT_COMMENT_SUCCESS';
-export const EDIT_COMMENT_FAILURE = 'singlebug/EDIT_COMMENT_FAILURE';
-
-export const UPDATE_BUG_REQUEST = 'singlebug/UPDATE_BUG_REQUEST';
-export const UPDATE_BUG_SUCCESS = 'singlebug/UPDATE_BUG_SUCCESS';
-export const UPDATE_BUG_FAILURE = 'singlebug/UPDATE_BUG_FAILURE';
-
-export const UPDATE_LABEL_CHECKBOX = 'singlebug/UPDATE_LABEL_CHECKBOX';
-export const CLEAR_LABEL_CHECKBOX = 'singlebug/CLEAR_LABEL_CHECKBOX';
+export const FETCH_BUG = createAPIAction('singlebug/FETCH_BUG');
+export const TOGGLE_BUG = createAPIAction('singlebug/TOGGLE_BUG');
+export const EDIT_LABELS = createAPIAction('singlebug/EDIT_LABELS');
+export const UPDATE_BUG = createAPIAction('singlebug/UPDATE_BUG');
+export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
+export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
+export const UPDATE_BUG_REACTIONS = createAPIAction('singlebug/UPDATE_BUG_REACTIONS');
+export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
+export const COMMENT_REACTIONS_OPTIMISTIC = 'singlebug/COMMENT_REACTIONS_OPTIMISTIC';
 
 
 export interface SinglebugReducerState {
-  bug: any,
+  entities: {
+    comments: {
+      [x: string]: any
+    }
+  },
+  result: {
+    activities: any[];
+    body: string;
+    title: string;
+    bugId: number;
+    labels: any[];
+    comments: string[];
+    reactions: any[];
+    references: any[];
+    date_opened: string;
+    author: any;
+    [x: string]: any
+  }
 }
-
 const DEFAULT_STATE: SinglebugReducerState = {
-  bug: null,
+  entities: {
+    comments: {}
+  },
+  result: {
+    activities: [],
+    body: '',
+    title: '',
+    bugId: 0,
+    labels: [],
+    comments: [],
+    reactions: [],
+    references: [],
+    date_opened: '',
+    author: { username: '' },
+  }
 }
 
-// reducers
+// saving the payload of OPTIMISTIC Reaction update
+// for handling fallback
+let selectedReaction: { emoji: string; userData: any } | null = null
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
-    case FETCH_BUG_SUCCESS:
-      return { ...state, bug: action.payload }
-    case ADD_COMMENT_SUCCESS:
+    case FETCH_BUG.SUCCESS:
       return {
         ...state,
-        bug: {
-          ...state.bug,
-          comments: action.payload
+        ...action.payload
+      };
+    //  return { ...state, entities: merge({}, state.entities, action.payload.entities) }
+    case EDIT_COMMENT.SUCCESS:
+    case ADD_COMMENT.SUCCESS:
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          comments: {
+            ...state.entities.comments,
+            [action.payload.id]: {
+              ...action.payload
+            }
+          }
         }
       }
-    case EDIT_COMMENT_SUCCESS:
+    case COMMENT_REACTIONS_OPTIMISTIC:
+    case UPDATE_COMMENT_REACTIONS.FAILURE:
+      if (action.type === COMMENT_REACTIONS_OPTIMISTIC) {
+        selectedReaction = action.payload
+        console.log(selectedReaction)
+      }
+      let { emoji, userData } = action.payload;
+      let comment = toggleCommentReaction(
+        state.entities.comments[action.payload.commentId],
+        { emoji, userData }
+      );
+
       return {
         ...state,
-        bug: {
-          ...state.bug,
-          comments: action.payload
+        entities: {
+          ...state.entities,
+          comments: {
+            ...state.entities.comments,
+            [action.payload.commentId]: {
+              ...comment
+            }
+          }
         }
       }
-    case UPDATE_BUG_SUCCESS:
+    case UPDATE_BUG.SUCCESS:
       return {
         ...state,
-        bug: {
-          ...state.bug,
-          body: action.payload.body
-        }
+        result: { ...state.result, body: action.payload }
       }
-    case TOGGLE_BUG_SUCCESS:
+    case UPDATE_BUG_REACTIONS.SUCCESS:
       return {
         ...state,
-        bug: {
-          ...state.bug,
+        result: { ...state.result, reactions: action.payload }
+      }
+    case EDIT_LABELS.SUCCESS:
+      return {
+        ...state,
+        result: { ...state.result, labels: action.payload }
+      }
+    case TOGGLE_BUG.SUCCESS:
+      return {
+        ...state,
+        result: {
+          ...state.result,
           activities: action.payload.data,
           isOpen: action.payload.bug_state === 'open' ? true : false
         }
       }
-    case EDIT_LABELS_SUCCESS:
-      return {
-        ...state,
-        bug: {
-          ...state.bug,
-          labels: action.payload
-        }
-      }
     case CLEAR_BUG_DATA:
-      return { ...state, bug: null }
+      return {}
     default:
+      // if (action?.payload?.entities?.comments) {
+      //   return merge({}, state, action?.payload?.entities?.comments);
+      // }
       return state;
   }
 }
-
 export default reducer;
 
-// action creators
-const errorAction = (action: string, payload: any) => ({
-  type: action,
-  payload: payload || 'Something went wrong'
-});
-
-// export const updateLabelCheckbox = (data: string[] | unknown) => {
-//   return { type: UPDATE_LABEL_CHECKBOX, payload: data };
-// };
-
 // side effects
+
+/**
+ * @description optimistic update of reactions
+ */
+const toggleCommentReaction = (
+  inputComment: any,
+  payload: { emoji: string; userData: any }
+) => {
+  let comment = cloneDeep(inputComment);
+  if (comment.reactions.length < 1) {
+    comment.reactions.push({
+      emoji: payload.emoji,
+      users: [payload.userData]
+    });
+    return comment;
+  }
+  comment.reactions.forEach((react: any, index: number) => {
+    let isEmojiPresent = comment.reactions.some(
+      (e: any) => e.emoji === payload.emoji
+    );
+    if (!isEmojiPresent) {
+      comment.reactions.push({
+        emoji: payload.emoji,
+        users: [payload.userData]
+      });
+    }
+    // emoji mismatch
+    if (react.emoji !== payload.emoji) return;
+    let indexOfUser = react.users.findIndex((u: any) =>
+      u.username === payload.userData.username
+    );
+
+    if (indexOfUser > -1) {
+      react.users.splice(indexOfUser, 1)
+    } else {
+      react.emoji = payload.emoji;
+      react.users = [payload.userData];
+    }
+
+    // if users array is empty remove the reaction from list
+    if (react.users.length < 1) comment.reactions.splice(index, 1);
+  });
+  return comment;
+};
+
 export const fetchBugWithId = (bugId: number | string): ApiAction => ({
   type: API,
   payload: {
     method: 'GET',
     url: `/api/bugs/${bugId}`,
-    request: (dispatch: any) => {
+  },
+  onRequest: (dispatch: any) => {
+    batch(() => {
       dispatch({ type: CLEAR_ALL_ERRORS });
       dispatch({ type: CLEAR_BUG_DATA });
-      dispatch({ type: FETCH_BUG_REQUEST });
-    },
-    success: FETCH_BUG_SUCCESS,
-    error: FETCH_BUG_FAILURE
-  }
+      dispatch({ type: FETCH_BUG.REQUEST });
+    })
+  },
+  onSuccess: (dispatch: any, data) => {
+    dispatch({
+      type: FETCH_BUG.SUCCESS,
+      payload: normalize(data, bugSchema)
+    })
+  },
+  onFailure: FETCH_BUG.FAILURE
 });
 
+
+//#region 
 export const addComment = (
   bugId: number | string,
   formData: { body: string }
@@ -131,10 +223,13 @@ export const addComment = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/comments`,
     formData: formData,
-    request: ADD_COMMENT_REQUEST,
-    success: ADD_COMMENT_SUCCESS,
-    error: ADD_COMMENT_FAILURE
-  }
+  },
+  onRequest: ADD_COMMENT.REQUEST,
+  onSuccess: (dispatch, data) => {
+    dispatch({ type: ADD_COMMENT.SUCCESS, payload: data });
+    socket.emit('send-notification', { message: 'Add comment' })
+  },
+  onFailure: ADD_COMMENT.FAILURE
 });
 
 export const editComment = (
@@ -147,10 +242,13 @@ export const editComment = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/comments/${commentId}`,
     formData: formData,
-    request: EDIT_COMMENT_REQUEST,
-    success: EDIT_COMMENT_SUCCESS,
-    error: EDIT_COMMENT_FAILURE
-  }
+  },
+  onRequest: EDIT_COMMENT.REQUEST,
+  onSuccess: (dispatch, data) => {
+    dispatch({ type: EDIT_COMMENT.SUCCESS, payload: data });
+    socket.emit('send-notification', { message: 'Add comment' })
+  },
+  onFailure: EDIT_COMMENT.FAILURE
 });
 
 export const updateBug = (
@@ -162,10 +260,10 @@ export const updateBug = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}`,
     formData: formData,
-    request: UPDATE_BUG_REQUEST,
-    success: UPDATE_BUG_SUCCESS,
-    error: UPDATE_BUG_FAILURE
-  }
+  },
+  onRequest: UPDATE_BUG.REQUEST,
+  onSuccess: UPDATE_BUG.SUCCESS,
+  onFailure: UPDATE_BUG.FAILURE
 });
 
 export const openOrCloseBug = (
@@ -176,15 +274,16 @@ export const openOrCloseBug = (
   payload: {
     method: 'PATCH',
     url: `/api/bugs/${bugId}/${state}`,
-    request: TOGGLE_BUG_REQUEST,
-    success: (dispatch: Dispatch, data: any) => {
-      dispatch({
-        type: TOGGLE_BUG_SUCCESS,
-        payload: { data, bug_state: state },
-      });
-    },
-    error: TOGGLE_BUG_FAILURE
-  }
+  },
+  onRequest: TOGGLE_BUG.REQUEST,
+  onSuccess: (dispatch, data) => {
+    dispatch({
+      type: TOGGLE_BUG.SUCCESS,
+      payload: { data, bug_state: state },
+    });
+    socket.emit('send-notification', { message: 'Bug Open/Closed' })
+  },
+  onFailure: TOGGLE_BUG.FAILURE
 });
 
 export const editLabels = (
@@ -196,27 +295,77 @@ export const editLabels = (
     method: 'PATCH',
     url: `/api/bugs/${bugId}/labels`,
     formData: { labels: labelData },
-    request: EDIT_LABELS_REQUEST,
-    success: (dispatch: Dispatch, data: any) => {
-      dispatch({ type: EDIT_LABELS_SUCCESS, payload: data });
-    },
-    error: (dispatch: Dispatch, err: string) => {
-      dispatch(errorAction(EDIT_LABELS_FAILURE, err));
-    }
-  }
+  },
+  onRequest: EDIT_LABELS.REQUEST,
+  onSuccess: (dispatch, data) => {
+    dispatch({ type: EDIT_LABELS.SUCCESS, payload: data });
+  },
+  onFailure: EDIT_LABELS.FAILURE
 });
 
 export const addReferences = (
   bugId: number | string,
-  references: number[]
+  references: string[]
 ): ApiAction => ({
   type: API,
   payload: {
     method: 'PATCH',
     url: `/api/bugs/${bugId}/references`,
     formData: { references },
-    request: () => { },
-    success: () => { },
-    error: () => { },
-  }
+  },
+  onSuccess: () => {
+    socket.emit('send-notification', { message: 'Bugs Referenced' })
+  },
 });
+
+export const mentionPeople = (
+  bugId: number | string,
+  mentions: string[]
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: `/api/notifications/mentions/${bugId}`,
+    formData: { mentions },
+  },
+  onSuccess: () => {
+    socket.emit('send-notification', { message: 'Users Mentioned' })
+  },
+});
+
+// add or remove reactions from bug (bug.body)
+export const addOrRemoveReacts = (
+  bugId: number | string,
+  emoji: string
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/reactions`,
+    formData: { emoji },
+  },
+  onSuccess: UPDATE_BUG_REACTIONS.SUCCESS,
+  onFailure: UPDATE_BUG_REACTIONS.FAILURE,
+});
+
+// add or remove reactions from comments
+export const addOrRemoveReactsComment = (
+  bugId: number | string,
+  commentId: string,
+  emoji: string
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/bugs/${bugId}/comments/${commentId}/reactions`,
+    formData: { emoji },
+  },
+  onSuccess: (dispatch, data: any) => {
+    dispatch({ type: UPDATE_COMMENT_REACTIONS.SUCCESS, payload: data });
+  },
+  onFailure: (dispatch) => {
+    // on failure remove the reaction
+    dispatch({ type: UPDATE_COMMENT_REACTIONS.FAILURE, payload: selectedReaction });
+  },
+});
+//#endregion

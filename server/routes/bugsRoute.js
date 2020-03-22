@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const verify = require('../middleware/verify')
 const rateLimit = require('express-rate-limit');
 const BugsController = require('../controllers/BugsController')
 
@@ -9,17 +8,21 @@ const bugOpenCloseLimiter = rateLimit({
   message: { error: "Hey stop that. don't try to break it." }
 });
 
-router.get('/suggestions', verify, BugsController.getSuggestions)
-router.get('/', verify, BugsController.getBugs)
+router.get('/suggestions', BugsController.getSuggestions)
+router.get('/', BugsController.getBugs)
 router.get('/:bugId', BugsController.getBugByNumber)
-router.post('/', verify, BugsController.createBug)
+router.post('/', BugsController.createBug)
 
-router.patch('/:bugId', verify, BugsController.updateBug)
-router.patch('/:bugId/references', verify, BugsController.addReferences)
-router.patch('/:bugId/close', verify, bugOpenCloseLimiter, BugsController.toggleBugOpenClose({ state: false }))
-router.patch('/:bugId/open', verify, BugsController.toggleBugOpenClose({ state: true }))
+router.patch('/:bugId', BugsController.updateBug)
+router.patch('/:bugId/references', BugsController.addReferences)
+router.patch('/:bugId/close', bugOpenCloseLimiter, BugsController.toggleBugOpenClose({ state: false }))
+router.patch('/:bugId/open', BugsController.toggleBugOpenClose({ state: true }))
 
-router.patch('/:bugId/labels', verify, BugsController.updateLabels)
+router.patch('/:bugId/labels', BugsController.updateLabels)
+router.get('/:bugId/reactions', BugsController.getReactions)
+router.patch('/:bugId/reactions', BugsController.addOrRemoveReaction)
+router.get('/:bugId/reactions/:username', BugsController.getReactionsByUsers)
+router.get('/:bugId/timeline', BugsController.getTimeline)
 // router.delete('/:bugId/labels/:name', verify, BugsController.deleteLabel)
 
 module.exports = router;

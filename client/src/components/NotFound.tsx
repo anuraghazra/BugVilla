@@ -1,5 +1,6 @@
 import React from 'react';
+import { Illustration } from '@bug-ui';
 
-const NotFound = () => <p>404</p>;
+const NotFound = () => <Illustration type="not-found" />;
 
 export default NotFound;

@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 const StyledEditor = styled.div`
   padding: 20px;
-  border: 1px solid ${p => p.theme.colors.common.offwhite};
+  background-color: ${p => p.theme.colors.white};
+  border: 1px solid ${p => p.theme.colors.offwhite};
   border-radius: 10px;
   overflow: auto;
 
@@ -11,21 +12,21 @@ const StyledEditor = styled.div`
   }
 
   .editor__tabpanel {
-    border-radius: 5px;
     width: 100%;
     min-height: 250px;
-    color: ${p => p.theme.colors.text.black};
+    border-radius: 5px;
     padding: 20px;
+    color: ${p => p.theme.colors.black};
 
     textarea {
-      padding: 20px;
-      border: 1px solid ${p => p.theme.colors.common.offwhite};
-      min-height: 250px;
-      resize: vertical;
       width: 100%;
       height: 100%;
+      min-height: 250px;
+      padding: 20px;
+      border: 1px solid ${p => p.theme.colors.offwhite};
+      resize: vertical;
       &::placeholder {
-        color: ${p => p.theme.colors.text.gray};
+        color: ${p => p.theme.colors.gray};
       }
     }
   }
@@ -40,12 +41,12 @@ const StyledEditor = styled.div`
   }
 
   .react-tabs__tab {
-    background-color: ${p => p.theme.colors.common.white};
+    background-color: ${p => p.theme.colors.white};
     border: none;
-    border-bottom: 3px solid ${p => p.theme.colors.brand.accent};
+    border-bottom: 3px solid ${p => p.theme.colors.accent};
   }
   .react-tabs__tab--selected {
-    border-bottom: 3px solid ${p => p.theme.colors.brand.primary};
+    border-bottom: 3px solid ${p => p.theme.colors.primary};
   }
 
   @media screen and (${p => p.theme.media.tablet}) {
@@ -63,11 +64,11 @@ export const StyledMentionList = styled.div`
     transform: translateY(30px);
     border-radius: 5px;
   }
-  
+
   .editor__tabpanel__suggestions__list {
     width: fit-content;
     padding: 15px;
-    background-color: ${p => p.theme.colors.common.white};
+    background-color: ${p => p.theme.colors.white};
     border-radius: 5px;
     border: ${p => p.theme.border};
     overflow: hidden;
@@ -81,8 +82,8 @@ export const StyledMentionList = styled.div`
     cursor: pointer;
     border: 1px solid transparent;
     &:hover {
-      color: ${p => p.theme.colors.common.white};
-      background-color: ${p => p.theme.colors.brand.primary};
+      color: ${p => p.theme.colors.white};
+      background-color: ${p => p.theme.colors.primary};
     }
   }
   .editor__tabpanel__suggestions__item__highlight {

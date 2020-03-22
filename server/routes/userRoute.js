@@ -1,18 +1,33 @@
 const router = require("express").Router();
-const verify = require('../middleware/verify')
+const passport = require('passport');
+
 const UserController = require('../controllers/UserController');
 const upload = require('../middleware/fileUpload');
 let avatarUpload = upload.single('image');
 
-router.get('/', verify, UserController.getAllUsers);
-router.get('/me', verify, UserController.getCurrent);
-router.get('/verify', verify, UserController.verifyUser);
+const generateUserToken = require('../middleware/generateToken')
+const passportJWT = passport.authenticate('jwt', { session: false });
+const passportGoogle = passport.authenticate('google', {
+  session: false,
+});
+
+router.get('/auth/google', passport.authenticate('google', { session: false, scope: ['profile', 'email'] }));
+router.get('/auth/google/callback', passportGoogle, generateUserToken);
+
+
+router.get('/', passportJWT, UserController.getAllUsers);
+router.patch('/pick', passportJWT, UserController.getMultipleByIds);
+router.get('/me', passportJWT, UserController.getCurrent);
+router.patch('/me/bio', passportJWT, UserController.updateBio);
+router.post('/check-auth', passportJWT, UserController.checkAuth);
 router.post('/signup', avatarUpload, UserController.signup);
 router.post("/login", UserController.login);
-router.get('/:username', UserController.getByUsername);
-router.get('/:username/comments', UserController.getCommentsByUser);
-router.get('/:username/comments/count', UserController.getCommentsCountByUser);
-router.get('/:username/bugs', UserController.getBugsByUser);
-
+router.get("/logout", passportJWT, UserController.logout);
+router.get("/verify-email", passportJWT, UserController.verifyEmail);
+router.get('/:username', passportJWT, UserController.getByUsername);
+router.get('/:username/comments', passportJWT, UserController.getCommentsByUser);
+router.get('/:username/reactions/count', passportJWT, UserController.getCollectedReactionsCount);
+router.get('/:username/comments/count', passportJWT, UserController.getCommentsCountByUser);
+router.get('/:username/bugs', passportJWT, UserController.getBugsByUser);
 
 module.exports = router;

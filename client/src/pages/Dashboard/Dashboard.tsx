@@ -1,19 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Bugs from 'pages/Bugs/Bugs';
-import Navbar from 'components/Navbar/Navbar';
-import Sidebar from 'components/Sidebar/Sidebar';
-
 import { DashboardWrapper, DashboardBody } from './Dashboard.style';
+
 import AuthRoute from 'components/AuthRoute';
 import AddBug from 'components/AddBug/AddBug';
-import SingleBug from 'pages/SingleBug/SingleBug';
+import Navbar from 'components/Navbar/Navbar';
+import NotFound from 'components/NotFound';
+import Sidebar from 'components/Sidebar/Sidebar';
+
+import Bugs from 'pages/Bugs/Bugs';
 import Profile from 'pages/Profile/Profile';
 import Profiles from 'pages/Profiles/Profiles';
-import NotFound from 'components/NotFound';
+import SingleBug from 'pages/SingleBug/SingleBug';
+import Notifications from 'pages/Notifications/Notifications';
 
-const Dashboard: React.FC = () => {
+
+// extracting out the logic to prevent re-render
+const Navigation = React.memo(() => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const handleSidebar = () => {
@@ -27,11 +31,18 @@ const Dashboard: React.FC = () => {
       }
     });
   }, []);
-
   return (
-    <DashboardWrapper>
+    <>
       <Navbar handleSidebar={handleSidebar} />
       <Sidebar isOpen={isSidebarOpen} />
+    </>
+  );
+});
+
+const Dashboard: React.FC = () => {
+  return (
+    <DashboardWrapper>
+      <Navigation />
       <DashboardBody>
         <Switch>
           <AuthRoute exact path="/dashboard/bugs" component={Bugs} />
@@ -43,6 +54,11 @@ const Dashboard: React.FC = () => {
           />
           <AuthRoute exact path="/profiles" component={Profiles} />
           <AuthRoute exact path="/profiles/:username" component={Profile} />
+          <AuthRoute
+            exact
+            path="/dashboard/notifications"
+            component={Notifications}
+          />
           <Route path="/" component={NotFound} />
         </Switch>
       </DashboardBody>

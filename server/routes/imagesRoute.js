@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const verify = require('../middleware/verify')
+const passport = require('passport');
 
-const upload = require('../middleware/fileUpload');
 const { User } = require('../models/userModel');
-const UserImageController = require('../controllers/UserImageController')
+const upload = require('../middleware/fileUpload');
+const UserImageController = require('../controllers/UserImageController');
 
+const passportJWT = passport.authenticate('jwt', { session: false });
 let avatarUpload = upload.single('image');
 
 router.param('username', async (req, res, next) => {
@@ -22,9 +23,9 @@ router.param('username', async (req, res, next) => {
   }
 });
 
-router.get("/me/avatar", verify, UserImageController.getCurrentUserAvatar);
-router.patch("/me/avatar/upload", verify, avatarUpload, UserImageController.uploadProfileImage);
-router.get('/:username/avatar', UserImageController.getAvatarImageByUsername)
-router.get("/:username/avatar/raw", UserImageController.getRawAvatarImageByUsername);
+router.get("/me/avatar", passportJWT, UserImageController.getCurrentUserAvatar);
+router.patch("/me/avatar/upload", passportJWT, avatarUpload, UserImageController.uploadProfileImage);
+router.get('/:username/avatar', passportJWT, UserImageController.getAvatarImageByUsername)
+router.get("/:username/avatar/raw", passportJWT, UserImageController.getRawAvatarImageByUsername);
 
 module.exports = router

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 import { ErrorMessage } from 'react-hook-form';
@@ -6,20 +6,17 @@ import { MentionsInput, Mention } from 'react-mentions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import useFetch from 'hooks/useFetch';
-import Flex from 'components/common/Flex';
-import Avatar from 'components/Avatar/Avatar';
-import { InputWrapper } from 'components/common/Form/Input';
+import { Avatar, Flex } from '@bug-ui';
+import { InputWrapper } from '@bug-ui/Form';
 
 import CodeBlock from './CodeBlock';
-import MentionPlugin from './MentionPlugin';
 import { StyledMentionList } from './Editor.style';
 import { StoreState } from 'store';
-import { htmlDecode } from 'utils';
+import { renderMarkdown, htmlDecode } from 'utils';
+import useSuggestion from './useSuggestion';
 
 const MarkdownPlugins = {
-  code: CodeBlock,
-  text: MentionPlugin
+  code: CodeBlock
 };
 
 interface EditorProps {
@@ -28,28 +25,6 @@ interface EditorProps {
   errors?: any;
   handleMarkdown?: (e: any) => void;
 }
-
-const useSuggestion = (url: string, prop: string[]) => {
-  const { data: suggestions } = useFetch(url, { cache: true });
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    if (suggestions) {
-      const isBug = prop[1] === 'bugId';
-      const suggestionsArray = suggestions.data.map((suggestions: any) => {
-        let display = suggestions[prop[0]];
-        if (isBug) {
-          // if it's a bug then append the #1 (bugId) to the display
-          display = suggestions[prop[0]] + ' #' + suggestions[prop[1]];
-        }
-        return { display, id: suggestions[prop[1]] };
-      });
-      setData(suggestionsArray);
-    }
-  }, [suggestions]);
-
-  return data;
-};
 
 const Editor: React.FC<EditorProps> = ({
   markdown,
@@ -110,7 +85,7 @@ const Editor: React.FC<EditorProps> = ({
           <ReactMarkdown
             escapeHtml={true}
             className="editor__tabpanel markdown-preview"
-            source={htmlDecode(markdown)}
+            source={renderMarkdown(markdown)}
             renderers={MarkdownPlugins}
           />
         </TabPanel>
@@ -128,4 +103,4 @@ const Editor: React.FC<EditorProps> = ({
   );
 };
 
-export default Editor;
+export default React.memo(Editor);
