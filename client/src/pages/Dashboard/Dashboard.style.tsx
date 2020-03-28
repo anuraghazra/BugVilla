@@ -11,6 +11,7 @@ export const DashboardWrapper = styled.section`
 
 export const DashboardBody = styled.section`
   position: relative;
+  min-height: 100vh;
   padding: 40px;
 
   @media screen and (${p => p.theme.media.tablet}) {
