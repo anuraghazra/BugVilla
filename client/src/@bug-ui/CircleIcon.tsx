@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { VariantTypes } from './colorVariants';
 
-type variant = 'primary' | 'success' | 'danger' | 'secondary';
 interface StyledCircleProps {
-  variant: variant;
+  variant: VariantTypes;
   size?: string | undefined;
 }
 export const StyledCircleIcon = styled.div<StyledCircleProps>`
@@ -21,7 +21,7 @@ export const StyledCircleIcon = styled.div<StyledCircleProps>`
 `;
 
 interface CircleIconProps {
-  variant?: variant;
+  variant?: VariantTypes;
   icon: any;
   size?: string;
   [x: string]: any;

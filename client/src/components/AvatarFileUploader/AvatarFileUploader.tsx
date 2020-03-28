@@ -9,7 +9,7 @@ interface PreviewFile extends File {
 }
 interface Props {
   name?: string;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: (ref: HTMLInputElement) => void;
   file?: PreviewFile;
   defaultImg?: any;
   handleFile: (file: PreviewFile) => void;

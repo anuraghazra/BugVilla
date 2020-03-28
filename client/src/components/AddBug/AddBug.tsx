@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
+import { useForm, FormContextValues, OnSubmit } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
 import { Input, StyledH3Input } from '@bug-ui/Form';
@@ -26,7 +26,7 @@ const AddBug: React.FC = () => {
     watch,
     reset,
     setValue
-  }: any = useForm({
+  }: FormContextValues<Record<string, any>> = useForm({
     validationSchema: AddBugSchema
   });
   const markdown = watch('body');
@@ -55,7 +55,7 @@ const AddBug: React.FC = () => {
         <h1>Submit new bug</h1>
       </DashboardHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit as any)}>
         <StyledEditor>
           <StyledH3Input className="bug__edit-title">
             <Input

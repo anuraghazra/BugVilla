@@ -1,9 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
+
+import Flex from './Flex';
+import { VariantTypes } from './colorVariants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface StyledButtonProps {
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
+  variant?: VariantTypes;
   size?: 'small' | 'medium';
   width?: string;
 }
@@ -86,17 +89,14 @@ export const Button: React.FC<ButtonProps> = ({
   </StyledButton>
 );
 
-export const ButtonGroup = styled.div<{ float?: string }>`
-  float: ${p => p.float || 'initial'};
+const ButtonGroupFloat: any = {
+  left: `margin-right: auto;`,
+  right: `margin-left: auto;`
+};
+export const ButtonGroup = styled(Flex)<{ float?: string }>`
+  width: fit-content;
 
-  > button {
-    margin-right: 10px !important;
-  }
-  @media screen and (${p => p.theme.media.mobile}) {
-    > button {
-      float: right;
-    }
-  }
+  ${p => ButtonGroupFloat[p.float || 'right']}
 `;
 
 export default Button;
