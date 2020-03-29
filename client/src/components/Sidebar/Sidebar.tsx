@@ -51,13 +51,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             <IconLink isNav icon="user" to="/profiles">
               Profiles
             </IconLink>
-            <IconLink isNav icon="times" to="/dashboard/notifications">
+            <IconLink isNav icon="bell" to="/dashboard/notifications">
               Notifications
             </IconLink>
             <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
               Closed
             </IconLink>
-            <IconLink isNav icon="door-open" to="#" onClick={logout}>
+            <IconLink isNav icon="sign-out-alt" to="#" onClick={logout}>
               Logout
             </IconLink>
           </Flex>

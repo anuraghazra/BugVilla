@@ -7,6 +7,7 @@ import {
 import {
   faArrowRight,
   faAt,
+  faBell,
   faBan,
   faBars,
   faBug,
@@ -28,6 +29,7 @@ import {
   faPlus,
   faRetweet,
   faSpinner,
+  faSignOutAlt,
   faTag,
   faTimes,
   faUser,
@@ -40,6 +42,7 @@ export default function registerIcons() {
     faArrowRight,
     faAt,
     faBan,
+    faBell,
     faBars,
     faBug,
     faCheck,
@@ -65,6 +68,7 @@ export default function registerIcons() {
     faPlus,
     faRetweet,
     faSpinner,
+    faSignOutAlt,
     faTag,
     faTimes,
     faUser
