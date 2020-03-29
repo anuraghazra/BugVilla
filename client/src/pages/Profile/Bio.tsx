@@ -68,7 +68,7 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
         {!isBioEditing && (isCurrentUser ? currentUser.bio : user.bio)}
       </p>
       {isCurrentUser && (
-        <ButtonGroup>
+        <ButtonGroup gap="medium">
           <Button
             className="edit__button"
             size="small"

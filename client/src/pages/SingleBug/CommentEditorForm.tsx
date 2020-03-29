@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, FormContextValues } from 'react-hook-form';
 
 import { getRefsOrMentions } from 'utils';
 import { Button, ButtonGroup, toast } from '@bug-ui';
@@ -27,7 +27,9 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     register,
     handleSubmit,
     errors: formErrors
-  }: any = useForm({ validationSchema: addCommentSchema });
+  }: FormContextValues<Record<string, any>> = useForm({
+    validationSchema: addCommentSchema
+  });
 
   const markdown = watch('body');
   const handleMarkdown = (e: any) => {
@@ -62,7 +64,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
   toggleError && toast.error(toggleError);
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit as any)}>
         <StyledEditor>
           <Editor
             markdown={markdown}
@@ -70,7 +72,7 @@ const CommentEditorForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
             errors={formErrors}
             inputRef={register}
           />
-          <ButtonGroup className="bug__button">
+          <ButtonGroup gap="medium">
             <CloseReopenButton
               isOpen={bugIsOpen}
               isLoading={isToggleLoading}

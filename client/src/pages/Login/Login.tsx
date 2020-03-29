@@ -2,7 +2,7 @@ import React from 'react';
 import * as yup from 'yup';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
+import { useForm, FormContextValues } from 'react-hook-form';
 
 import LoginWrapper from '../Signup/Signup.style';
 import { Button, BugVillaLogo, Flex, IconLink, toast } from '@bug-ui';
@@ -46,7 +46,11 @@ const Login: React.FC = () => {
     state.loading['user/LOGIN'],
     state.error['user/LOGIN']
   ]);
-  const { register, handleSubmit, errors }: any = useForm({
+  const {
+    register,
+    handleSubmit,
+    errors
+  }: FormContextValues<Record<string, any>> = useForm({
     validationSchema: LoginSchema,
     mode: 'onChange'
   });
@@ -86,7 +90,7 @@ const Login: React.FC = () => {
         <BugVillaLogo />
         <h2 className="text--bold">Welcome back!</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit as any)}>
           <Input
             name="email"
             type="email"

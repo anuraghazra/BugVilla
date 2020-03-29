@@ -17,6 +17,7 @@ const secondary = css`
   background-color: ${p => p.theme.colors.accent};
 `;
 
+export type VariantTypes = 'primary' | 'success' | 'danger' | 'secondary';
 export const colorVariants: any = {
   danger,
   success,

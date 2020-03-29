@@ -1,5 +1,9 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGoogle,
+  faGithub,
+  faTwitter
+} from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRight,
   faAt,
@@ -51,6 +55,8 @@ export default function registerIcons() {
     faExclamationCircle,
     faExclamationTriangle,
     faGoogle,
+    faGithub,
+    faTwitter,
     faHistory,
     faHome,
     faInfoCircle,

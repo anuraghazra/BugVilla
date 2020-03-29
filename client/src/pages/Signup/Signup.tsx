@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FormContextValues } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import genericAvatar from 'assets/images/avatar-generic.jpg';
 
@@ -16,7 +16,12 @@ import { StoreState } from 'store';
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState<File>();
-  const { register, handleSubmit, errors, watch }: any = useForm({
+  const {
+    register,
+    handleSubmit,
+    errors,
+    watch
+  }: FormContextValues<Record<string, any>> = useForm({
     validationSchema: SignupSchema,
     mode: 'onChange'
   });

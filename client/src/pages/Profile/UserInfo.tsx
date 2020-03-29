@@ -100,7 +100,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         </h2>
         <p>Are you sure you want to change your Profile Picture?</p>
         <br />
-        <ButtonGroup float="right">
+        <ButtonGroup gap="medium">
           <Button
             variant="danger"
             icon="times"

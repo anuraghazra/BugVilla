@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import RM from 'react-markdown';
-import { useForm } from 'react-hook-form';
+import { useForm, FormContextValues } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getRefsOrMentions, renderMarkdown } from 'utils';
@@ -59,7 +59,7 @@ const Comment: React.FC<CommentProps> = ({
     handleSubmit,
     setValue,
     errors: formErrors
-  }: any = useForm({
+  }: FormContextValues<Record<string, any>> = useForm({
     validationSchema: CommentSchema
   });
 
@@ -125,7 +125,7 @@ const Comment: React.FC<CommentProps> = ({
               errors={formErrors}
               inputRef={register}
             />
-            <ButtonGroup float="right">
+            <ButtonGroup gap="medium">
               <Button
                 variant="danger"
                 icon="times"
