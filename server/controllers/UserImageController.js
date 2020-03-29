@@ -1,6 +1,7 @@
 /// <reference path="./mytypes.d.ts" />
 const mongoose = require('mongoose');
 const sharp = require('sharp');
+const request = require('request');
 const { User } = require('../models/userModel');
 const { MemCache } = require('../middleware/cache');
 
