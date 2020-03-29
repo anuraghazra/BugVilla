@@ -6,6 +6,7 @@ const LoginWrapper = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  padding: 30px 0;
 
   .logo {
     width: 100px;

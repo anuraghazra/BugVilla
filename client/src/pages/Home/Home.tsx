@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from 'store';
 import { useHistory } from 'react-router-dom';
 
-import { Flex, IconLink } from '@bug-ui';
+import { Flex } from '@bug-ui';
 import circleShapes from 'assets/svg/circle_shapes.svg';
 
 import HomeWrapper from './Home.style';
@@ -32,9 +32,10 @@ const Home: React.FC<HomeProps> = ({ right: Right }) => {
             <h1 className="text--light">Manage</h1>
             <h1 className="text--light">& Kill Bugs</h1>
             <h1 className="text--bold">Effectively</h1>
-            <IconLink className="color--white" icon="arrow-right" to="/bugs">
+            <span>Universal bug tracker for everyone!</span>
+            {/* <IconLink className="color--white" icon="arrow-right" to="/bugs">
               Wanna see the currenty active bugs?
-            </IconLink>
+            </IconLink> */}
           </div>
         </div>
         <div className="home__right">

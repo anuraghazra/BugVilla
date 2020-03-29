@@ -12,6 +12,7 @@ import SignupSchema from './SignupSchema';
 import SignupWrapper from './Signup.style';
 import { signUserUp } from 'store/ducks/auth';
 import { StoreState } from 'store';
+import { GoogleButton } from 'components/GoogleButton';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -110,9 +111,11 @@ const Signup: React.FC = () => {
           >
             SignUp
           </Button>
+
+          <GoogleButton />
         </form>
 
-        <IconLink className="color--gray" to="/login">
+        <IconLink className="color--gray" to="/">
           Already have an account?
         </IconLink>
       </Flex>

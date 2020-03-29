@@ -65,10 +65,10 @@ const App: React.FC = () => {
           <div>
             <Switch>
               <Route path="/" exact>
-                <Home right={Signup} />
-              </Route>
-              <Route path="/login" exact>
                 <Home right={Login} />
+              </Route>
+              <Route path="/signup" exact>
+                <Home right={Signup} />
               </Route>
 
               <AuthRoute path="/" component={Dashboard} />
