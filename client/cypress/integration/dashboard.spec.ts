@@ -3,11 +3,9 @@
 describe('Test Dashboard', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000')
-      .findByText(/Already have an account\?/i)
-      .click()
       .findByPlaceholderText(/example@gmail\.com/i)
       .focus()
-      .type('newuser@gmail.com{enter}123456789{enter}')
+      .type('testuser@gmail.com{enter}123456789{enter}')
   })
 
 
@@ -21,11 +19,7 @@ describe('Test Dashboard', () => {
 
   it('should add a new bug', () => {
     cy.server();
-    cy.route({
-      method: 'POST',
-      url: '/api/bugs',
-      response: []
-    })
+    cy.route('POST', '/api/bugs', 'fixture:add-bug.json');
     cy.findByText(/Add/i)
       .click()
       .findByText(/Submit new bug/i)
@@ -44,8 +38,10 @@ describe('Test Dashboard', () => {
 
   it('should add a new comment', () => {
     cy.server();
+    cy.route('GET', '/api/bugs', 'fixture:add-bug.json');
+    cy.route('GET', '/api/bugs/2', 'fixture:single-bug.json');
     cy.route('PATCH', '/api/bugs/*/comments', 'fixture:add-comment.json')
-    cy.findByText(/Cypres testing/i, { selector: 'h3' })
+    cy.findByText(/Cypress testing/i, { selector: 'h3' })
       .click()
       .wait(500)
       .findByPlaceholderText(/write markdown/i)
@@ -59,8 +55,10 @@ describe('Test Dashboard', () => {
 
   it('should add/remove bug labels', () => {
     cy.server();
+    cy.route('GET', '/api/bugs', 'fixture:add-bug.json');
+    cy.route('GET', '/api/bugs/2', 'fixture:single-bug.json');
     cy.route('PATCH', '/api/bugs/*/labels', { "data": ["bug", "feature"] })
-    cy.findByText(/Cypres testing/i, { selector: 'h3' })
+    cy.findByText(/Cypress testing/i, { selector: 'h3' })
       .click()
       .wait(500)
       .findByTestId('label_dropdown').click()

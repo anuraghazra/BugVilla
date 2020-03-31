@@ -3,8 +3,6 @@
 describe('Should Login', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000')
-      .findByText(/Already have an account\?/i)
-      .click()
   })
 
   it('Should not be empty', function () {
@@ -21,7 +19,7 @@ describe('Should Login', () => {
   it('Should report error if invalid password', function () {
     cy.findByPlaceholderText(/example@gmail\.com/i)
       .focus()
-      .type('hazru.anurag@gmail.com{enter}helloworld{enter}')
+      .type('testuser@gmail.com{enter}helloworld{enter}')
       .findByText(/Password Is Incorrect/i)
   })
 })

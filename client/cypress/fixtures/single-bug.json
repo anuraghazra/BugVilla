@@ -1,0 +1,20 @@
+{
+  "data": {
+    "isOpen": true,
+    "labels": ["feature"],
+    "title": "Cypress testing",
+    "body": "Body",
+    "date_opened": "2020-03-29T08:13:35.910Z",
+    "author": {
+      "username": "hazruanurag",
+      "name": "Anurag Hazra",
+      "id": "5e8055b6a95be100170445ae"
+    },
+    "activities": [],
+    "comments": [],
+    "references": [],
+    "reactions": [],
+    "bugId": 1,
+    "id": "5e8058af2389b219fc0f2aad"
+  }
+}

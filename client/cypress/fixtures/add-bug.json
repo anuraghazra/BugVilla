@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "isOpen": true,
+      "labels": ["feature"],
+      "title": "What is BugVilla?",
+      "body": "# Track, Manage & Kill Bugs Effectively\n\nUniversal bug tracker for everyone! BugVilla allows team members to collaborate, discuss and kill bugs effectively.\n\n\n## ✨ Features\n\n- Issue discussions\n\n- Comment Reactions\n\n- Social Interactions\n\n- User Reputation System\n\n- \\# Reference other bugs\n\n- @ Mentions users\n\n- Notifications\n\n- Bug Labels\n",
+      "date_opened": "2020-03-29T08:13:35.910Z",
+      "author": {
+        "username": "hazruanurag",
+        "name": "Anurag Hazra",
+        "id": "5e8055b6a95be100170445ae"
+      },
+      "activities": [],
+      "comments": [],
+      "references": [],
+      "reactions": [
+        {
+          "users": ["5e8055b6a95be100170445ae"],
+          "emoji": ":heart:"
+        },
+        {
+          "users": ["5e8055b6a95be100170445ae", "5e8322788c542b1d0807c456"],
+          "emoji": ":tada:"
+        },
+        {
+          "users": ["5e8322788c542b1d0807c456"],
+          "emoji": ":smile:"
+        },
+        {
+          "users": ["5e8322788c542b1d0807c456"],
+          "emoji": ":+1:"
+        }
+      ],
+      "bugId": 1,
+      "id": "5e8058af2389b219fc0f9aad"
+    },
+    {
+      "isOpen": true,
+      "labels": ["feature"],
+      "title": "Cypress testing",
+      "body": "Body",
+      "date_opened": "2020-03-29T08:13:35.910Z",
+      "author": {
+        "username": "hazruanurag",
+        "name": "Anurag Hazra",
+        "id": "5e8055b6a95be100170445ae"
+      },
+      "activities": [],
+      "comments": [],
+      "references": [],
+      "reactions": [],
+      "bugId": 2,
+      "id": "5e8058af2389b219fc0f2aad"
+    }
+  ]
+}

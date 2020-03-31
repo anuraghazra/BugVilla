@@ -6,6 +6,6 @@ describe('Smoke Testing', () => {
   })
 
   it('Should open the app', function () {
-    cy.findByText(/signup/i);
+    cy.findByText(/login/i);
   })
 })

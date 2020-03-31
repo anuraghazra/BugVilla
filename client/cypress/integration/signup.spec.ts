@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 describe('Should Check Signup', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    cy.visit('http://localhost:3000/signup')
   })
 
   it('Should not be empty', function () {
