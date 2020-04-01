@@ -136,7 +136,7 @@ const User = mongoose.model('User', UserSchema);
 const validateUser = user => {
   const schema = Joi.object({
     name: Joi.string()
-      .pattern(/^[a-zA-Z0-9\s]+$/)
+      .pattern(/^[a-zA-Z0-9\s]+$/, 'Name should not contain special symbols')
       .min(6)
       .max(100)
       .required(),
