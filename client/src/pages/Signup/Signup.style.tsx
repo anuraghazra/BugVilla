@@ -22,11 +22,23 @@ const LoginWrapper = styled.div`
     margin-top: ${p => p.theme.spacings.my};
   }
 
+  .chip {
+    padding: 10px 15px;
+    font-size: 16px;
+
+    a {
+      font-size: 16px;
+      color: ${p => p.theme.colors.black};
+      :hover {
+        color: ${p => p.theme.colors.primary};
+      }
+    }
+  }
+
   @media screen and (${p => p.theme.media.tablet}) {
     margin-top: ${p => p.theme.spacings.top}px;
     margin-bottom: ${p => p.theme.spacings.bottom}px;
   }
 `;
-
 
 export default LoginWrapper;

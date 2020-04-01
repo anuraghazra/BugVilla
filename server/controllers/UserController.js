@@ -74,6 +74,7 @@ exports.signup = async (req, res) => {
         isVerified: savedUser.isVerified,
         avatarUrl: savedUser.avatarUrl,
         id: savedUser.id,
+        email: savedUser.email,
         username: savedUser.username,
         name: savedUser.name,
         message: "User Registered",

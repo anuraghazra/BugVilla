@@ -94,7 +94,7 @@ export const signUserUp = (formData: FormData): ApiAction => ({
   onSuccess: (dispatch: Dispatch, data: any) => {
     dispatch({ type: CLEAR_ALL_ERRORS });
     dispatch({ type: SIGNUP.SUCCESS });
-    history.push('/')
+    history.push(`/?signedup=true&email=${data.email}`)
   },
   onFailure: (dispatch: Dispatch, err: string) => {
     dispatch({ type: SIGNUP.FAILURE, payload: err });

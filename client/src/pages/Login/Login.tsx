@@ -3,9 +3,10 @@ import * as yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, FormContextValues } from 'react-hook-form';
 
-import LoginWrapper from '../Signup/Signup.style';
-import { Button, BugVillaLogo, Flex, IconLink, toast } from '@bug-ui';
+import { Button, BugVillaLogo, Flex, IconLink, Label, toast } from '@bug-ui';
 import { Input } from '@bug-ui/Form';
+import useQuery from 'hooks/useQuery';
+import LoginWrapper from '../Signup/Signup.style';
 
 import { StoreState } from 'store';
 import { loginUser } from 'store/ducks/auth';
@@ -26,6 +27,7 @@ const LoginSchema = yup.object().shape({
 });
 
 const Login: React.FC = () => {
+  const query = useQuery();
   const dispatch = useDispatch<any>();
   const [isLoading, loginError] = useSelector((state: StoreState) => [
     state.loading['user/LOGIN'],
@@ -43,6 +45,8 @@ const Login: React.FC = () => {
   const onSubmit = async (data: { name: string; email: string }) => {
     dispatch(loginUser(data));
   };
+
+  const isComingFromSignup = query.get('signedup') && query.get('email');
 
   loginError && toast.error(loginError);
   return (
@@ -79,12 +83,24 @@ const Login: React.FC = () => {
             Login
           </Button>
         </form>
-        
+
         <GoogleButton />
 
         <IconLink className="color--gray" to="/signup">
           Don't have an account?
         </IconLink>
+
+        {isComingFromSignup && (
+          <>
+            <br />
+            <Label className="chip" type="feature">
+              Signup successful, please{' '}
+              <a className="color--gray" href={`https://${query.get('email')}`}>
+                verify {query.get('email')}
+              </a>
+            </Label>
+          </>
+        )}
       </Flex>
     </LoginWrapper>
   );

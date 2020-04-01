@@ -38,7 +38,9 @@ const Signup: React.FC = () => {
     for (let name in data) {
       formData.append(name, data[name]);
     }
-    dispatch(signUserUp(formData));
+    dispatch(signUserUp(formData)).then(() => {
+      toast.success('Successfully signed up');
+    });
   };
 
   signupError && toast.error(signupError);
