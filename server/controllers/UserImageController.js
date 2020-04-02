@@ -88,9 +88,7 @@ exports.getAvatarImageByUsername = async (req, res) => {
 exports.getRawAvatarImageByUsername = async (req, res) => {
   try {
     let cacheUrl = req.originalUrl || req.url;
-    console.log(MemCache.cache.keys())
 
-    console.log(req.foundUser)
     if (!req.foundUser.avatar) {
       request({ url: req.foundUser.avatarUrl, encoding: null }, (err, resp, buffer) => {
         // Use the buffer
