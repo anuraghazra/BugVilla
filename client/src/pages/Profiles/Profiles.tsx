@@ -33,13 +33,18 @@ const Profiles = () => {
     }
     if (users?.data?.length === 0) return <Illustration type="empty" />;
 
-    return users?.data?.map((user: any) => (
-      <Flex align="center" direction="column">
-        <Avatar width="130" height="130" username={user.username} />
-        <h3 className="text--bold mt-small">{user.name}</h3>
-        <span className="color--gray">@{user.username}</span>
-      </Flex>
-    ));
+    return users?.data
+      ?.sort(
+        (a: any, b: any) =>
+          (new Date(a.date_joined) as any) - (new Date(b.date_joined) as any)
+      )
+      .map((user: any) => (
+        <Flex key={user.id} align="center" direction="column">
+          <Avatar width="130" height="130" username={user.username} />
+          <h3 className="text--bold mt-small">{user.name}</h3>
+          <span className="color--gray">@{user.username}</span>
+        </Flex>
+      ));
   };
 
   return (
