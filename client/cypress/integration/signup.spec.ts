@@ -7,7 +7,7 @@ describe('Should Check Signup', () => {
   it('Should not be empty', function () {
     cy.findByText(/signup/i)
       .click()
-      .findByText(/name must be at least 6 characters/i)
+      .findByText(/Name should not contain special symbols/i)
   })
   it('Should report error if invalid inputs happen', function () {
     cy.findByPlaceholderText(/Enter Your Name/i)
