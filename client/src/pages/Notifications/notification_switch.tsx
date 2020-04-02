@@ -10,25 +10,23 @@ const BugLinkTitle: React.FC<{ bugId: string; title: string }> = ({
   </NavLink>
 );
 
-const Commented: React.FC = ({ byUser: { username }, onBug }: any) => {
+const Commented: React.FC = ({ byUser, onBug }: any) => {
   return (
     <>
-      <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
+      <NavLink to={`/profiles/${byUser?.username}`}>
+        @{byUser?.username}
+      </NavLink>
       <span> commented on </span>
       <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
     </>
   );
 };
 
-const Referenced: React.FC = ({
-  byUser: { username },
-  fromBug,
-  references
-}: any) => {
-  const referenceSlice = references.slice(0, 2);
-  const remaining = references.length - referenceSlice.length;
+const Referenced: React.FC = ({ byUser, fromBug, references }: any) => {
+  const referenceSlice = references?.slice(0, 2);
+  const remaining = references?.length - referenceSlice?.length;
 
-  const refs = referenceSlice.map((ref: any, index: number) => (
+  const refs = referenceSlice?.map((ref: any, index: number) => (
     <>
       {references.length === 2 && index > 0 && ' & '}
       <BugLinkTitle bugId={ref.bugId} title={ref.title} key={ref.id} />
@@ -42,39 +40,36 @@ const Referenced: React.FC = ({
         &nbsp; referenced in &nbsp;
       </span>
       <BugLinkTitle bugId={fromBug?.bugId} title={fromBug?.title} />
-      &nbsp;by <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
+      &nbsp;by{' '}
+      <NavLink to={`/profiles/${byUser?.username}`}>
+        @{byUser?.username}
+      </NavLink>
     </>
   );
 };
 
-const NewBug: React.FC = ({ byUser: { username }, onBug }: any) => (
+const NewBug: React.FC = ({ byUser, onBug }: any) => (
   <>
-    <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
+    <NavLink to={`/profiles/${byUser?.username}`}>@{byUser?.username}</NavLink>
     <span> created a new bug </span>
     <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
   </>
 );
 
-const BugStatus: React.FC = ({
-  byUser: { username },
-  onBug,
-  bug_status
-}: any) => (
+const BugStatus: React.FC = ({ byUser, onBug, bug_status }: any) => (
   <>
     <BugLinkTitle bugId={onBug?.bugId} title={onBug?.title} />
     <span> {bug_status} by </span>
-    <NavLink to={`/profiles/${username}`}>@{username}</NavLink>
+    <NavLink to={`/profiles/${byUser?.username}`}>@{byUser?.username}</NavLink>
   </>
 );
 
-const Mentioned: React.FC = ({
-  byUser: { username },
-  onBug,
-  mentions
-}: any) => {
+const Mentioned: React.FC = ({ byUser, onBug, mentions }: any) => {
   return (
     <>
-      <NavLink to={`/profiles/${username}`}>@{username} </NavLink>
+      <NavLink to={`/profiles/${byUser?.username}`}>
+        @{byUser?.username}{' '}
+      </NavLink>
       <span>
         mentioned
         {mentions.map((username: string, index: number) => {
