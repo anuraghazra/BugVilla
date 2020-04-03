@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VariantTypes } from './colorVariants';
 
@@ -10,8 +10,12 @@ interface StyledCircleProps {
 export const StyledCircleIcon = styled.div<StyledCircleProps>`
   font-size: 14px;
   border-radius: 50px;
-  min-width: ${p => p.size || '40px'};
-  min-height: ${p => p.size || '40px'};
+  ${({ size = '40px' }) => css`
+    min-width: ${size};
+    min-height: ${size};
+    max-width: ${size};
+    max-height: ${size};
+  `}
   line-height: 1;
   display: flex;
   align-items: center;

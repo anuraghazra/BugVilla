@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toast, Button, ButtonGroup } from '@bug-ui';
+import { toast, Button, ButtonGroup, Flex, CircleIcon, Tooltip } from '@bug-ui';
 import { Textarea } from '@bug-ui/Form';
 
 import { StoreState } from 'store';
@@ -51,7 +51,22 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      <h2 className="text--medium">{user.name}</h2>
+      <Flex
+        style={{ display: 'inline-flex' }}
+        as="h2"
+        align="center"
+        gap="small"
+        className="text--medium"
+      >
+        <span>{user.name}</span>
+        <CircleIcon
+          as="span"
+          size="25px"
+          variant={user.isVerified ? 'success' : 'danger'}
+          icon={user.isVerified ? 'check' : 'times'}
+        />
+      </Flex>
+      <br />
       <span className="color--gray">@{user.username}</span>
       <p>
         <Textarea
