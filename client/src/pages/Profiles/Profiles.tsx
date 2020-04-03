@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Loading, Avatar, Illustration } from '@bug-ui';
+import { Flex, Loading, Avatar, Illustration, CircleIcon } from '@bug-ui';
 
 import useFetch from 'hooks/useFetch';
 import DashboardHeader from 'components/DashboardHeader';
@@ -19,7 +19,7 @@ const ProfilesWrapper = styled.section`
 `;
 
 const Profiles = () => {
-  const [users, isLoading, error] = useFetch(`/api/user`);
+  const [users, isLoading, error] = useFetch(`/api/user`, { cache: true });
 
   const renderProfiles = () => {
     if (isLoading) return <Loading />;
@@ -40,7 +40,13 @@ const Profiles = () => {
       )
       .map((user: any) => (
         <Flex key={user.id} align="center" direction="column">
-          <Avatar width="130" height="130" username={user.username} />
+          <Avatar
+            showVerification
+            isVerified={user.isVerified}
+            width="130"
+            height="130"
+            username={user.username}
+          />
           <h3 className="text--bold mt-small">{user.name}</h3>
           <span className="color--gray">@{user.username}</span>
         </Flex>
@@ -53,6 +59,7 @@ const Profiles = () => {
         <h1>All Profiles</h1>
       </DashboardHeader>
 
+      <span className="color--gray">Total Users: {users?.data?.length}</span>
       <div className="users">{renderProfiles()}</div>
     </ProfilesWrapper>
   );
