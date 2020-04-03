@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import http from 'utils/httpInstance';
@@ -27,7 +27,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   return (
     <SidebarWrapper isOpen={isOpen}>
-      <BugVillaLogo width="100px" />
+      <Link to="/dashboard/bugs">
+        <BugVillaLogo width="100px" />
+      </Link>
       <div className="sidebar--sticky">
         <Flex align="center" justify="flex-start">
           <Avatar
@@ -48,14 +50,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             <IconLink isNav icon="home" to="/dashboard/bugs">
               Dashboard
             </IconLink>
-            <IconLink isNav icon="user" to="/profiles">
-              Profiles
+            <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
+              Closed Bugs
             </IconLink>
             <IconLink isNav icon="bell" to="/dashboard/notifications">
               Notifications
             </IconLink>
-            <IconLink isNav icon="times" to="/dashboard/bugs?status=closed">
-              Closed
+            <IconLink isNav icon="user" to="/profiles">
+              Profiles
             </IconLink>
             <IconLink isNav icon="sign-out-alt" to="#" onClick={logout}>
               Logout

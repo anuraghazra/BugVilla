@@ -70,7 +70,8 @@ const Bugs: React.FC = () => {
             ?.filter((bug: any) => {
               const labelName = query.get('label');
               const status = query.get('status');
-              if (!labelName && !status) return true;
+
+              if (!labelName && !status) return bug.isOpen;
               // check for matching label or isOpen status
               return bug.labels.includes(labelName) || (status && !bug.isOpen);
             })
