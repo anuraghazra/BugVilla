@@ -23,7 +23,7 @@ router.post('/check-auth', passportJWT, UserController.checkAuth);
 router.post('/signup', avatarUpload, UserController.signup);
 router.post("/login", UserController.login);
 router.get("/logout", passportJWT, UserController.logout);
-router.get("/verify-email", passportJWT, UserController.verifyEmail);
+router.get("/verify-email", UserController.verifyEmail);
 router.get('/:username', passportJWT, UserController.getByUsername);
 router.get('/:username/comments', passportJWT, UserController.getCommentsByUser);
 router.get('/:username/reactions/count', passportJWT, UserController.getCollectedReactionsCount);
