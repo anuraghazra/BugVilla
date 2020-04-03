@@ -129,9 +129,14 @@ exports.getRawAvatarImageByUsername = async (req, res) => {
                   .resize(size, size)
                   .jpeg({ quality: 100 })
                   .toBuffer((err, resizedBuffer) => {
-                    if (err) res.send({ error: 'Cannot resize img' })
-                    res.send(resizedBuffer);
-                    MemCache.set(cacheUrl, resizedBuffer);
+                    try {
+                      if (err || !resizedBuffer) return res.send({ error: 'Cannot resize img' })
+                      res.send(resizedBuffer);
+                      MemCache.set(cacheUrl, resizedBuffer);
+                    } catch (err) {
+                      console.log('Something went wrong');
+                      return res.internalError({ error: 'something went wrong' });
+                    }
                   });
               })
             } else {
