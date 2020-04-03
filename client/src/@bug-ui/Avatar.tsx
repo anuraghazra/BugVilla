@@ -15,8 +15,8 @@ interface AvatarProps {
 }
 
 const AvatarImage = styled.img(p => ({
-  width: p.width + 'px' || 150,
-  height: p.height + 'px' || 150,
+  width: p.width || 150,
+  height: p.height || 150,
   border: p.theme.border,
   borderRadius: '100%',
   objectFit: 'cover',
