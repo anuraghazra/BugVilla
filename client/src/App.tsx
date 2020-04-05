@@ -18,6 +18,7 @@ import Dashboard from 'pages/Dashboard/Dashboard';
 import NotFound from 'components/NotFound';
 import AuthRoute from 'components/AuthRoute';
 import ErrorBoundary from 'components/ErrorBoundary';
+import SEO from 'components/SEO';
 
 socket.on('received-notification', () => {
   toast.info('New notifications available');
@@ -39,6 +40,8 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <SEO title="BugVilla | Universal bug tracker for everyone!" />
+
       <Router history={history}>
         <Notifications
           options={{
@@ -47,17 +50,17 @@ const App: React.FC = () => {
             colors: {
               error: {
                 color: theme.colors.red,
-                backgroundColor: theme.colors.redlight
+                backgroundColor: theme.colors.redlight,
               },
               success: {
                 color: theme.colors.green,
-                backgroundColor: theme.colors.greenlight
+                backgroundColor: theme.colors.greenlight,
               },
               info: {
                 color: theme.colors.primary,
-                backgroundColor: theme.colors.accent
-              }
-            }
+                backgroundColor: theme.colors.accent,
+              },
+            },
           }}
         />
         <GlobalStyles />

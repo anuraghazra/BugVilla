@@ -9,6 +9,7 @@ import useQuery from 'hooks/useQuery';
 
 import DashboardHeader from 'components/DashboardHeader';
 import Comment from 'components/Comment/Comment';
+import SEO from 'components/SEO';
 import Timeline from './Timeline';
 import MetaInfo from './MetaInfo';
 import SingleBugWrapper from './SingleBug.style';
@@ -19,11 +20,7 @@ import { fetchBugWithId } from 'store/ducks/single-bug';
 import { StoreState } from 'store';
 
 export const addCommentSchema = yup.object().shape({
-  body: yup
-    .string()
-    .min(6)
-    .max(1000)
-    .required()
+  body: yup.string().min(6).max(1000).required(),
 });
 
 export interface AuthorProps {
@@ -40,7 +37,7 @@ const SingleBug: React.FC = () => {
   const bug = useSelector((state: StoreState) => state.singlebug);
   const [isFetching, fetchError] = useSelector((state: StoreState) => [
     state.loading['singlebug/FETCH_BUG'],
-    state.error['singlebug/FETCH_BUG']
+    state.error['singlebug/FETCH_BUG'],
   ]);
 
   let query_comment_id = query.get('comment_id');
@@ -70,6 +67,7 @@ const SingleBug: React.FC = () => {
       {fetchError && <Illustration type="error" />}
       {bug?.result && (
         <>
+          <SEO title={`BugVilla | ${bug.result.title}`} />
           <section>
             <DashboardHeader>
               <h1>
