@@ -11,7 +11,6 @@ const VARIANTS_MAP = {
 export type LabelTypes = 'bug' | 'feature' | 'help wanted' | 'enhancement';
 interface LabelProps {
   type: LabelTypes;
-  children: React.ReactNode;
   [x: string]: any;
 }
 interface StyledLabelProps {

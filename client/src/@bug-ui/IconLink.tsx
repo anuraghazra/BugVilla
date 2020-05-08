@@ -44,7 +44,6 @@ export const Link = styled(NavLink)<LinkProps>`
 interface IconLinkProps {
   to: string;
   icon?: any;
-  children: React.ReactNode;
   isNav?: boolean;
   [x: string]: any;
 }

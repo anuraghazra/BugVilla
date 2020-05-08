@@ -20,7 +20,6 @@ const DropdownContext = React.createContext<IDropdownContext>({
 });
 
 interface DropdownProps {
-  children?: React.ReactNode;
   onChange?: (toggle: boolean) => void;
   shouldCloseOnClick?: boolean;
   [x: string]: any;
@@ -37,15 +36,14 @@ interface DropdownToggleProps {
   [x: string]: any;
 }
 interface DropdownContentProps {
-  children?: React.ReactNode;
   [x: string]: any;
 }
-type StaticComponenets = {
+type StaticComponents = {
   Toggle: React.FC<DropdownToggleProps>;
   Content: React.FC<DropdownContentProps>;
 };
 
-export const Dropdown: React.FC<DropdownProps> & StaticComponenets = ({
+export const Dropdown: React.FC<DropdownProps> & StaticComponents = ({
   children,
   onChange,
   shouldCloseOnClick,
