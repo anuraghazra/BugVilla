@@ -14,7 +14,6 @@ interface StyledButtonProps {
 interface ButtonProps extends StyledButtonProps {
   icon?: any;
   isLoading?: boolean;
-  children: React.ReactNode;
   [x: string]: any;
 }
 

@@ -32,7 +32,6 @@ const TooltipWrapper = styled.div`
 `;
 
 interface TooltipProps {
-  children: React.ReactNode;
   content: React.ReactNode;
   [x: string]: any;
 }

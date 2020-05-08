@@ -25,7 +25,6 @@ const StyledToastText = styled.div`
 
 export const Toast: React.FC<{
   icon?: any;
-  children: React.ReactNode;
 }> = ({ icon = 'exclamation-triangle', children }) => {
   return (
     <StyledToastText>
