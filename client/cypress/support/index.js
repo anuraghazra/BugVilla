@@ -21,3 +21,7 @@ Cypress.on('fail', (error, runnable) => {
 
   throw error // throw error to have test still fail
 })
+
+Cypress.Commands.add('dataCy', (value) => {
+  return cy.get(`[data-cy=${value}]`)
+})

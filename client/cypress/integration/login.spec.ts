@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+/// <reference path="../support/index.d.ts" />
 
 describe('Should Login', () => {
   beforeEach(() => {
@@ -6,6 +7,7 @@ describe('Should Login', () => {
   })
 
   it('Should not be empty', function () {
+    cy.dataCy('greeting')
     cy.findByText(/login/i)
       .click()
       .findByText(/email must be at least 5 characters/i)
