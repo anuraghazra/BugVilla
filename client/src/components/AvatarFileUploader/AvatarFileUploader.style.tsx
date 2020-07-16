@@ -22,6 +22,7 @@ const AvatarContainer = styled.section<{ size?: string }>`
     transform: scale(0.85);
     transition: 0.2s;
     cursor: pointer;
+    outline: none;
 
     p {
       margin: auto;
