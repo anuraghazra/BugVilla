@@ -10,13 +10,17 @@ const { NOTIFY_TYPES } = require('../constants');
  * @type RequestHandler
  */
 exports.getNotifications = async (req, res) => {
+  const MAX_ITEMS = 10;
+  const page = parseInt(req.query.page - 1);
+
   const notifications = await Notification.find({})
+    .sort({ createdAt: -1 })
     .populate('byUser', 'username')
     .populate('onBug', 'title bugId')
     .populate('fromBug ', 'title bugId')
     .populate('references ', 'title bugId');
 
-  const filtered = notifications.filter(notify => {
+  let filtered = notifications.filter(notify => {
     if (notify.type === NOTIFY_TYPES.MENTIONED) {
       return notify.notificationTo.includes(req.user.id);
     } else {
@@ -24,7 +28,11 @@ exports.getNotifications = async (req, res) => {
     }
   });
 
-  res.send({ data: filtered });
+  res.send({
+    totalDocs: filtered.length,
+    totalPages: Math.floor(filtered.length / MAX_ITEMS),
+    data: filtered.slice(MAX_ITEMS * page, MAX_ITEMS * page + MAX_ITEMS),
+  });
 };
 
 /**
