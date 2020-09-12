@@ -13,7 +13,7 @@ const NotificationsWrapper = styled.section`
   width: 100%;
 
   .notification__aside {
-    margin-bottom: ${(p) => p.theme.spacings.bottom}px;
+    margin-bottom: ${p => p.theme.spacings.bottom}px;
   }
 `;
 

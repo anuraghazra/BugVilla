@@ -16,7 +16,11 @@
     "cy:run": "concurrently \"npm start\" \"cd client && npm run test:e2e:run\"",
     "prod": "concurrently \"npm run server:watch\" \"cd client && serve -s build\"",
     "test:e2e:ci": "cd client && npm run cy:run",
-    "test": "cd client && npm run test"
+    "test": "cd client && npm run test",
+    "lint": "eslint ./server/**",
+    "lint:fix": "eslint ./server/** --fix",
+    "pretty-quick": "pretty-quick --staged && lint-staged",
+    "prettier": "prettier --write **/*.{ts,js,css,html}"
   },
   "author": "Anurag Hazra <hazru.anurag@gmail.com>",
   "license": "MIT",
@@ -57,8 +61,22 @@
   "devDependencies": {
     "concurrently": "^5.0.2",
     "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-security": "^1.4.0",
-    "jest": "^24.9.0"
+    "husky": "^4.3.0",
+    "jest": "^24.9.0",
+    "lint-staged": "^10.3.0",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pretty-quick"
+    }
+  },
+  "lint-staged": {
+    "*.{js}": "eslint ./server/** --cache --fix"
   },
   "engines": {
     "node": "10.15.0"

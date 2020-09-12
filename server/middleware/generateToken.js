@@ -1,22 +1,25 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = function generateUserToken(req, res) {
-  let user = req.user;
+  const user = req.user;
 
   // Create JWT Token
-  const token = jwt.sign({
-    sub: user.id,
-    isVerified: user.isVerified,
-    provider: user.provider,
-    username: user.username,
-    name: user.name,
-    email: user.email,
-    googleId: user.googleId
-  }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign(
+    {
+      sub: user.id,
+      isVerified: user.isVerified,
+      provider: user.provider,
+      username: user.username,
+      name: user.name,
+      email: user.email,
+      googleId: user.googleId,
+    },
+    process.env.TOKEN_SECRET,
+    { expiresIn: '2h' }
+  );
 
-  res.status(200)
-    .cookie('jwt', token, { maxAge: 2 * 3600000, httpOnly: true })
-    // .redirect('http://localhost:3000')
+  // .redirect('http://localhost:3000')
+  res.status(200).cookie('jwt', token, { maxAge: 2 * 3600000, httpOnly: true })
     .send(`
     <html>
       <head>
@@ -35,5 +38,5 @@ module.exports = function generateUserToken(req, res) {
       </script>
       </body>
     </html>
-  `)
-}
+  `);
+};

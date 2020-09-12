@@ -17,21 +17,21 @@ export const UPDATE_BUG = createAPIAction('singlebug/UPDATE_BUG');
 export const UPDATE_REACTIONS = createAPIAction('singlebug/UPDATE_REACTIONS');
 export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
 export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
-export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
+export const UPDATE_COMMENT_REACTIONS = createAPIAction(
+  'singlebug/UPDATE_COMMENT_REACTIONS'
+);
 export const COMMENT_REACTIONS_OPTI = 'singlebug/COMMENT_REACTIONS_OPTI';
 
 export interface SinglebugReducerState {
   result?: {
-    [x: string]: any
-  },
+    [x: string]: any;
+  };
   entities?: {
-    [x: string]: any
-  }
+    [x: string]: any;
+  };
 }
 
-const DEFAULT_STATE: SinglebugReducerState = {
-
-}
+const DEFAULT_STATE: SinglebugReducerState = {};
 
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
@@ -40,8 +40,8 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
       // let normalizedComments = normalize(action.payload, { comments: [commentSchema] })
       return {
         ...state,
-        ...action.payload
-      }
+        ...action.payload,
+      };
     case ADD_COMMENT.SUCCESS:
       // let norm1 = normalize(action.payload, [commentSchema])
       return {
@@ -56,9 +56,12 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         },
         result: {
           ...state.result,
-          comments: [...state?.result?.comments, action.payload[action.payload.length - 1].id]
-        }
-      }
+          comments: [
+            ...state?.result?.comments,
+            action.payload[action.payload.length - 1].id,
+          ],
+        },
+      };
     case EDIT_COMMENT.SUCCESS:
       // let norm = normalize(action.payload[0], commentSchema)
       return {
@@ -66,44 +69,44 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
         entities: {
           comments: {
             ...state?.entities?.comments,
-          }
+          },
         },
-      }
+      };
     case UPDATE_BUG.SUCCESS:
       return {
         ...state,
         result: {
           ...state.result,
-          body: action.payload.body
-        }
-      }
+          body: action.payload.body,
+        },
+      };
     case TOGGLE_BUG.SUCCESS:
       return {
         ...state,
         result: {
           ...state.result,
           activities: action.payload.data,
-          isOpen: action.payload.bug_state === 'open' ? true : false
-        }
-      }
+          isOpen: action.payload.bug_state === 'open' ? true : false,
+        },
+      };
     case EDIT_LABELS.SUCCESS:
       return {
         ...state,
         result: {
           ...state.result,
-          labels: action.payload
-        }
-      }
+          labels: action.payload,
+        },
+      };
     case UPDATE_REACTIONS.SUCCESS:
       return {
         ...state,
-        reactions: action.payload
-      }
+        reactions: action.payload,
+      };
     case UPDATE_COMMENT_REACTIONS.SUCCESS:
       return {
         ...state,
-        comments: action.payload
-      }
+        comments: action.payload,
+      };
     // optimistic
     // {user:{
     //   username: string;
@@ -151,13 +154,13 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
 
         //   return comment;
         // })
-      }
+      };
     case CLEAR_BUG_DATA:
-      return { ...state, bug: null }
+      return { ...state, bug: null };
     default:
       return state;
   }
-}
+};
 
 export default reducer;
 
@@ -174,14 +177,14 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
     dispatch({ type: FETCH_BUG.REQUEST });
   },
   onSuccess: (dispatch: any, data) => {
-    let norm = normalize(data, [bugSchema])
-    console.log(norm)
+    let norm = normalize(data, [bugSchema]);
+    console.log(norm);
     dispatch({
       type: FETCH_BUG.SUCCESS,
-      payload: norm
-    })
+      payload: norm,
+    });
   },
-  onFailure: FETCH_BUG.FAILURE
+  onFailure: FETCH_BUG.FAILURE,
 });
 
 export const addComment = (
@@ -197,9 +200,9 @@ export const addComment = (
   onRequest: ADD_COMMENT.REQUEST,
   onSuccess: (dispatch: Dispatch, data: any) => {
     dispatch({ type: ADD_COMMENT.SUCCESS, payload: data });
-    socket.emit('send-notification', { message: 'Add comment' })
+    socket.emit('send-notification', { message: 'Add comment' });
   },
-  onFailure: ADD_COMMENT.FAILURE
+  onFailure: ADD_COMMENT.FAILURE,
 });
 
 export const editComment = (
@@ -215,7 +218,7 @@ export const editComment = (
   },
   onRequest: EDIT_COMMENT.REQUEST,
   onSuccess: EDIT_COMMENT.SUCCESS,
-  onFailure: EDIT_COMMENT.FAILURE
+  onFailure: EDIT_COMMENT.FAILURE,
 });
 
 export const updateBug = (
@@ -230,7 +233,7 @@ export const updateBug = (
   },
   onRequest: UPDATE_BUG.REQUEST,
   onSuccess: UPDATE_BUG.SUCCESS,
-  onFailure: UPDATE_BUG.FAILURE
+  onFailure: UPDATE_BUG.FAILURE,
 });
 
 export const openOrCloseBug = (
@@ -248,9 +251,9 @@ export const openOrCloseBug = (
       type: TOGGLE_BUG.SUCCESS,
       payload: { data, bug_state: state },
     });
-    socket.emit('send-notification', { message: 'Bug Open/Closed' })
+    socket.emit('send-notification', { message: 'Bug Open/Closed' });
   },
-  onFailure: TOGGLE_BUG.FAILURE
+  onFailure: TOGGLE_BUG.FAILURE,
 });
 
 export const editLabels = (
@@ -267,7 +270,7 @@ export const editLabels = (
   onSuccess: (dispatch: Dispatch, data: any) => {
     dispatch({ type: EDIT_LABELS.SUCCESS, payload: data });
   },
-  onFailure: EDIT_LABELS.FAILURE
+  onFailure: EDIT_LABELS.FAILURE,
 });
 
 export const addReferences = (
@@ -281,7 +284,7 @@ export const addReferences = (
     formData: { references },
   },
   onSuccess: () => {
-    socket.emit('send-notification', { message: 'Bugs Referenced' })
+    socket.emit('send-notification', { message: 'Bugs Referenced' });
   },
 });
 
@@ -296,7 +299,7 @@ export const mentionPeople = (
     formData: { mentions },
   },
   onSuccess: () => {
-    socket.emit('send-notification', { message: 'Users Mentioned' })
+    socket.emit('send-notification', { message: 'Users Mentioned' });
   },
 });
 

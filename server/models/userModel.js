@@ -8,15 +8,15 @@ const UserInfoSchema = new mongoose.Schema({
     required: true,
     trim: true,
     minlength: 6,
-    maxlength: 100
+    maxlength: 100,
   },
   username: {
     type: String,
     required: true,
     trim: true,
     minlength: 6,
-    maxlength: 100
-  }
+    maxlength: 100,
+  },
 });
 
 UserInfoSchema.set('toJSON', {
@@ -24,7 +24,7 @@ UserInfoSchema.set('toJSON', {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
-  }
+  },
 });
 
 const UserSchema = new mongoose.Schema(
@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 6,
-      maxlength: 100
+      maxlength: 100,
     },
     username: {
       type: String,
@@ -42,40 +42,40 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       minlength: 2,
       maxlength: 100,
-      unique: true
+      unique: true,
     },
     email: {
       type: String,
       trim: true,
       required: true,
-      unique: true
+      unique: true,
     },
     password: {
       type: String,
       minLength: 6,
-      maxLength: 100
+      maxLength: 100,
     },
     bio: {
       type: String,
       minLength: 6,
       maxLength: 200,
-      default: '404 Bio Not Found'
+      default: '404 Bio Not Found',
     },
     avatar: {
-      type: mongoose.Schema.Types.ObjectId
+      type: mongoose.Schema.Types.ObjectId,
     },
     avatarUrl: {
       type: String,
-      required: true
+      required: true,
     },
     date_joined: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     // new auth
     isVerified: { type: Boolean, default: false },
     provider: { type: [String], enum: ['google', 'local'], required: true },
-    googleId: { type: String }
+    googleId: { type: String },
   },
   { timestamps: true }
 );
@@ -86,7 +86,7 @@ UserSchema.set('toJSON', {
     delete ret.password;
     delete ret._id;
     delete ret.__v;
-  }
+  },
 });
 
 UserSchema.pre('save', function (next) {
@@ -124,8 +124,8 @@ UserSchema.index(
   {
     expireAfterSeconds: 60 * process.env.EXPIRATION_TIME,
     partialFilterExpression: {
-      isVerified: false
-    }
+      isVerified: false,
+    },
   }
 );
 
@@ -145,15 +145,10 @@ const validateUser = user => {
       .max(100)
       .required()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    password: Joi.string()
-      .min(6)
-      .max(100)
-      .required(),
-    confirmPassword: Joi.any()
-      .required()
-      .valid(Joi.ref('password')),
+    password: Joi.string().min(6).max(100).required(),
+    confirmPassword: Joi.any().required().valid(Joi.ref('password')),
     avatar: Joi.string(),
-    date_joined: Joi.date().default(Date.now)
+    date_joined: Joi.date().default(Date.now),
   });
   return schema.validate(user);
 };
@@ -165,10 +160,7 @@ const validateUserLogin = user => {
       .max(100)
       .required()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    password: Joi.string()
-      .min(6)
-      .max(100)
-      .required()
+    password: Joi.string().min(6).max(100).required(),
   });
   return schema.validate(user);
 };

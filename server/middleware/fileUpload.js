@@ -1,9 +1,8 @@
 // file upload setup
 const path = require('path');
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
 const crypto = require('crypto');
-
 
 // Storage
 const storage = new GridFsStorage({
@@ -15,18 +14,17 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename = buffer.toString("hex") + path.extname(file.originalname);
+        const filename =
+          buffer.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: "images"
+          bucketName: 'images',
         };
         resolve(fileInfo);
       });
     });
-  }
+  },
 });
-
-
 
 const fileFilter = (req, file, cb) => {
   const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -34,7 +32,7 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     // if validation failed then generate error
-    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE", file), false);
+    cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', file), false);
   }
 };
 
@@ -42,8 +40,8 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 1 * 1024 * 1024 // 1MB
-  }
+    fileSize: 1 * 1024 * 1024, // 1MB
+  },
 });
 
 module.exports = upload;

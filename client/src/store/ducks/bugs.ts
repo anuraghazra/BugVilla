@@ -6,17 +6,17 @@ export const API = 'API';
 export const FETCH_BUGS = createAPIAction('bugs/FETCH_BUGS');
 export const ADD_BUG = createAPIAction('bugs/ADD_BUG');
 
-const DEFAULT_STATE = <any[]>[]
+const DEFAULT_STATE = <any[]>[];
 
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case FETCH_BUGS.SUCCESS:
-      return [...action.payload]
+      return [...action.payload];
     default:
-      return state
+      return state;
   }
-}
+};
 
 export default reducer;
 
@@ -32,14 +32,15 @@ export const fetchBugs = (): ApiAction => ({
   onFailure: FETCH_BUGS.FAILURE,
 });
 
-export const addBug = (
-  formData: { title: string; body: string }
-): ApiAction => ({
+export const addBug = (formData: {
+  title: string;
+  body: string;
+}): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
     url: `/api/bugs/`,
-    formData
+    formData,
   },
   onRequest: ADD_BUG.REQUEST,
   onSuccess: ADD_BUG.SUCCESS,

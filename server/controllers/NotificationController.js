@@ -20,7 +20,7 @@ exports.getNotifications = async (req, res) => {
     .populate('fromBug ', 'title bugId')
     .populate('references ', 'title bugId');
 
-  let filtered = notifications.filter((notify) => {
+  const filtered = notifications.filter(notify => {
     if (notify.type === NOTIFY_TYPES.MENTIONED) {
       return notify.notificationTo.includes(req.user.id);
     } else {
@@ -48,22 +48,22 @@ exports.mentionPeople = async (req, res) => {
     return res.unprocessable({ error: error.details[0].message });
   }
 
-  let usersIds = await User.find({
+  const usersIds = await User.find({
     username: {
       $in: [...value.mentions],
     },
   }).select('_id');
 
-  let bug = await Bug.findOne({ bugId: req.params.bugId });
+  const bug = await Bug.findOne({ bugId: req.params.bugId });
   if (!bug) return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
   // send notifications
-  let notification = new Notification({
+  const notification = new Notification({
     type: NOTIFY_TYPES.MENTIONED,
     byUser: req.user.id,
     onBug: bug._id,
     mentions: [...value.mentions],
-    notificationTo: usersIds.map((v) => v._id),
+    notificationTo: usersIds.map(v => v._id),
   });
   await notification.save();
 

@@ -11,8 +11,8 @@ const ProfilesWrapper = styled.section`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-row-gap: 50px;
-    margin-top: ${(p) => p.theme.spacings.top * 2}px;
-    margin-bottom: ${(p) => p.theme.spacings.bottom * 2}px;
+    margin-top: ${p => p.theme.spacings.top * 2}px;
+    margin-bottom: ${p => p.theme.spacings.bottom * 2}px;
 
     h3 {
       word-break: break-all;

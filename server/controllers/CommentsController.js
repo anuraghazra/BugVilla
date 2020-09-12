@@ -40,7 +40,7 @@ exports.createComment = async (req, res) => {
     if (!bug)
       return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
-    let authorDetails = {
+    const authorDetails = {
       username: req.user.username,
       name: req.user.name,
       _id: req.user.id,
@@ -51,10 +51,10 @@ exports.createComment = async (req, res) => {
       author: authorDetails,
     });
 
-    let newBug = await bug.save();
+    const newBug = await bug.save();
 
     // send notifications
-    let notification = new Notification({
+    const notification = new Notification({
       type: NOTIFY_TYPES.COMMENTED,
       byUser: req.user.id,
       onBug: newBug._id,
@@ -120,7 +120,11 @@ exports.updateComment = async (req, res) => {
           },
         },
       },
-      { $set: { 'comments.$.body': value.body } },
+      {
+        $set: {
+          'comments.$.body': value.body,
+        },
+      },
       { new: true, runValidators: true }
     );
 
@@ -128,7 +132,7 @@ exports.updateComment = async (req, res) => {
       return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok({
-      data: bug.comments.filter((e) => e.id === req.params.comment_id)[0],
+      data: bug.comments.filter(e => e.id === req.params.comment_id)[0],
     });
   } catch (err) {
     console.log(err);
@@ -154,7 +158,7 @@ exports.addOrRemoveReaction = async (req, res) => {
 
   try {
     // preventing _id in LabelSchema fixes the issue to `$addToSet` not working
-    let bug = await Bug.findOne({
+    const bug = await Bug.findOne({
       bugId: req.params.bugId,
       'comments._id': req.params.comment_id,
     });
@@ -163,14 +167,14 @@ exports.addOrRemoveReaction = async (req, res) => {
 
     // TODO: fix perf issues
     const userId = req.user.id.toString();
-    let comments = bug.comments;
-    let commentIndex = parseInt(
-      comments.findIndex((c) => c.id === req.params.comment_id)
+    const comments = bug.comments;
+    const commentIndex = parseInt(
+      comments.findIndex(c => c.id === req.params.comment_id)
     );
-    let comment = comments[parseInt(commentIndex)];
+    const comment = comments[parseInt(commentIndex)];
 
     // find the index of matching user & emoji pair
-    const index = comment.reactions.findIndex((reaction) => {
+    const index = comment.reactions.findIndex(reaction => {
       const isSameReaction = reaction.emoji === value.emoji;
       const isSameId = reaction.users.includes(userId);
       return isSameId && isSameReaction;
@@ -178,7 +182,7 @@ exports.addOrRemoveReaction = async (req, res) => {
 
     if (index > -1) {
       // findIndex of user to remove it from the users list
-      let indexedComment = comment.reactions[parseInt(index)];
+      const indexedComment = comment.reactions[parseInt(index)];
       const indexOfUser = indexedComment.users.indexOf(userId);
       indexedComment.users.splice(indexOfUser, 1);
       // if users list is empty then remove the entire reaction
@@ -187,7 +191,7 @@ exports.addOrRemoveReaction = async (req, res) => {
       }
     } else {
       const emojiIndex = comment.reactions.findIndex(
-        (r) => r.emoji === value.emoji
+        r => r.emoji === value.emoji
       );
       // if emoji is absent then push it to the reactions list
       // else push the userId to the users list
@@ -196,21 +200,21 @@ exports.addOrRemoveReaction = async (req, res) => {
         : comment.reactions[parseInt(emojiIndex)].users.push(req.user.id);
     }
 
-    let newBug = await bug
+    const newBug = await bug
       .save()
-      .then((t) =>
+      .then(t =>
         t.populate('comments.reactions.users', 'name username').execPopulate()
       );
     if (!newBug)
       return res.notFound({ error: `Bug#${req.params.bugId} Not Found` });
 
     res.ok({
-      data: newBug.comments.filter((e) => e.id === req.params.comment_id)[0],
+      data: newBug.comments.filter(e => e.id === req.params.comment_id)[0],
     });
   } catch (err) {
     console.log(err);
     res.internalError({
-      error: `Something went wrong while adding new reaction`,
+      error: 'Something went wrong while adding new reaction',
     });
   }
 };
@@ -223,7 +227,7 @@ exports.addOrRemoveReaction = async (req, res) => {
 exports.getReactions = async (req, res) => {
   try {
     // https://stackoverflow.com/a/41354060/10629172
-    let bug = await Bug.findOne(
+    const bug = await Bug.findOne(
       {
         bugId: req.params.bugId,
         'comments._id': req.params.comment_id,
@@ -237,7 +241,7 @@ exports.getReactions = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.internalError({
-      error: `Something went wrong while adding new reaction`,
+      error: 'Something went wrong while adding new reaction',
     });
   }
 };

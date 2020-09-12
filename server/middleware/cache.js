@@ -3,17 +3,17 @@ const cache = require('memory-cache');
 class MemCacheContainer {
   constructor() {
     this.cache = new cache.Cache();
-    this.duration = 30
+    this.duration = 30;
   }
   set(key, data) {
     this.cache.put(key, data, this.duration * 1000);
   }
   get(key, callback) {
-    let saved = this.cache.get(key);
+    const saved = this.cache.get(key);
     if (saved) {
-      callback(saved)
+      callback(saved);
     } else {
-      callback(null)
+      callback(null);
     }
   }
   del(keys) {
@@ -27,39 +27,39 @@ const MemCache = new MemCacheContainer();
 
 const clearCache = () => {
   return (req, res, next) => {
-    let keys = MemCache.cache.keys()
+    const keys = MemCache.cache.keys();
     if (keys.length > 0) {
-      let resourceUrl = '__express__' + req.originalUrl || req.url;
-      let resourceKeys = keys.filter(k => resourceUrl.includes(k));
-      console.log(resourceUrl, '*******', resourceKeys)
+      const resourceUrl = '__express__' + req.originalUrl || req.url;
+      const resourceKeys = keys.filter(k => resourceUrl.includes(k));
+      console.log(resourceUrl, '*******', resourceKeys);
 
       MemCache.del(resourceKeys);
     }
     return next();
-  }
-}
+  };
+};
 
-const addCache = (CacheName) => {
+const addCache = CacheName => {
   return (req, res, next) => {
-    let key = '__express__' + req.originalUrl || req.url || CacheName
-    console.log(key)
-    console.log('-----')
-    console.log(MemCache.cache.keys())
+    const key = '__express__' + req.originalUrl || req.url || CacheName;
+    console.log(key);
+    console.log('-----');
+    console.log(MemCache.cache.keys());
     MemCache.get(key, (err, saved) => {
       if (err) {
-        res.sendResponse = res.send
-        res.send = (body) => {
+        res.sendResponse = res.send;
+        res.send = body => {
           MemCache.set(key, body);
-          res.sendResponse(body)
-        }
+          res.sendResponse(body);
+        };
         next();
       } else {
         res.send(saved);
         return;
       }
     });
-  }
-}
+  };
+};
 
 /*
 const cacheMiddleware = (duration) => {

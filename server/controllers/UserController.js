@@ -52,7 +52,7 @@ exports.signup = async (req, res) => {
     const savedUser = await newUser.save();
 
     // create email verification token
-    let token = new Token({
+    const token = new Token({
       _userId: savedUser._id,
       token: crypto.randomBytes(16).toString('hex'),
     });
@@ -186,7 +186,7 @@ exports.updateBio = async (req, res) => {
   }
 
   try {
-    let user = await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       {
         _id: req.user.id,
       },
@@ -222,12 +222,12 @@ exports.checkAuth = (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     // find token
-    let token = await Token.findOne({ token: req.query.token });
+    const token = await Token.findOne({ token: req.query.token });
     if (!token)
       return res.notFound({ error: 'Unable to find verification token' });
 
     // find user with matching token
-    let user = await User.findOne({ _id: token._userId });
+    const user = await User.findOne({ _id: token._userId });
     if (!user)
       return res.notFound({
         error: 'Unable to find matching user & token for verification',
@@ -240,7 +240,7 @@ exports.verifyEmail = async (req, res) => {
     // it will not expire anymore
     user.expires = null;
 
-    let savedUser = await user.save();
+    const savedUser = await user.save();
     if (!savedUser)
       return res.internalError({ error: 'Error while verifying user' });
 
@@ -263,7 +263,7 @@ exports.verifyEmail = async (req, res) => {
  */
 exports.getByUsername = async (req, res) => {
   try {
-    let user = await User.findOne({ username: req.params.username }).select(
+    const user = await User.findOne({ username: req.params.username }).select(
       '-password'
     );
     if (!user)
@@ -285,7 +285,7 @@ exports.getByUsername = async (req, res) => {
  * @type RequestHandler
  */
 exports.getMultipleByIds = async (req, res) => {
-  let { error, value } = Joi.object({
+  const { error, value } = Joi.object({
     user_ids: Joi.array().items(Joi.string()).required(),
   }).validate(req.body);
 
@@ -294,12 +294,12 @@ exports.getMultipleByIds = async (req, res) => {
   }
 
   try {
-    let user = await User.find({
+    const user = await User.find({
       _id: {
         $in: [...value.user_ids],
       },
     }).select('username');
-    if (!user) return res.notFound({ error: `Users not found` });
+    if (!user) return res.notFound({ error: 'Users not found' });
 
     res.ok({ data: user });
   } catch (err) {
@@ -318,11 +318,11 @@ exports.getAllUsers = async (req, res) => {
   const MAX_ITEMS = 10;
   const page = parseInt(req.query.page - 1);
   try {
-    let users = await User.find({})
+    const users = await User.find({})
       .select('-password -email')
       .sort('date_joined');
 
-    if (!users) return res.notFound({ error: `No users found!` });
+    if (!users) return res.notFound({ error: 'No users found!' });
 
     res.ok({
       totalDocs: users.length,
@@ -343,7 +343,7 @@ exports.getAllUsers = async (req, res) => {
  */
 exports.getCurrent = async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.user.id }).select('-password');
+    const user = await User.findOne({ _id: req.user.id }).select('-password');
     if (!user) return res.notFound({ error: 'User Not Found!' });
 
     res.ok({ data: user });
@@ -361,7 +361,7 @@ exports.getCurrent = async (req, res) => {
 exports.getCommentsByUser = async (req, res) => {
   try {
     // https://stackoverflow.com/questions/16845191/mongoose-finding-subdocuments-by-criteria
-    let bug = await Bug.aggregate([
+    const bug = await Bug.aggregate([
       { $match: { 'comments.author.username': req.params.username } },
       { $unwind: '$comments' },
       { $match: { 'comments.author.username': req.params.username } },
@@ -397,7 +397,7 @@ exports.getCommentsByUser = async (req, res) => {
 exports.getCommentsCountByUser = async (req, res) => {
   try {
     // https://docs.mongodb.com/manual/reference/operator/aggregation/count/
-    let data = await Bug.aggregate([
+    const data = await Bug.aggregate([
       { $match: { 'comments.author.username': req.params.username } },
       { $unwind: '$comments' },
       { $match: { 'comments.author.username': req.params.username } },
@@ -423,7 +423,7 @@ exports.getCommentsCountByUser = async (req, res) => {
 exports.getCollectedReactionsCount = async (req, res) => {
   try {
     // https://docs.mongodb.com/manual/reference/operator/aggregation/count/
-    let data = await Bug.aggregate([
+    const data = await Bug.aggregate([
       { $match: { 'comments.author.username': req.params.username } },
       { $unwind: '$comments' },
       { $match: { 'comments.author.username': req.params.username } },
@@ -468,7 +468,7 @@ exports.getCollectedReactionsCount = async (req, res) => {
  */
 exports.getBugsByUser = async (req, res) => {
   try {
-    let bug = await Bug.find({ 'author.username': req.params.username });
+    const bug = await Bug.find({ 'author.username': req.params.username });
     if (!bug) return res.notFound({ error: 'Bug Not Found!' });
 
     res.ok({ data: bug });
