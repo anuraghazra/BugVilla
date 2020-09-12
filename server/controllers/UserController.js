@@ -318,11 +318,11 @@ exports.getAllUsers = async (req, res) => {
   const MAX_ITEMS = 10;
   const page = parseInt(req.query.page - 1);
   try {
-    let users = await User.find({})
+    const users = await User.find({})
       .select('-password -email')
       .sort('date_joined');
 
-    if (!users) return res.notFound({ error: `No users found!` });
+    if (!users) return res.notFound({ error: 'No users found!' });
 
     res.ok({
       totalDocs: users.length,
@@ -343,7 +343,7 @@ exports.getAllUsers = async (req, res) => {
  */
 exports.getCurrent = async (req, res) => {
   try {
-    let user = await User.findOne({ _id: req.user.id }).select('-password');
+    const user = await User.findOne({ _id: req.user.id }).select('-password');
     if (!user) return res.notFound({ error: 'User Not Found!' });
 
     res.ok({ data: user });

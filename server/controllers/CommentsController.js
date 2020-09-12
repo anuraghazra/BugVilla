@@ -200,7 +200,7 @@ exports.addOrRemoveReaction = async (req, res) => {
         : comment.reactions[parseInt(emojiIndex)].users.push(req.user.id);
     }
 
-    let newBug = await bug
+    const newBug = await bug
       .save()
       .then(t =>
         t.populate('comments.reactions.users', 'name username').execPopulate()
@@ -214,7 +214,7 @@ exports.addOrRemoveReaction = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.internalError({
-      error: `Something went wrong while adding new reaction`,
+      error: 'Something went wrong while adding new reaction',
     });
   }
 };

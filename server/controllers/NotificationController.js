@@ -20,7 +20,7 @@ exports.getNotifications = async (req, res) => {
     .populate('fromBug ', 'title bugId')
     .populate('references ', 'title bugId');
 
-  let filtered = notifications.filter(notify => {
+  const filtered = notifications.filter(notify => {
     if (notify.type === NOTIFY_TYPES.MENTIONED) {
       return notify.notificationTo.includes(req.user.id);
     } else {
