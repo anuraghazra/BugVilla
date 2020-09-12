@@ -12,26 +12,28 @@ export interface ApiAction {
   onRequest?: string | ((dispatch: Dispatch) => void);
   onSuccess?: string | ((dispatch: Dispatch, data: any) => void);
   onFailure?: string | ((dispatch: Dispatch, err: string) => void);
-  [x: string]: any
+  [x: string]: any;
 }
 
 interface apiProps {
   getState: any;
-  dispatch: Dispatch
+  dispatch: Dispatch;
 }
-const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: ApiAction) => {
+const api = ({ getState, dispatch }: apiProps) => (next: any) => async (
+  action: ApiAction
+) => {
   if (action.type !== 'API') return next(action);
 
-  const noop = () => { };
+  const noop = () => {};
   const {
     payload: { method, url, formData },
     onRequest = noop,
     onSuccess = noop,
-    onFailure = noop
+    onFailure = noop,
   } = action;
 
   if (typeof onRequest === 'function') {
-    onRequest(dispatch)
+    onRequest(dispatch);
   } else {
     dispatch({ type: onRequest });
   }
@@ -39,10 +41,10 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
     const res = await http({
       method: method,
       url: url,
-      data: formData
+      data: formData,
     });
     let { data } = res.data;
-    // TODO: normalize this res.data.data causing 
+    // TODO: normalize this res.data.data causing
     // inconsistency because server is sending with wrapped {data: ...}
     if (typeof onSuccess === 'function') {
       onSuccess(dispatch, data);
@@ -55,8 +57,8 @@ const api = ({ getState, dispatch }: apiProps) => (next: any) => async (action: 
     } else {
       dispatch({ type: onFailure, payload: err || 'Something went wrong' });
     }
-    return Promise.reject(err)
+    return Promise.reject(err);
   }
-}
+};
 
 export default api;

@@ -17,17 +17,21 @@ export const EDIT_LABELS = createAPIAction('singlebug/EDIT_LABELS');
 export const UPDATE_BUG = createAPIAction('singlebug/UPDATE_BUG');
 export const ADD_COMMENT = createAPIAction('singlebug/ADD_COMMENT');
 export const EDIT_COMMENT = createAPIAction('singlebug/EDIT_COMMENT');
-export const UPDATE_BUG_REACTIONS = createAPIAction('singlebug/UPDATE_BUG_REACTIONS');
-export const UPDATE_COMMENT_REACTIONS = createAPIAction('singlebug/UPDATE_COMMENT_REACTIONS');
-export const COMMENT_REACTIONS_OPTIMISTIC = 'singlebug/COMMENT_REACTIONS_OPTIMISTIC';
-
+export const UPDATE_BUG_REACTIONS = createAPIAction(
+  'singlebug/UPDATE_BUG_REACTIONS'
+);
+export const UPDATE_COMMENT_REACTIONS = createAPIAction(
+  'singlebug/UPDATE_COMMENT_REACTIONS'
+);
+export const COMMENT_REACTIONS_OPTIMISTIC =
+  'singlebug/COMMENT_REACTIONS_OPTIMISTIC';
 
 export interface SinglebugReducerState {
   entities: {
     comments: {
-      [x: string]: any
-    }
-  },
+      [x: string]: any;
+    };
+  };
   result: {
     activities: any[];
     body: string;
@@ -39,12 +43,12 @@ export interface SinglebugReducerState {
     references: any[];
     date_opened: string;
     author: any;
-    [x: string]: any
-  }
+    [x: string]: any;
+  };
 }
 const DEFAULT_STATE: SinglebugReducerState = {
   entities: {
-    comments: {}
+    comments: {},
   },
   result: {
     activities: [],
@@ -57,18 +61,18 @@ const DEFAULT_STATE: SinglebugReducerState = {
     references: [],
     date_opened: '',
     author: { username: '' },
-  }
-}
+  },
+};
 
 // saving the payload of OPTIMISTIC Reaction update
 // for handling fallback
-let selectedReaction: { emoji: string; userData: any } | null = null
+let selectedReaction: { emoji: string; userData: any } | null = null;
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case FETCH_BUG.SUCCESS:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     //  return { ...state, entities: merge({}, state.entities, action.payload.entities) }
     case EDIT_COMMENT.SUCCESS:
@@ -80,16 +84,16 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           comments: {
             ...state.entities.comments,
             [action.payload.id]: {
-              ...action.payload
-            }
-          }
-        }
-      }
+              ...action.payload,
+            },
+          },
+        },
+      };
     case COMMENT_REACTIONS_OPTIMISTIC:
     case UPDATE_COMMENT_REACTIONS.FAILURE:
       if (action.type === COMMENT_REACTIONS_OPTIMISTIC) {
-        selectedReaction = action.payload
-        console.log(selectedReaction)
+        selectedReaction = action.payload;
+        console.log(selectedReaction);
       }
       let { emoji, userData } = action.payload;
       let comment = toggleCommentReaction(
@@ -104,44 +108,44 @@ const reducer = (state = DEFAULT_STATE, action: any) => {
           comments: {
             ...state.entities.comments,
             [action.payload.commentId]: {
-              ...comment
-            }
-          }
-        }
-      }
+              ...comment,
+            },
+          },
+        },
+      };
     case UPDATE_BUG.SUCCESS:
       return {
         ...state,
-        result: { ...state.result, body: action.payload }
-      }
+        result: { ...state.result, body: action.payload },
+      };
     case UPDATE_BUG_REACTIONS.SUCCESS:
       return {
         ...state,
-        result: { ...state.result, reactions: action.payload }
-      }
+        result: { ...state.result, reactions: action.payload },
+      };
     case EDIT_LABELS.SUCCESS:
       return {
         ...state,
-        result: { ...state.result, labels: action.payload }
-      }
+        result: { ...state.result, labels: action.payload },
+      };
     case TOGGLE_BUG.SUCCESS:
       return {
         ...state,
         result: {
           ...state.result,
           activities: action.payload.data,
-          isOpen: action.payload.bug_state === 'open' ? true : false
-        }
-      }
+          isOpen: action.payload.bug_state === 'open' ? true : false,
+        },
+      };
     case CLEAR_BUG_DATA:
-      return {}
+      return {};
     default:
       // if (action?.payload?.entities?.comments) {
       //   return merge({}, state, action?.payload?.entities?.comments);
       // }
       return state;
   }
-}
+};
 export default reducer;
 
 // side effects
@@ -157,7 +161,7 @@ const toggleCommentReaction = (
   if (comment.reactions.length < 1) {
     comment.reactions.push({
       emoji: payload.emoji,
-      users: [payload.userData]
+      users: [payload.userData],
     });
     return comment;
   }
@@ -168,17 +172,17 @@ const toggleCommentReaction = (
     if (!isEmojiPresent) {
       comment.reactions.push({
         emoji: payload.emoji,
-        users: [payload.userData]
+        users: [payload.userData],
       });
     }
     // emoji mismatch
     if (react.emoji !== payload.emoji) return;
-    let indexOfUser = react.users.findIndex((u: any) =>
-      u.username === payload.userData.username
+    let indexOfUser = react.users.findIndex(
+      (u: any) => u.username === payload.userData.username
     );
 
     if (indexOfUser > -1) {
-      react.users.splice(indexOfUser, 1)
+      react.users.splice(indexOfUser, 1);
     } else {
       react.emoji = payload.emoji;
       react.users = [payload.userData];
@@ -201,19 +205,18 @@ export const fetchBugWithId = (bugId: number | string): ApiAction => ({
       dispatch({ type: CLEAR_ALL_ERRORS });
       dispatch({ type: CLEAR_BUG_DATA });
       dispatch({ type: FETCH_BUG.REQUEST });
-    })
+    });
   },
   onSuccess: (dispatch: any, data) => {
     dispatch({
       type: FETCH_BUG.SUCCESS,
-      payload: normalize(data, bugSchema)
-    })
+      payload: normalize(data, bugSchema),
+    });
   },
-  onFailure: FETCH_BUG.FAILURE
+  onFailure: FETCH_BUG.FAILURE,
 });
 
-
-//#region 
+//#region
 export const addComment = (
   bugId: number | string,
   formData: { body: string }
@@ -227,9 +230,9 @@ export const addComment = (
   onRequest: ADD_COMMENT.REQUEST,
   onSuccess: (dispatch, data) => {
     dispatch({ type: ADD_COMMENT.SUCCESS, payload: data });
-    socket.emit('send-notification', { message: 'Add comment' })
+    socket.emit('send-notification', { message: 'Add comment' });
   },
-  onFailure: ADD_COMMENT.FAILURE
+  onFailure: ADD_COMMENT.FAILURE,
 });
 
 export const editComment = (
@@ -246,9 +249,9 @@ export const editComment = (
   onRequest: EDIT_COMMENT.REQUEST,
   onSuccess: (dispatch, data) => {
     dispatch({ type: EDIT_COMMENT.SUCCESS, payload: data });
-    socket.emit('send-notification', { message: 'Add comment' })
+    socket.emit('send-notification', { message: 'Add comment' });
   },
-  onFailure: EDIT_COMMENT.FAILURE
+  onFailure: EDIT_COMMENT.FAILURE,
 });
 
 export const updateBug = (
@@ -263,7 +266,7 @@ export const updateBug = (
   },
   onRequest: UPDATE_BUG.REQUEST,
   onSuccess: UPDATE_BUG.SUCCESS,
-  onFailure: UPDATE_BUG.FAILURE
+  onFailure: UPDATE_BUG.FAILURE,
 });
 
 export const openOrCloseBug = (
@@ -281,9 +284,9 @@ export const openOrCloseBug = (
       type: TOGGLE_BUG.SUCCESS,
       payload: { data, bug_state: state },
     });
-    socket.emit('send-notification', { message: 'Bug Open/Closed' })
+    socket.emit('send-notification', { message: 'Bug Open/Closed' });
   },
-  onFailure: TOGGLE_BUG.FAILURE
+  onFailure: TOGGLE_BUG.FAILURE,
 });
 
 export const editLabels = (
@@ -300,7 +303,7 @@ export const editLabels = (
   onSuccess: (dispatch, data) => {
     dispatch({ type: EDIT_LABELS.SUCCESS, payload: data });
   },
-  onFailure: EDIT_LABELS.FAILURE
+  onFailure: EDIT_LABELS.FAILURE,
 });
 
 export const addReferences = (
@@ -314,7 +317,7 @@ export const addReferences = (
     formData: { references },
   },
   onSuccess: () => {
-    socket.emit('send-notification', { message: 'Bugs Referenced' })
+    socket.emit('send-notification', { message: 'Bugs Referenced' });
   },
 });
 
@@ -329,7 +332,7 @@ export const mentionPeople = (
     formData: { mentions },
   },
   onSuccess: () => {
-    socket.emit('send-notification', { message: 'Users Mentioned' })
+    socket.emit('send-notification', { message: 'Users Mentioned' });
   },
 });
 
@@ -363,9 +366,12 @@ export const addOrRemoveReactsComment = (
   onSuccess: (dispatch, data: any) => {
     dispatch({ type: UPDATE_COMMENT_REACTIONS.SUCCESS, payload: data });
   },
-  onFailure: (dispatch) => {
+  onFailure: dispatch => {
     // on failure remove the reaction
-    dispatch({ type: UPDATE_COMMENT_REACTIONS.FAILURE, payload: selectedReaction });
+    dispatch({
+      type: UPDATE_COMMENT_REACTIONS.FAILURE,
+      payload: selectedReaction,
+    });
   },
 });
 //#endregion

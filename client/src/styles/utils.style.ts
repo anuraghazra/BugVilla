@@ -2,13 +2,13 @@ import { css } from 'styled-components';
 
 export default css`
   .text--bold {
-    font-family: ${p => p.theme.font.primaryBold}
+    font-family: ${p => p.theme.font.primaryBold};
   }
   .text--light {
-    font-family: ${p => p.theme.font.primaryLight}
+    font-family: ${p => p.theme.font.primaryLight};
   }
   .text--medium {
-    font-family: ${p => p.theme.font.primaryMedium}
+    font-family: ${p => p.theme.font.primaryMedium};
   }
   .color--error {
     color: ${p => p.theme.colors.red} !important;
@@ -18,18 +18,18 @@ export default css`
     color: ${p => p.theme.colors.red};
   }
   .color--white {
-    color: ${p => p.theme.colors.white}
+    color: ${p => p.theme.colors.white};
   }
   .color--gray {
-    color: ${p => p.theme.colors.gray}
+    color: ${p => p.theme.colors.gray};
   }
   .color--black {
-    color: ${p => p.theme.colors.black}
+    color: ${p => p.theme.colors.black};
   }
   .color--brand {
-    color: ${p => p.theme.colors.primary}
+    color: ${p => p.theme.colors.primary};
   }
-  
+
   .mt-small {
     margin-top: ${p => p.theme.space.small}px;
   }
@@ -57,4 +57,4 @@ export default css`
   .mb-large {
     margin-bottom: ${p => p.theme.space.large}px;
   }
-`
+`;

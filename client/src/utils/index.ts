@@ -1,10 +1,7 @@
-import { ReactionType } from "components/Comment/Reactions";
+import { ReactionType } from 'components/Comment/Reactions';
 
 export const formatDate = (date: string): string =>
-  new Date(date)
-    .toDateString()
-    .slice(4, 10)
-    .toLowerCase();
+  new Date(date).toDateString().slice(4, 10).toLowerCase();
 
 // https://github.com/withspectrum/spectrum/blob/alpha/admin/src/helpers/utils.js
 export const timeAgo = (time: any): string | number => {
@@ -16,7 +13,7 @@ export const timeAgo = (time: any): string | number => {
 
   let current: any = new Date();
   let previous: any = new Date(time);
-  let elapsed = current - previous
+  let elapsed = current - previous;
 
   if (elapsed < MS_PER_MINUTE) {
     return Math.round(elapsed / MS_PER_SECOND) + 's ago';
@@ -29,7 +26,7 @@ export const timeAgo = (time: any): string | number => {
   } else {
     return Math.round(elapsed / MS_PER_YEAR) + 'y ago';
   }
-}
+};
 
 // @deprecated
 export const getTimeDiff = (dt1: any): string | number => {
@@ -45,7 +42,7 @@ export const getTimeDiff = (dt1: any): string | number => {
   if (hours >= 24) return days + ' days ago';
   if (hours < 1) return min + ' min ago';
   return hours + ' hours ago';
-}
+};
 
 export const MENTION_REGEX = /(?:^|[^a-zA-Z0-9_!@#$%&*])(?:(?:@)(?!\/))([a-zA-Z0-9/_.]{1,40})(?:\b(?!@)|$)/gm;
 export const REFERENCE_REGEX = /\B#(\d{1,10})(?:\b)/gm;
@@ -53,11 +50,15 @@ export const REFERENCE_REGEX = /\B#(\d{1,10})(?:\b)/gm;
 /**
  * @description Returns array of [@mentions] & [#references] from markdown
  */
-export const getRefsOrMentions = (markdown: string, quantifier: string = '#'): string[] => {
+export const getRefsOrMentions = (
+  markdown: string,
+  quantifier: string = '#'
+): string[] => {
   let regex: RegExp = REFERENCE_REGEX;
   if (quantifier === '@') regex = MENTION_REGEX;
 
-  let matched = markdown.match(regex)
+  let matched = markdown
+    .match(regex)
     ?.map((ref: string): any => ref.replace(quantifier, '').trim())
     ?.filter(
       (value: number, index: number, arr: number[]) =>
@@ -71,31 +72,26 @@ export const getRefsOrMentions = (markdown: string, quantifier: string = '#'): s
  */
 export const parseRefsAndMentions = (markdown: string): string => {
   return markdown
-    ?.replace(
-      MENTION_REGEX,
-      ` [@$1](/profiles/$1) `
-    )
+    ?.replace(MENTION_REGEX, ` [@$1](/profiles/$1) `)
     .replace(REFERENCE_REGEX, ` [#$1](/dashboard/bugs/$1) `);
 };
-
-
 
 /**
  * @description safe decode entities
  */
 export const htmlDecode = (input: string): string => {
   if (typeof input !== 'string') return '';
-  const textarea = document.createElement("textarea");
+  const textarea = document.createElement('textarea');
   textarea.innerHTML = input;
   return textarea.value;
-}
-
+};
 
 /**
  * decode html entities | parse refs & mentions
  * @param markdown string
  */
-export const renderMarkdown = (markdown: string): string => htmlDecode(parseRefsAndMentions(markdown))
+export const renderMarkdown = (markdown: string): string =>
+  htmlDecode(parseRefsAndMentions(markdown));
 
 export const copyToClipboard = (str: string) => {
   let el = document.createElement('textarea');
@@ -107,7 +103,7 @@ export const copyToClipboard = (str: string) => {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
-}
+};
 
 export const toggleArrayItem = (arr: any[], value: any) => {
   let item = JSON.stringify(value);
@@ -124,11 +120,11 @@ export const calculateReputation = (reactions: ReactionType[]) => {
     ':smile:': 20,
     ':heart:': 30,
     ':confused:': -10,
-    ':tada:': 20
+    ':tada:': 20,
   };
 
   let avg = 0;
-  reactions?.forEach((react) => {
+  reactions?.forEach(react => {
     avg += REPUTATION_MAP[react.emoji] * react.users.length;
   });
 

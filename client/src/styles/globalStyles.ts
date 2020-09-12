@@ -137,6 +137,6 @@ const GlobalStyles = createGlobalStyle`
       padding: 15px !important;
     }
   }
-`
+`;
 
-export default GlobalStyles
+export default GlobalStyles;

@@ -18,7 +18,7 @@ module.exports = {
   OK: 200,
 
   PORT: 5000,
-}
+};
 
 module.exports.NOTIFY_TYPES = {
   COMMENTED: 'COMMENTED',
@@ -26,4 +26,4 @@ module.exports.NOTIFY_TYPES = {
   REFERENCED: 'REFERENCED',
   BUG_STATUS: 'BUG_STATUS',
   NEW_BUG: 'NEW_BUG',
-}
+};

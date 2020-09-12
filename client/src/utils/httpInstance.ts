@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 const instance: AxiosInstance = axios.create({
   baseURL: '/',
-  withCredentials:true
+  withCredentials: true,
 });
 
 const requestHandler = (config: AxiosRequestConfig) => {
@@ -21,7 +21,7 @@ instance.interceptors.response.use(undefined, (error: AxiosError) => {
   if (axios.isCancel(error)) {
     console.log(`request cancelled`);
   }
-  return Promise.reject(error.response?.data?.error)
+  return Promise.reject(error.response?.data?.error);
 });
 
 export default instance;

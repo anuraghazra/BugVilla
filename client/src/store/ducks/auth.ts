@@ -18,8 +18,6 @@ export const SIGNUP = createAPIAction('user/SIGN_UP');
 export const LOGIN_CLEAR_ERROR = 'login/CLEAR_ERROR';
 export const SIGNUP_CLEAR_ERROR = 'signup/CLEAR_ERROR';
 
-
-
 export interface UserProps {
   username?: string;
   name?: string;
@@ -28,47 +26,45 @@ export interface UserProps {
   id?: string;
 }
 export interface AuthReducerState {
-  isAuthenticated: boolean,
+  isAuthenticated: boolean;
   user: UserProps;
 }
 
 const DEFAULT_STATE: AuthReducerState = {
   isAuthenticated: false,
   user: {},
-}
+};
 
 // reducers
 const reducer = (state = DEFAULT_STATE, action: any) => {
   switch (action.type) {
     case CHECK_AUTH.SUCCESS:
-      return { ...state, user: action.payload, isAuthenticated: true }
+      return { ...state, user: action.payload, isAuthenticated: true };
     case AUTH_LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
         user: null,
-      }
+      };
 
     case LOGIN.SUCCESS:
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
-      }
+      };
 
     case UPDATE_BIO.SUCCESS:
-      return { ...state, user: { ...state.user, bio: action.payload } }
+      return { ...state, user: { ...state.user, bio: action.payload } };
     default:
       return state;
   }
-}
+};
 
 export default reducer;
 
-
 // actions creators
 export const logUserOut = () => ({ type: AUTH_LOGOUT });
-
 
 // side effects
 export const checkAuth = (): ApiAction => ({
@@ -81,7 +77,7 @@ export const checkAuth = (): ApiAction => ({
   onRequest: CHECK_AUTH.REQUEST,
   onSuccess: CHECK_AUTH.SUCCESS,
   onFailure: CHECK_AUTH.FAILURE,
-})
+});
 
 export const signUserUp = (formData: FormData): ApiAction => ({
   type: API,
@@ -94,16 +90,19 @@ export const signUserUp = (formData: FormData): ApiAction => ({
   onSuccess: (dispatch: Dispatch, data: any) => {
     dispatch({ type: CLEAR_ALL_ERRORS });
     dispatch({ type: SIGNUP.SUCCESS });
-    history.push(`/?signedup=true&email=${data.email}`)
+    history.push(`/?signedup=true&email=${data.email}`);
   },
   onFailure: (dispatch: Dispatch, err: string) => {
     dispatch({ type: SIGNUP.FAILURE, payload: err });
-    dispatch({ type: AUTH_LOGOUT })
+    dispatch({ type: AUTH_LOGOUT });
     dispatch({ type: CLEAR_ALL_ERRORS });
-  }
-})
+  },
+});
 
-export const loginUser = (formData: { name: string, email: string }): ApiAction => ({
+export const loginUser = (formData: {
+  name: string;
+  email: string;
+}): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -114,14 +113,14 @@ export const loginUser = (formData: { name: string, email: string }): ApiAction 
   onSuccess: (dispatch: Dispatch, data: any) => {
     dispatch({ type: LOGIN.SUCCESS, payload: data });
     dispatch({ type: CLEAR_ALL_ERRORS });
-    history.push('/dashboard/bugs')
+    history.push('/dashboard/bugs');
   },
   onFailure: (dispatch: Dispatch, err: string) => {
-    dispatch({ type: LOGIN.FAILURE, payload: err })
-    dispatch({ type: AUTH_LOGOUT })
+    dispatch({ type: LOGIN.FAILURE, payload: err });
+    dispatch({ type: AUTH_LOGOUT });
     dispatch({ type: CLEAR_ALL_ERRORS });
-  }
-})
+  },
+});
 
 export const updateUserAvatar = (formData: any): ApiAction => ({
   type: API,
@@ -133,7 +132,7 @@ export const updateUserAvatar = (formData: any): ApiAction => ({
   onRequest: UPLOAD_AVATAR.REQUEST,
   onSuccess: UPLOAD_AVATAR.SUCCESS,
   onFailure: UPLOAD_AVATAR.FAILURE,
-})
+});
 
 export const updateUserBio = (formData: { bio: string }): ApiAction => ({
   type: API,
@@ -145,4 +144,4 @@ export const updateUserBio = (formData: { bio: string }): ApiAction => ({
   onRequest: UPDATE_BIO.REQUEST,
   onSuccess: UPDATE_BIO.SUCCESS,
   onFailure: UPDATE_BIO.FAILURE,
-})
+});
