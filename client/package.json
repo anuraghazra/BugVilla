@@ -25,7 +25,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/styled-components": "^4.4.1",
     "@types/yup": "^0.26.27",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "json-api-normalizer": "^0.4.16",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.20",
