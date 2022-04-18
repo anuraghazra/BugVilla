@@ -46,10 +46,10 @@
 
 ## :rocket: Quick start
 
-Start developing locally.
+Start using locally.
 
 ### Step 1: Clone the repo
-Fork the repository. then clone the repo locally by doing -
+Fork the repository. Then clone the repo locally by doing -
 
 ```sh
 git clone https://github.com/anuraghazra/BugVilla.git
@@ -62,7 +62,7 @@ cd into the directory
 cd BugVilla
 ```
 
-In the root folder do npm install.
+In the root folder run
 ```sh
 npm install
 # also in client
@@ -70,11 +70,12 @@ cd client & npm install
 ```
 
 ### Step 3: Setup .env
-To run the server you will also need to provide the `.env` variables
+To run the server locally you will need to provide your own `.env` variables.
 
-- create a new file .env in the root
-- open [.env.EXAMPLE](./.env.EXAMPLE)
-- copy the contents and paste it to the .env with valid keys
+- Create a new ` .env ` file in the root folder
+- Open [.env.EXAMPLE](./.env.EXAMPLE)
+- Copy it's content and paste it into your own ` .env ` file. 
+Then replace the keys with your own valid keys.
 
 #### And you are good to go
 ```sh
