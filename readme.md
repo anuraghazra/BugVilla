@@ -46,7 +46,7 @@
 
 ## :rocket: Quick start
 
-Start using locally.
+Start using it locally.
 
 ### Step 1: Clone the repo
 Fork the repository. Then clone the repo locally by doing -
